@@ -4,7 +4,8 @@ from optparse import OptionParser, OptionGroup
 import os.path
 
 from project.configparser import ProjectGlobal, ProjectCourse, ProjectProject
-from project.coursemanage import create_course, switch_course
+from project.coursemanage import create_course #, switch_course
+
 # from project.projectmanage import create_project 
 
 if __name__ == '__main__':
@@ -37,11 +38,14 @@ if __name__ == '__main__':
     else:
         config = os.path.join(os.path.expanduser('~'), 'turnin.cf')
 
+    if options.create_course:
+        create_course(config, options.create_course) 
+        break
+
     default_course = ProjectGlobal(config).config.default
     project = ProjectProject(config, default_course, args[0])
     if options.enabled:
         project.write(True)
     elif not options.enabled:
         project.write(False)
-        
     print options, args
