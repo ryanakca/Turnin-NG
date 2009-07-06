@@ -1,4 +1,5 @@
 ## Original turnin.cf:
+
 # # $Id: turnin.cf,v 5.19 90/09/18 15:12:38 ksb Exp $
 # # The file turnin.cf consists of a line for each course with the following
 # # information separated by colons: The course name, the id for the account
@@ -20,4 +21,4 @@
 # user = "username"
 # directory = "directory"
 # group = "group"
-# sections = ['section1']
+# sections = "section1;section2;section3"
