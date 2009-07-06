@@ -41,7 +41,7 @@ class ProjectCourse(ProjectGlobal):
         self.group = self.course['group']
         self.sections = self.course['sections']
 
-    def write(self, user='', directory='', group='', sections='', default=''):
+    def write(self, user='', directory='', group='', sections=''):
         """ Modifies the config file. """
         #self.config.reload() # We don't want to clobber something
         if user:
@@ -52,8 +52,6 @@ class ProjectCourse(ProjectGlobal):
             self.course['group'] = group
         if sections:
             self.course['sections'] = sections
-        if type(default) == bool:
-            self.course['default'] = default
         self.config.write()
 
 class ProjectProject(ProjectCourse):
