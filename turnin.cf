@@ -18,7 +18,7 @@
 
 # We will use the following format:
 # [course_name]
-# user = "username"
-# directory = "directory"
-# group = "group"
-# sections = "section1;section2;section3"
+# user = username
+# directory = directory
+# group = group
+# sections = section1;section2;section3
