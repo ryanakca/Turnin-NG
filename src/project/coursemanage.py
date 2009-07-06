@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from project.configparser import ProjectGlobal, ProjectCourse
 
@@ -9,7 +10,6 @@ def create_course(config_file, course):
     group = raw_input("Group: ")
     sections = raw_input("Sections: ")
     course.write(user, directory, group, sections) 
-    print "Successfully created the course %s." % course
 
 def delete_course(config_file, course):
     course_obj = ProjectCourse(config_file, course)
@@ -17,7 +17,11 @@ def delete_course(config_file, course):
         certain = raw_input("If you really want to delete this course and all " +
                 "associated files, enter 'yes' in capital letters: ")
         if certain == 'YES':
-            sh.rmtree(course_obj.course.directory, ignore_errors=True)
-            course_obj.config.sections.remove(course)
+            shutil.rmtree(course_obj.course['directory'], ignore_errors=True)
+            del course_obj.config[course]
+            if ((course_obj.config['Global'].has_key('default')) and
+                    (course_obj.config['Global']['default'] == course)):
+                course_obj.config['Global']['default'] = ''
+            course_obj.config.write()
     else:
         raise ValueError("%s is not an existing course" % course)
