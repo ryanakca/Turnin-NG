@@ -11,7 +11,7 @@ class ProjectGlobal(object):
         if not self.config.has_key('Global'):
             self.config.reload()
             self.config['Global'] = {}
-            self.config.default = ''
+            self.config['Global']['default'] = ''
             self.config.write()
 
     def set_default(self, course):

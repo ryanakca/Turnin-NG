@@ -25,3 +25,8 @@ def delete_course(config_file, course):
             course_obj.config.write()
     else:
         raise ValueError("%s is not an existing course" % course)
+
+def switch_course(config_file, course):
+    global_obj = ProjectGlobal(config_file)
+    global_obj.config['Global']['default'] = course
+    global_obj.config.write()
