@@ -1,0 +1,23 @@
+## Original turnin.cf:
+# # $Id: turnin.cf,v 5.19 90/09/18 15:12:38 ksb Exp $
+# # The file turnin.cf consists of a line for each course with the following
+# # information separated by colons: The course name, the id for the account
+# # the data should be put into, the subdirectory name in which the data should
+# # be kept, the group which should own the files after they have been
+# # submitted, and a comma-separated list of the sections for this course.
+# test:rountree:submit:sysstaff:ALL
+# cisc221:cisc221t:submit:cisc221t:ALL
+# cisc236:cisc236:submit:cisc236:ALL
+# cisc332:wendy:submit:cisc332:ALL
+# cisc432:cisc432t:submit:cisc432t:ALL
+# cisc434:cisc434:submit:cisc434:ALL
+# cisc435:cisc435:submit:cisc435:ALL
+# cisc454:cisc454t:submit:cisc454t:ALL
+# cisc458:cisc458:submit:cisc458t:ALL
+
+# We will use the following format:
+# [course_name]
+# user = "username"
+# directory = "directory"
+# group = "group"
+# sections = ['section1']
