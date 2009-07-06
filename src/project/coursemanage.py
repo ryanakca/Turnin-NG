@@ -2,6 +2,7 @@ import os
 import shutil
 
 from project.configparser import ProjectGlobal, ProjectCourse
+from project.sys import chmod
 
 def create_course(config_file, course):
     course = ProjectCourse(config_file, course)
@@ -9,6 +10,8 @@ def create_course(config_file, course):
     directory = raw_input("Full path to project directory: ")
     group = raw_input("Group: ")
     sections = raw_input("Sections: ")
+    os.makedirs(directory, 0730)
+    chmod(directory, user, group)
     course.write(user, directory, group, sections) 
 
 def delete_course(config_file, course):
