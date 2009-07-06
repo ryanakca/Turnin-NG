@@ -1,6 +1,6 @@
 from configobj import ConfigObj
 
-class ProjectGlobalConfig(object):
+class ProjectGlobal(object):
     """ This class is in case we ever decide we want global configurations. """
     
     def __init__(self, config_file):
@@ -8,9 +8,21 @@ class ProjectGlobalConfig(object):
         self.config.filename = config_file
         self.config.indent_type = '    '
         self.config.unrepr = True
-        self.config.reload()
+        if not self.config.has_key('Global'):
+            self.config.reload()
+            self.config['Global'] = {}
+            self.config.default = ''
+            self.config.write()
 
-class ProjectCourse(ProjectGlobalConfig):
+    def set_default(self, course):
+        if self.config.has_key(course):
+            self.config.reload()
+            self.config.default = course
+            self.config.write()
+        else:
+            raise ValueError("Please add the course %s first." % course)
+
+class ProjectCourse(ProjectGlobal):
     """ This class represents a turnin course object. """
 
     def __init__(self, config_file, course):
@@ -29,8 +41,7 @@ class ProjectCourse(ProjectGlobalConfig):
         self.group = self.course['group']
         self.sections = self.course['sections']
 
-
-    def write(self, user='', directory='', group='', sections=''):
+    def write(self, user='', directory='', group='', sections='', default=''):
         """ Modifies the config file. """
         #self.config.reload() # We don't want to clobber something
         if user:
@@ -41,6 +52,8 @@ class ProjectCourse(ProjectGlobalConfig):
             self.course['group'] = group
         if sections:
             self.course['sections'] = sections
+        if type(default) == bool:
+            self.course['default'] = default
         self.config.write()
 
 class ProjectProject(ProjectCourse):
