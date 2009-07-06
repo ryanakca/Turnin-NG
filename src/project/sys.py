@@ -1,5 +1,6 @@
 import pwd
+import grp
 import os
 
-def chmod(path, user, group):
-    return os.chmod(path, pwd.getpwnam[2], pwd.getpwnam[3])
+def chown(path, user, group):
+    return os.chown(path, pwd.getpwnam(user)[2], grp.getgrnam(group)[2])
