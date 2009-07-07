@@ -8,6 +8,7 @@ import time
 import tempfile
 
 from turnin.sys import chown
+from turnin.configparser import TurninCourse
 
 def check_group(group):
     # Gets the group database entry, selects [2] from the tuple (gr_name,
@@ -45,3 +46,10 @@ def submit_files(course_name, project, files):
     for j, file in enumerate(submitted_files):
         submitted_files[j] = file.name
     return submitted_files
+
+def list_projects(config, course):
+    projects = ['(Enabled, Project)']
+    course_obj = TurninCourse(config, course)
+    for i in course_obj.course.__dict__['sections']:
+        projects.append((course_obj.course[i]['enabled'], i))
+    return projects

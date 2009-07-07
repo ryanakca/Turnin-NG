@@ -5,7 +5,7 @@ import os.path
 import sys
 
 from turnin.configparser import TurninGlobal, TurninCourse, TurninProject
-from turnin.submitter import submit_files, check_group
+from turnin.submitter import submit_files, check_group, list_projects
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
@@ -13,8 +13,7 @@ if __name__ == '__main__':
     parser.add_option('-c', '--course', help='Set the course to submit the ' +
             'assignment to.')
     parser.add_option('-l', '--list', help='Lists projects for the course. ' +
-            'also displays wether or not the project is open.',
-            action='store_true')
+            'also displays wether or not the project is open.')
     parser.add_option('-p', '--project', help='Set the project to submit the '+
             'assigmnent to.')
     parser.add_option('-C', '--config', help='Set a custom configuration ' +
@@ -24,7 +23,9 @@ if __name__ == '__main__':
 
     (options, args) = parser.parse_args()
 
-    if not args:
+    if options.list:
+        options.course = options.list
+    if not options.list and not args:
         sys.exit(ValueError("Error, please submit at least one document."))
     if not options.course:
         sys.exit(ValueError("Error, please specify a course."))
@@ -42,6 +43,17 @@ if __name__ == '__main__':
                 options.course).course['default'])
     except ValueError, e:
         sys.exit(e)
+
+    if options.list:
+        try:
+            projects = list_projects(config, options.list)
+            for i in projects:
+                print i
+            sys.exit()
+        except ValueError, e:
+            sys.exit(e)
+
+
 
     if check_group(project.course['group']): # Check that the current user is in
                                              # the submitter group.
