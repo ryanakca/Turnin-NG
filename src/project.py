@@ -4,9 +4,9 @@ from optparse import OptionParser, OptionGroup
 import os.path
 import sys
 
-from project.configparser import ProjectGlobal, ProjectCourse, ProjectProject
-from project.coursemanage import create_course, delete_course, switch_course
-from project.projectmanage import create_project, delete_project
+from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
+from turnin.coursemanage import create_course, delete_course, switch_course
+from turnin.projectmanage import create_project, delete_project
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'

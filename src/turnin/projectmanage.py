@@ -2,8 +2,8 @@ import os
 import os.path
 import shutil
 
-from project.configparser import ProjectCourse, ProjectProject
-from project.sys import chown
+from turnin.configparser import ProjectCourse, ProjectProject
+from turnin.sys import chown
 
 def create_project(config_file, course, project):
     project_obj = ProjectProject(config_file, course, project)

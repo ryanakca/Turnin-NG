@@ -1,8 +1,8 @@
 import os
 import shutil
 
-from project.configparser import ProjectGlobal, ProjectCourse
-from project.sys import chown
+from turnin.configparser import ProjectGlobal, ProjectCourse
+from turnin.sys import chown
 
 def create_course(config_file, course):
     course = ProjectCourse(config_file, course)

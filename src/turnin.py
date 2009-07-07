@@ -37,6 +37,6 @@ if __name__ == '__main__':
     else:
         project = TurninProject(config, options.course, TurninCourse(config,
             options.course).course['default'])
-    
+
     check_group(project.course['group'])
     submit_files(options.course, project, args)
