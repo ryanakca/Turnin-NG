@@ -19,8 +19,8 @@ if __name__ == '__main__':
             help='Remove all files associated with the current project.')
     parser.add_option('-i', '--init', action='store_true', dest='init',
             help='Initialize this project')
-    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
-            help='Verbose. Print shell commands as they are executed.')
+#    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
+#            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('--config', help='Use an alternate config file')
     admin = OptionGroup(parser, "Administrative options",
             "These options can add or remove courses, etc.")
@@ -56,30 +56,36 @@ if __name__ == '__main__':
         except ValueError, e:
             sys.exit(e)
 
+
     # End user functions :
     default_course = ProjectGlobal(config).config['Global']['default']
     if not default_course:
         sys.exit("Please set the default course using the '-c course' or " +
             "'--switch=COURSE' options.")
 
-    # Create the project if needed before creating an object
+    # Create or delete the project if needed before creating an object
     if options.init:
         create_project(config, default_course, args[0])
         sys.exit("Successfully created the project %s in the course %s" %
                 (args[0], default_course))
-
-    project = ProjectProject(config, default_course, args[0])
-    # Enable submissions for a project
-    if options.enabled:
-        project.write(True)
-        sys.exit("Successfully enabled the project %s" % args[0])
-    elif not options.enabled: # Disable them.
-        project.write(False)
-        sys.exit("Successfully disabled the project %s" % args[0])
     elif options.remove:
         try:
             delete_project(config, default_course, args[0])
             sys.exit("Successfully deleted the project %s" % args[0])
         except ValueError, e:
             sys.exit(e)
-    print options, args
+
+
+    project = ProjectProject(config, default_course, args[0])
+    # Enable submissions for a project
+    if options.enabled:
+        project.write(True)
+        sys.exit("Successfully enabled the project %s" % args[0])
+    elif options.enabled == False: # Disable it. I know, using '== False' is
+        # bad according to PEP 8. However, using 'elif not options.enabled' will
+        # return true even if the user didn't pass the option since
+        # options.enabled will be None. We could check for != None, but I'd
+        # rather be explicit than implicit ;)
+        project.write(False)
+        sys.exit("Successfully disabled the project %s" % args[0])
+   #  print options, args
