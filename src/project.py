@@ -20,7 +20,7 @@ if __name__ == '__main__':
             help="Enable submissions for the current project but don't make " +
             "it default")
     parser.add_option('-r', '--remove', action='store_true', dest='remove',
-            help='Remove all files associated with the current project.')
+            help='Remove the current project and all associated files.')
     parser.add_option('-i', '--init', action='store_true', dest='init',
             help='Initialize this project')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
