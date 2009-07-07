@@ -5,15 +5,15 @@ from project.configparser import ProjectCourse, ProjectProject
 from project.sys import chown
 
 def create_project(config_file, course, project):
-    project = ProjectProject(config_file, course, project)
-    user = project.course['user']
-    group = project.course['group']
-    directory = os.path.join(project.course['directory'], project)
+    project_obj = ProjectProject(config_file, course, project)
+    user = project_obj.course['user']
+    group = project_obj.course['group']
+    directory = os.path.join(project_obj.course['directory'], project)
     os.makedirs(directory)
     os.chmod(directory, 0730)
     chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
-    course.write(True, description)
+    project_obj.write(True, description)
 
 def delete_project(config_file, course, project):
     project_obj = ProjectProject(config_file, course, project)

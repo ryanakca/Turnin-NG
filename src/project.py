@@ -60,13 +60,13 @@ if __name__ == '__main__':
     default_course = ProjectGlobal(config).config['Global']['default']
     if not default_course:
         sys.exit("Please set the default course using the '-c course' or " +
-        "'--switch=COURSE' options.")
+            "'--switch=COURSE' options.")
 
     # Create the project if needed before creating an object
     if options.init:
         create_project(config, default_course, args[0])
         sys.exit("Successfully created the project %s in the course %s" %
-                args[0], default_course)
+                (args[0], default_course))
 
     project = ProjectProject(config, default_course, args[0])
     # Enable submissions for a project
