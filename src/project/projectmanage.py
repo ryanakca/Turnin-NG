@@ -9,7 +9,7 @@ def create_project(config_file, course, project):
     project_obj = ProjectProject(config_file, course, project)
     user = project_obj.course['user']
     group = project_obj.course['group']
-    directory = os.path.join(project_obj.course['directory'], project)
+    directory = project_obj.project['directory']
     os.makedirs(directory)
     os.chmod(directory, 0730)
     chown(directory, user, group)
@@ -22,7 +22,7 @@ def delete_project(config_file, course, project):
         certain = raw_input("If you really want to delete this project and " +
                 "all associated files, enter 'yes' in capital letters: ")
         if certain == 'YES':
-            directory = os.path.join(project_obj.course['directory'], project)
+            directory = project_obj.project['directory']
             shutil.rmtree(directory, ignore_errors=True)
             if project_obj.course['default'] == project:
                 project_obj.course['default'] = ''

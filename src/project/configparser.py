@@ -71,6 +71,8 @@ class ProjectProject(ProjectCourse):
             self.config[course][project]['enabled'] = False
             self.config.write()
         self.project = self.course[project]
+        self.project['directory'] = os.path.join(self.course['directory'],
+                                project)
         self.name = project
 
     def read(self):
@@ -78,8 +80,9 @@ class ProjectProject(ProjectCourse):
         self.config.reload()
         self.description = self.project['description']
         self.enabled = self.project['enabled']
+        self.directory = self.project['directory']
 
-    def write(self, enabled, description='', default=False):
+    def write(self, enabled, description='', directory='', default=False):
         """ Modifies the config file. """
         #self.config.reload() # We don't want to clobber something
         self.project['enabled'] = enabled
