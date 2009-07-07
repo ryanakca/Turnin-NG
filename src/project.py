@@ -6,7 +6,7 @@ import sys
 
 from project.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from project.coursemanage import create_course, delete_course, switch_course
-from project.projectmanage import create_project
+from project.projectmanage import create_project, delete_project
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
@@ -43,8 +43,11 @@ if __name__ == '__main__':
         create_course(config, options.create_course) 
         sys.exit("Successfully created the course %s" % options.create_course)
     if options.delete_course:
-        delete_course(config, options.delete_course)
-        sys.exit("Successfully deleted the course %s" % options.delete_course)
+        try:
+            delete_course(config, options.delete_course)
+            sys.exit("Successfully deleted the course %s" % options.delete_course)
+        except ValueError, e:
+            sys.exit(e)
     if options.switch:
         switch_course(config, options.switch)
         sys.exit("Successfully switched the default course to %s" %
@@ -52,15 +55,28 @@ if __name__ == '__main__':
 
     # End user functions :
     default_course = ProjectGlobal(config).config['Global']['default']
+    if not default_course:
+        sys.exit("Please set the default course using the '-c course' or " +
+        "'--switch=COURSE' options.")
 
     # Create the project if needed before creating an object
     if options.init:
         create_project(config, default_course, args[0])
+        sys.exit("Successfully created the project %s in the course %s" %
+                args[0], default_course)
+
     project = ProjectProject(config, default_course, args[0])
     # Enable submissions for a project
     if options.enabled:
         project.write(True)
+        sys.exit("Successfully enabled the project %s" % args[0])
     elif not options.enabled: # Disable them.
         project.write(False)
-    
+        sys.exit("Successfully disabled the project %s" % args[0])
+    elif options.remove:
+        try:
+            delete_project(config, default_course, args[0])
+            sys.exit("Successfully deleted the project %s" % args[0])
+        except ValueError, e:
+            sys.exit(e)
     print options, args
