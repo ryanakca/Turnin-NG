@@ -1,4 +1,5 @@
-from os.path import join
+import os.path
+
 from configobj import ConfigObj
 
 class ProjectGlobal(object):

@@ -38,5 +38,6 @@ if __name__ == '__main__':
         project = TurninProject(config, options.course, TurninCourse(config,
             options.course).course['default'])
 
-    check_group(project.course['group'])
-    submit_files(options.course, project, args)
+    if check_group(project.course['group']): # Check that the current user is in
+                                             # the submitter group.
+        submit_files(options.course, project, args)
