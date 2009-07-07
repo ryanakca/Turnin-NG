@@ -29,8 +29,16 @@ class ProjectCourse(ProjectGlobal):
         if not self.config.has_key(course):
             self.config.reload() # We don't want to clobber something
             self.config[course] = {}
+            self.config[course]['default'] = ''
             self.config.write()
         self.course = self.config[course]
+
+    def set_default(self, project):
+        if self.course.has_key(project):
+            self.course['default'] = project
+            self.config.write()
+        else:
+            raise ValueError("Please add the project %s first." % project)
 
     def read(self):
         """ Reads the self.course section in the config file. """
@@ -63,6 +71,7 @@ class ProjectProject(ProjectCourse):
             self.config[course][project]['enabled'] = False
             self.config.write()
         self.project = self.course[project]
+        self.name = project
 
     def read(self):
         """ Reads the project from the config file. """
@@ -70,10 +79,12 @@ class ProjectProject(ProjectCourse):
         self.description = self.project['description']
         self.enabled = self.project['enabled']
 
-    def write(self, enabled, description=''):
+    def write(self, enabled, description='', default=False):
         """ Modifies the config file. """
         #self.config.reload() # We don't want to clobber something
         self.project['enabled'] = enabled
         if description:
             self.project['description'] = description
+        if default:
+            super(ProjectProject, self).set_default(self.name)
         self.config.write()

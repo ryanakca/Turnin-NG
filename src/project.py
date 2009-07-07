@@ -14,7 +14,8 @@ if __name__ == '__main__':
     parser.add_option('-d', '--disable', action='store_false', dest='enabled',
             help='Disable submissions for the current project.')
     parser.add_option('-e', '--enable', action='store_true', dest='enabled',
-            help='Enable submissions for the current project.')
+            help='Enable submissions for the current project and make it ' +
+            'the default project.')
     parser.add_option('-r', '--remove', action='store_true', dest='remove',
             help='Remove all files associated with the current project.')
     parser.add_option('-i', '--init', action='store_true', dest='init',
@@ -79,8 +80,8 @@ if __name__ == '__main__':
     project = ProjectProject(config, default_course, args[0])
     # Enable submissions for a project
     if options.enabled:
-        project.write(True)
-        sys.exit("Successfully enabled the project %s" % args[0])
+        project.write(True, default=True)
+        sys.exit("Successfully enabled and set default the project %s" % args[0])
     elif options.enabled == False: # Disable it. I know, using '== False' is
         # bad according to PEP 8. However, using 'elif not options.enabled' will
         # return true even if the user didn't pass the option since
