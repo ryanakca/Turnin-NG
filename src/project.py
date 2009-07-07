@@ -49,9 +49,12 @@ if __name__ == '__main__':
         except ValueError, e:
             sys.exit(e)
     if options.switch:
-        switch_course(config, options.switch)
-        sys.exit("Successfully switched the default course to %s" %
-                options.switch)
+        try:
+            switch_course(config, options.switch)
+            sys.exit("Successfully switched the default course to %s" %
+                    options.switch)
+        except ValueError, e:
+            sys.exit(e)
 
     # End user functions :
     default_course = ProjectGlobal(config).config['Global']['default']

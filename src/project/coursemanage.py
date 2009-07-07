@@ -35,5 +35,4 @@ def delete_course(config_file, course):
 
 def switch_course(config_file, course):
     global_obj = ProjectGlobal(config_file)
-    global_obj.config['Global']['default'] = course
-    global_obj.config.write()
+    global_obj.set_default(course)

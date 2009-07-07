@@ -8,16 +8,15 @@ class ProjectGlobal(object):
         self.config.filename = config_file
         self.config.indent_type = '    '
         self.config.unrepr = True
+        self.config.reload()
         if not self.config.has_key('Global'):
-            self.config.reload()
             self.config['Global'] = {}
             self.config['Global']['default'] = ''
             self.config.write()
 
     def set_default(self, course):
         if self.config.has_key(course):
-            self.config.reload()
-            self.config.default = course
+            self.config['Global']['default'] = course
             self.config.write()
         else:
             raise ValueError("Please add the course %s first." % course)
