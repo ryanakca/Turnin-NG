@@ -7,6 +7,7 @@ import sys
 from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from turnin.coursemanage import create_course, delete_course, switch_course
 from turnin.projectmanage import create_project, delete_project
+from turnin.projectmanage import compress_project
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
@@ -23,6 +24,8 @@ if __name__ == '__main__':
             help='Remove the current project and all associated files.')
     parser.add_option('-i', '--init', action='store_true', dest='init',
             help='Initialize this project')
+    parser.add_option('-p', '--compress', action='store_true',
+            help='Compress this project')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('--config', help='Use an alternate config file')
@@ -67,7 +70,8 @@ if __name__ == '__main__':
         sys.exit("Please set the default course using the '-c course' or " +
             "'--switch=COURSE' options.")
 
-    # Create or delete the project if needed before creating an object
+    # Create, delete or (un)compress the project if needed before creating an 
+    # object
     if options.init:
         create_project(config, default_course, args[0])
         sys.exit("Successfully created the project %s in the course %s" %
@@ -76,6 +80,12 @@ if __name__ == '__main__':
         try:
             delete_project(config, default_course, args[0])
             sys.exit("Successfully deleted the project %s" % args[0])
+        except ValueError, e:
+            sys.exit(e)
+    elif options.compress:
+        try:
+            compress_project(config, default_course, args[0])
+            sys.exit("Successfully compressed the project %s" % args[0])
         except ValueError, e:
             sys.exit(e)
 
@@ -95,4 +105,5 @@ if __name__ == '__main__':
     elif options.enabled_nodefault:
         project.write(True)
         sys.exit("Successfully enabled the project %s" % args[0])
+
    #  print options, args

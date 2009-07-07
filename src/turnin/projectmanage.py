@@ -41,13 +41,18 @@ def compress_project(config_file, course, project):
         if project_obj.project['enabled']:
             raise ValueError("Project %s is enabled, please disable it first." %
                     project)
+        elif (project_obj.project.has_key('tarball') and
+                            project_obj.project['tarball']):
+            raise ValueError("Project %s is already compressed.")
         archive_name = os.path.join(project_obj.course['directory'],
                 project_obj.name + '.tar.gz')
         print archive_name
         tar = tarfile.open(archive_name, 'w:gz')
+        print project_obj.project['directory']
         tar.add(project_obj.project['directory'])
         tar.close()
         project_obj.project['tarball'] = archive_name
+        project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:
         raise ValueError("%s is not an existing project in the course %s" %
