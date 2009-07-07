@@ -53,8 +53,6 @@ if __name__ == '__main__':
         except ValueError, e:
             sys.exit(e)
 
-
-
     if check_group(project.course['group']): # Check that the current user is in
                                              # the submitter group.
         files = submit_files(options.course, project, args)
