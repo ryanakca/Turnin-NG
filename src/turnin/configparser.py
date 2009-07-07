@@ -84,7 +84,8 @@ class ProjectProject(ProjectCourse):
         self.enabled = self.project['enabled']
         self.directory = self.project['directory']
 
-    def write(self, enabled, description='', directory='', default=False):
+    def write(self, enabled, description='', directory='', tarball='', 
+            default=False):
         """ Modifies the config file. """
         #self.config.reload() # We don't want to clobber something
         self.project['enabled'] = enabled
@@ -92,6 +93,8 @@ class ProjectProject(ProjectCourse):
             self.project['description'] = description
         if default:
             super(ProjectProject, self).set_default(self.name)
+        if directory:
+            self.project['tarball'] = tarball
         self.config.write()
 
 class TurninGlobal(object):

@@ -1,6 +1,7 @@
 import os
 import os.path
 import shutil
+import tarfile
 
 from turnin.configparser import ProjectCourse, ProjectProject
 from turnin.sys import chown
@@ -30,6 +31,24 @@ def delete_project(config_file, course, project):
             project_obj.config.write()
         else:
             raise ValueError("Aborting and keeping project.")
+    else:
+        raise ValueError("%s is not an existing project in the course %s" %
+                (project, course))
+
+def compress_project(config_file, course, project):
+    if ProjectCourse(config_file, course).course.has_key(project):
+        project_obj = ProjectProject(config_file, course, project)
+        if project_obj.project['enabled']:
+            raise ValueError("Project %s is enabled, please disable it first." %
+                    project)
+        archive_name = os.path.join(project_obj.course['directory'],
+                project_obj.name + '.tar.gz')
+        print archive_name
+        tar = tarfile.open(archive_name, 'w:gz')
+        tar.add(project_obj.project['directory'])
+        tar.close()
+        project_obj.project['tarball'] = archive_name
+        shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:
         raise ValueError("%s is not an existing project in the course %s" %
                 (project, course))
