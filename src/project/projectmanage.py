@@ -24,6 +24,8 @@ def delete_project(config_file, course, project):
         if certain == 'YES':
             directory = os.path.join(project_obj.course['directory'], project)
             shutil.rmtree(directory, ignore_errors=True)
+            if project_obj.course['default'] == project:
+                project_obj.course['default'] = ''
             del project_obj.course[project]
             project_obj.config.write()
         else:
