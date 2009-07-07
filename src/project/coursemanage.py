@@ -28,6 +28,8 @@ def delete_course(config_file, course):
                     (course_obj.config['Global']['default'] == course)):
                 course_obj.config['Global']['default'] = ''
             course_obj.config.write()
+        else:
+            raise ValueError("Aborting and keeping course %s" % course)
     else:
         raise ValueError("%s is not an existing course" % course)
 
