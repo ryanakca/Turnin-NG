@@ -6,6 +6,7 @@ from project.sys import chown
 
 def create_project(config_file, course, project):
     project = ProjectProject(config_file, course, project)
+    print project
     user = project.course['user']
     group = project.course['group']
     directory = os.path.join(project.course['directory'], project)

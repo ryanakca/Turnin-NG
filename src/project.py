@@ -6,7 +6,7 @@ import sys
 
 from project.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from project.coursemanage import create_course, delete_course, switch_course
-from project.projectmanage import create_project 
+from project.projectmanage import create_project
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
@@ -52,10 +52,12 @@ if __name__ == '__main__':
 
     # End user functions :
     default_course = ProjectGlobal(config).config['Global']['default']
-    project = ProjectProject(config, default_course, args[0])
-    # Enable submissions for a project
+
+    # Create the project if needed before creating an object
     if options.init:
         create_project(config, default_course, args[0])
+    project = ProjectProject(config, default_course, args[0])
+    # Enable submissions for a project
     if options.enabled:
         project.write(True)
     elif not options.enabled: # Disable them.
