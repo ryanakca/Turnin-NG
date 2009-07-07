@@ -1,5 +1,7 @@
-## Original turnin.cf:
+# This is an example configuration file. It doesn't need to be copied, it will
+# be automatically created on project's first run.
 
+## Original turnin.cf:
 # # $Id: turnin.cf,v 5.19 90/09/18 15:12:38 ksb Exp $
 # # The file turnin.cf consists of a line for each course with the following
 # # information separated by colons: The course name, the id for the account
@@ -17,8 +19,27 @@
 # cisc458:cisc458:submit:cisc458t:ALL
 
 # We will use the following format:
-# [course_name]
-# user = username
-# directory = directory
-# group = group
-# sections = section1;section2;section3
+[Global]
+    default = 'course1'
+[course1]
+    user = 'professor1'
+    directory = '/srv/submit/course1/'
+    group = 'course1_students'
+    sections = ''
+    [[project1]]
+        enabled = True
+        description = "Course1's first project."
+    [[project2]]
+        enabled = False
+        description = "Course1's second project."
+[course2]
+    user = 'professor2'
+    directory = '/srv/submit/course2/'
+    group = 'course2_students'
+    sections = ''
+    [[project1]]
+        enabled = False
+        description = "Course2's first project."
+    [[project2]]
+        enabled = True
+        description = "Course2's second project."
