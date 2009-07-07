@@ -26,11 +26,20 @@ def submit_files(course_name, project, files):
          'timestamp': time.strftime("%Y-%m-%d-%H%M%S")}
     archive = os.path.join(tempdir, filename )
     tar = tarfile.open(archive, 'w:gz')
+    tempdir2 = tempfile.mkdtemp()
     for file in files:
-        tar.add(file)
-    submitted_files = tar.list(verbose=True)
+        if os.path.isdir(file):
+            shutil.copytree(file, os.path.join(tempdir2, file))
+        else:
+            shutil.copy(file, tempdir2)
+    tar.add(file, '%(projectname)s-%(username)s' %
+                           {'projectname': project.name,
+                            'username': pwd.getpwuid(os.getuid())[0]})
+    submitted_files = tar.members # tar.list(verbose=True)
     tar.close()
     chown(archive, project.course['user'], project.course['group'])
     shutil.move(archive, os.path.join(project.project['directory'], filename))
     shutil.rmtree(tempdir, ignore_errors=True)
+    for j, file in enumerate(submitted_files):
+        submitted_files[j] = file.name
     return submitted_files

@@ -19,8 +19,8 @@ if __name__ == '__main__':
             'assigmnent to.')
     parser.add_option('-C', '--config', help='Set a custom configuration ' +
             'file.')
-    #parser.add_option('-v', '--verbose', action='store_true', help='Print ' +
-    #        'a list of submitted files.')
+    parser.add_option('-v', '--verbose', action='store_true', help='Print ' +
+            'a list of submitted files.')
 
     (options, args) = parser.parse_args()
 
@@ -45,4 +45,12 @@ if __name__ == '__main__':
 
     if check_group(project.course['group']): # Check that the current user is in
                                              # the submitter group.
-        submit_files(options.course, project, args)
+        files = submit_files(options.course, project, args)
+        if options.verbose:
+            print "Submitted files:"
+            for file in files:
+                print file
+            sys.exit()
+    else:
+        sys.exit("You need to be in the group %s to submit files" %
+                project.course['group'])
