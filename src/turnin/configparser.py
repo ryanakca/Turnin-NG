@@ -130,9 +130,8 @@ class TurninProject(TurninCourse):
     def __init__(self, config_file, course, project):
         super(TurninProject, self).__init__(config_file, course)
         if not self.course.has_key(project):
-            self.config[course][project] = {}
-            self.config[course][project]['enabled'] = False
-            self.config.write()
+            raise ValueError("Project %s does not exist in course %s!" %
+                    (project, course))
         self.project = self.course[project]
         self.project['directory'] = os.path.join(self.course['directory'],
                 project)

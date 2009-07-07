@@ -28,15 +28,20 @@ if __name__ == '__main__':
         sys.exit(ValueError("Error, please submit at least one document."))
     if not options.course:
         sys.exit(ValueError("Error, please specify a course."))
-    if options.config:
-        config = options.config
-    else:
-        config = os.path.join("/srv/submit", options.course, "turnin.cf")
-    if options.project:
-        project = TurninProject(config, options.course, options.project)
-    else:
-        project = TurninProject(config, options.course, TurninCourse(config,
-            options.course).course['default'])
+    try:
+        # We're nesting this in a try: because we might find out the requested
+        # course or project doesn't exist.
+        if options.config:
+            config = options.config
+        else:
+            config = os.path.join("/srv/submit", options.course, "turnin.cf")
+        if options.project:
+            project = TurninProject(config, options.course, options.project)
+        else:
+            project = TurninProject(config, options.course, TurninCourse(config,
+                options.course).course['default'])
+    except ValueError, e:
+        sys.exit(e)
 
     if check_group(project.course['group']): # Check that the current user is in
                                              # the submitter group.
