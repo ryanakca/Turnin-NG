@@ -7,6 +7,17 @@ from turnin.configparser import ProjectCourse, ProjectProject
 from turnin.sys import chown
 
 def create_project(config_file, course, project):
+    """
+    Create the project 'project'.
+
+    @type config_file: string
+    @param config_file: path to the configuration file
+    @type course: string
+    @param course: course name
+    @type project: string
+    @param project project name
+
+    """
     project_obj = ProjectProject(config_file, course, project)
     user = project_obj.course['user']
     group = project_obj.course['group']
@@ -18,6 +29,19 @@ def create_project(config_file, course, project):
     project_obj.write(True, description)
 
 def delete_project(config_file, course, project):
+    """
+    Delete the project 'project'
+
+    @type config_file: string
+    @param config_file: path to the configuration file
+    @type course: string
+    @param course: course name
+    @type project: string
+    @param project: project name
+    @raise ValueError: The user enters anything but 'YES' at the prompt.
+    @raise valueError: The project doesn't exist.
+
+    """
     if ProjectCourse(config_file, course).course.has_key(project):
         project_obj = ProjectProject(config_file, course, project)
         certain = raw_input("If you really want to delete this project and " +
@@ -36,6 +60,20 @@ def delete_project(config_file, course, project):
                 (project, course))
 
 def compress_project(config_file, course, project):
+    """
+    Compress the project 'project'.
+
+    @type config_file: string
+    @param config_file: path to the configuration file
+    @type course: string
+    @param course: course name
+    @type project: string
+    @param project: project name
+    @raise ValueError: The project is enabled / accepting submissions
+    @raise ValueError: The project is already compressed
+    @raise ValueError: The project doesn't exist.
+
+    """
     if ProjectCourse(config_file, course).course.has_key(project):
         project_obj = ProjectProject(config_file, course, project)
         if project_obj.project['enabled']:

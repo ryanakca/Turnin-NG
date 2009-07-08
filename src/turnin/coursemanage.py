@@ -33,7 +33,7 @@ def delete_course(config_file, course):
     @param config_file: path to the configuration file
     @type course: string
     @param course: course name
-    @raise ValueError: The user decides enters anything but 'YES at the prompt.
+    @raise ValueError: The user enters anything but 'YES' at the prompt.
     @raise ValueError: The course does not exist.
 
     """
