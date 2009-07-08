@@ -120,6 +120,8 @@ if __name__ == '__main__':
     project = ProjectProject(config, default_course, project_name)
     # Enable submissions for a project
     if options.enabled:
+        if project.project['tarball']:
+            extract_project(config, default_course, project_name)
         project.write(True, default=True)
         sys.exit("Successfully enabled and set default the project %s" % project_name)
     elif options.enabled == False: # Disable it. I know, using '== False' is
@@ -130,7 +132,7 @@ if __name__ == '__main__':
         project.write(False)
         sys.exit("Successfully disabled the project %s" % project_name)
     elif options.enabled_nodefault:
+        if project.project['tarball']:
+            extract_project(config, default_course, project_name)
         project.write(True)
         sys.exit("Successfully enabled the project %s" % project_name)
-
-   #  print options, args
