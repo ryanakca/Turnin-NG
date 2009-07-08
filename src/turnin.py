@@ -13,7 +13,8 @@ if __name__ == '__main__':
     parser.add_option('-c', '--course', help='Set the course to submit the ' +
             'assignment to.')
     parser.add_option('-l', '--list', help='Lists projects for the course. ' +
-            'also displays wether or not the project is open.')
+            'also displays wether or not the project is open.',
+            action='set_true')
     parser.add_option('-p', '--project', help='Set the project to submit the '+
             'assigmnent to.')
     parser.add_option('-C', '--config', help='Set a custom configuration ' +
@@ -23,8 +24,7 @@ if __name__ == '__main__':
 
     (options, args) = parser.parse_args()
 
-    if options.list:
-        options.course = options.list
+    # If we're listing projects, it's obvious we won't be submitting to one.
     if not options.list and not args:
         sys.exit(ValueError("Error, please submit at least one document."))
     if not options.course:
@@ -36,6 +36,18 @@ if __name__ == '__main__':
             config = options.config
         else:
             config = os.path.join("/srv/submit", options.course, "turnin.cf")
+        # We're listing the courses:
+        if options.list:
+            projects = list_projects(config, options.course)
+            for i in projects:
+                print i
+            sys.exit()
+    except ValueError, e:
+        sys.exit(e)
+
+    try:
+        # We're creating after having run list because if the user is asking for
+        # a list of projects, the user won't be passing a project.
         if options.project:
             project = TurninProject(config, options.course, options.project)
         else:
@@ -44,17 +56,11 @@ if __name__ == '__main__':
     except ValueError, e:
         sys.exit(e)
 
-    if options.list:
-        try:
-            projects = list_projects(config, options.list)
-            for i in projects:
-                print i
-            sys.exit()
-        except ValueError, e:
-            sys.exit(e)
 
-    if check_group(project.course['group']): # Check that the current user is in
-                                             # the submitter group.
+    # We have checked that the user has provided a course, a project and
+    # assignments. We can now proceed to submit them.
+    # Check that the current user is in the submitter group.
+    if check_group(project.course['group']):
         files = submit_files(options.course, project, args)
         if options.verbose:
             print "Submitted files:"
