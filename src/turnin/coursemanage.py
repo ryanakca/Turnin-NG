@@ -12,6 +12,7 @@ def create_course(config_file, course):
     @param config_file: path to the configuration file
     @type course: string
     @param course: course name
+    @rtype: None
 
     """
     course = ProjectCourse(config_file, course)
@@ -33,6 +34,7 @@ def delete_course(config_file, course):
     @param config_file: path to the configuration file
     @type course: string
     @param course: course name
+    @rtype: None
     @raise ValueError: The user enters anything but 'YES' at the prompt.
     @raise ValueError: The course does not exist.
 
@@ -61,6 +63,7 @@ def switch_course(config_file, course):
     @param config_file: path to the configuration file
     @type course: string
     @param course: course name
+    @rtype: None
 
     """
     global_obj = ProjectGlobal(config_file)

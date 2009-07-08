@@ -16,6 +16,7 @@ def create_project(config_file, course, project):
     @param course: course name
     @type project: string
     @param project project name
+    @rtype: None
 
     """
     project_obj = ProjectProject(config_file, course, project)
@@ -38,6 +39,7 @@ def delete_project(config_file, course, project):
     @param course: course name
     @type project: string
     @param project: project name
+    @rtype: None
     @raise ValueError: The user enters anything but 'YES' at the prompt.
     @raise valueError: The project doesn't exist.
 
@@ -69,6 +71,7 @@ def compress_project(config_file, course, project):
     @param course: course name
     @type project: string
     @param project: project name
+    @rtype: None
     @raise ValueError: The project is enabled / accepting submissions
     @raise ValueError: The project is already compressed
     @raise ValueError: The project doesn't exist.
