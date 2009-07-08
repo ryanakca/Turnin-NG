@@ -27,7 +27,7 @@ from turnin.projectmanage import compress_project, extract_project
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
-    parser = OptionParser(version='0.1_pre-alpha', usage=usage)
+    parser = OptionParser(version='0.1~beta1', usage=usage)
     parser.add_option('-d', '--disable', action='store_false', dest='enabled',
             help='Disable submissions for the current project.')
     parser.add_option('-e', '--enable', action='store_true', dest='enabled',
