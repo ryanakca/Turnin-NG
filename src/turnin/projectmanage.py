@@ -84,13 +84,14 @@ def compress_project(config_file, course, project):
                     project)
         elif (project_obj.project.has_key('tarball') and
                             project_obj.project['tarball']):
-            raise ValueError("Project %s is already compressed.")
+            raise ValueError("Project %s is already compressed." % project)
         archive_name = os.path.join(project_obj.course['directory'],
                 project_obj.name + '.tar.gz')
         print archive_name
         tar = tarfile.open(archive_name, 'w:gz')
         print project_obj.project['directory']
-        tar.add(project_obj.project['directory'])
+        tar.add(project_obj.project['directory'], project_obj.name)
+        print tar.members
         tar.close()
         project_obj.project['tarball'] = archive_name
         project_obj.config.write()
