@@ -3,9 +3,22 @@ import os.path
 from configobj import ConfigObj
 
 class ProjectGlobal(object):
-    """ This class is in case we ever decide we want global configurations. """
+    """ This class class represents the global configurations for the project
+        command.
+
+    """
 
     def __init__(self, config_file):
+        """
+        Initialize. We'll create the configuration file if it doesn't
+        already exist. We'll also add the [Global] section if it isn't
+        already present.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @rtype: None
+
+        """
         self.config = ConfigObj()
         self.config.filename = config_file
         self.config.indent_type = '    '
@@ -17,6 +30,14 @@ class ProjectGlobal(object):
             self.config.write()
 
     def set_default(self, course):
+        """
+        Set the course 'course' as the default course for this professor.
+
+        @type course: string
+        @param course: Name of the course we want to set as default
+        @rtype: None
+
+        """
         if self.config.has_key(course):
             self.config['Global']['default'] = course
             self.config.write()
@@ -24,9 +45,20 @@ class ProjectGlobal(object):
             raise ValueError("Please add the course %s first." % course)
 
 class ProjectCourse(ProjectGlobal):
-    """ This class represents a turnin course object. """
+    """ This class represents a course object for project. """
 
     def __init__(self, config_file, course):
+        """
+        Initialize the course. If it doesn't already exist, we'll create it.
+        self.course will be a shortcut to access the course configurations.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @type course: string
+        @param course: name of the course
+        @rtype: None
+
+        """
         super(ProjectCourse, self).__init__(config_file)
         if not self.config.has_key(course):
             self.config.reload() # We don't want to clobber something
@@ -34,8 +66,17 @@ class ProjectCourse(ProjectGlobal):
             self.config[course]['default'] = ''
             self.config.write()
         self.course = self.config[course]
+        """ A shortcut to access the course configurations. """
 
     def set_default(self, project):
+        """
+        Set the project 'project' as the default project for this course.
+
+        @type project: string
+        @param project: Name of the project we want to set as default
+        @rtype: None
+
+        """
         if self.course.has_key(project):
             self.course['default'] = project
             self.config.write()
@@ -51,7 +92,18 @@ class ProjectCourse(ProjectGlobal):
         self.sections = self.course['sections']
 
     def write(self, user='', directory='', group='', sections=''):
-        """ Modifies the config file. """
+        """ Modifies the config file.
+
+        @type user: string
+        @param user: username that owns the course directory.
+        @type directory: string
+        @param directory: path to the course submission directory.
+        @type group: string
+        @param group: group that owns teh course directory.
+        @type section: python list
+        @param section: I don't know. It was in the original turnin.cf
+
+        """
         #self.config.reload() # We don't want to clobber something
         if user:
             self.course['user'] = user
@@ -64,9 +116,22 @@ class ProjectCourse(ProjectGlobal):
         self.config.write()
 
 class ProjectProject(ProjectCourse):
-    """ This class represents a turnin course's project object. """
+    """ This class represents a project object for project. """
 
     def __init__(self, config_file, course, project):
+        """
+        Initialize the project. If it doesn't already exist, we'll create it.
+        self.project will be a shortcut to access the project configurations.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @type course: string
+        @param course: name of the course
+        @type project: string
+        @param project: name of the project.
+        @rtype: None
+
+        """
         super(ProjectProject, self).__init__(config_file, course)
         if not self.course.has_key(project):
             self.config[course][project] = {}
@@ -86,7 +151,17 @@ class ProjectProject(ProjectCourse):
 
     def write(self, enabled, description='', directory='', tarball='', 
             default=False):
-        """ Modifies the config file. """
+        """
+        Modifies the config file.
+
+        @type enabled: Bool
+        @param enabled: Is this course enabled? True/False
+        @type description: string
+        @param description: Optional description for this project.
+        @type tarball: string
+        @param tarball: Path to the compressed project's tarball.
+
+        """
         #self.config.reload() # We don't want to clobber something
         self.project['enabled'] = enabled
         if description:
@@ -98,9 +173,22 @@ class ProjectProject(ProjectCourse):
         self.config.write()
 
 class TurninGlobal(object):
-    """ This class is in case we ever decide we want global configurations. """
+    """
+    This class class represents the global configurations for the turnin
+    command.
+
+    """
 
     def __init__(self, config_file):
+        """
+        Initialize the global configurations.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @rtype: None
+
+        """
+
         self.config = ConfigObj()
         self.config.filename = config_file
         self.config.indent_type = '    '
@@ -110,9 +198,20 @@ class TurninGlobal(object):
             raise ValueError("Invalid config file")
 
 class TurninCourse(TurninGlobal):
-    """ This class represents a turnin course object. """
+    """ This class represents a course object for turnin. """
 
     def __init__(self, config_file, course):
+        """
+        Initialize the turnin course object. self.course is an alias to access
+        the course configurations.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @type course: string
+        @param course: name of the course
+        @rtype: None
+
+        """
         super(TurninCourse, self).__init__(config_file)
         if not self.config.has_key(course):
             raise ValueError("Course %s does not exists!" % course)
@@ -131,7 +230,20 @@ class TurninProject(TurninCourse):
     """ This class represents a turnin course's project object. """
 
     def __init__(self, config_file, course, project):
-        super(TurninProject, self).__init__(config_file, course)
+        """
+        Initialize the project's configurations for turnin.
+        self.project will be a shortcut to access the project configurations.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @type course: string
+        @param course: name of the course
+        @type project: string
+        @param project: name of the project.
+        @rtype: None
+
+        """
+       super(TurninProject, self).__init__(config_file, course)
         if not self.course.has_key(project):
             raise ValueError("Project %s does not exist in course %s!" %
                     (project, course))
