@@ -65,6 +65,7 @@ class ProjectCourse(ProjectGlobal):
             self.config.reload() # We don't want to clobber something
             self.config[course] = {}
             self.config[course]['default'] = ''
+            self.config[course]['description'] = ''
             self.config.write()
         self.course = self.config[course]
         """ @ivar: A shortcut to access the course configurations. """

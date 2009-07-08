@@ -78,11 +78,12 @@ def list_projects(config, course):
     @type course: string
     @param course: course name
     @rtype: list
-    @return: List of (Enabled/Disabled, Project_name) tuples
+    @return: List of (Enabled/Disabled, Project_name, Description) tuples
 
     """
-    projects = ['(Enabled, Project)']
+    projects = ['(Enabled, Project, Description)']
     course_obj = TurninCourse(config, course)
     for i in course_obj.course.__dict__['sections']:
-        projects.append((course_obj.course[i]['enabled'], i))
+        projects.append((course_obj.course[i]['enabled'], i,
+            course_obj.course[i]['description']))
     return projects
