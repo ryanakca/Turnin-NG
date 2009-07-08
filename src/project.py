@@ -30,7 +30,7 @@ if __name__ == '__main__':
             help='Extract this project')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
-    parser.add_option('--config', help='Use an alternate config file')
+    parser.add_option('-C', '--config', help='Use an alternate config file')
     admin = OptionGroup(parser, "Administrative options",
             "These options can add or remove courses, etc.")
     admin.add_option('--create-course', help='Creates a course')
