@@ -21,7 +21,6 @@ import os.path
 import pwd
 import shutil
 import tarfile
-import time
 import tempfile
 
 from turnin.sys import chown
@@ -61,9 +60,8 @@ def submit_files(course_name, project, files):
     # Maybe we should use pwd.getpwuid(os.getuid())[4].replace(' ', '') ---
     # that's to say, their full name stored in GECOS.
     temparchive = tempfile.NamedTemporaryFile()
-    filename =  '%(username)s-%(timestamp)s.tar.gz' % \
-        {'username': pwd.getpwuid(os.getuid())[0],
-         'timestamp': time.strftime("%Y-%m-%d-%H%M%S")}
+    filename =  '%(username)s.tar.gz' % \
+        {'username': pwd.getpwuid(os.getuid())[0]}
     tempdir = tempfile.mkdtemp()
     for file in files:
         if os.path.isdir(file):
