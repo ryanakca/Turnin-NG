@@ -40,8 +40,6 @@ if __name__ == '__main__':
     parser.add_option_group(admin)
     (options, args) = parser.parse_args()
 
-    if len(args) > 1:
-        raise ValueError("Error, please pass one project name at a time.")
     if options.config:
         config = options.config
     else:
@@ -72,44 +70,51 @@ if __name__ == '__main__':
         sys.exit("Please set the default course using the '-c course' or " +
             "'--switch=COURSE' options.")
 
+    # Let's set the project_name variable
+    if len(args) > 1:
+        raise ValueError("Error, please pass one project name at a time.")
+    elif len(args) == 1:
+        project_name = args[0]
+    else:
+        project_name = ProjectCourse(config, default_course).course['default']
     # Create, delete or (un)compress the project if needed before creating an 
     # object
     if options.init:
-        create_project(config, default_course, args[0])
+        create_project(config, default_course, project_name)
         sys.exit("Successfully created the project %s in the course %s" %
-                (args[0], default_course))
+                (project_name, default_course))
     elif options.remove:
         try:
-            delete_project(config, default_course, args[0])
-            sys.exit("Successfully deleted the project %s" % args[0])
+            delete_project(config, default_course, project_name)
+            sys.exit("Successfully deleted the project %s" % project_name)
         except ValueError, e:
             sys.exit(e)
     # Compress or decompress
     try:
         if options.compress:
-            compress_project(config, default_course, args[0])
-            sys.exit("Successfully compressed the project %s" % args[0])
+            compress_project(config, default_course, project_name)
+            sys.exit("Successfully compressed the project %s" % project_name)
         elif options.extract:
-            extract_project(config, default_course, args[0])
-            sys.exit("Successfully extracted the project %s" % args[0])
+            extract_project(config, default_course, project_name)
+            sys.exit("Successfully extracted the project %s" % project_name)
     except ValueError, e:
         sys.exit(e)
 
 
-    project = ProjectProject(config, default_course, args[0])
+    project = ProjectProject(config, default_course, project_name)
     # Enable submissions for a project
     if options.enabled:
         project.write(True, default=True)
-        sys.exit("Successfully enabled and set default the project %s" % args[0])
+        sys.exit("Successfully enabled and set default the project %s" % project_name)
     elif options.enabled == False: # Disable it. I know, using '== False' is
         # bad according to PEP 8. However, using 'elif not options.enabled' will
         # return true even if the user didn't pass the option since
         # options.enabled will be None. We could check for != None, but I'd
         # rather be explicit than implicit ;)
         project.write(False)
-        sys.exit("Successfully disabled the project %s" % args[0])
+        sys.exit("Successfully disabled the project %s" % project_name)
     elif options.enabled_nodefault:
         project.write(True)
-        sys.exit("Successfully enabled the project %s" % args[0])
+        sys.exit("Successfully enabled the project %s" % project_name)
 
    #  print options, args
