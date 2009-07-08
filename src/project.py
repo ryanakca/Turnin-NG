@@ -7,7 +7,7 @@ import sys
 from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from turnin.coursemanage import create_course, delete_course, switch_course
 from turnin.projectmanage import create_project, delete_project
-from turnin.projectmanage import compress_project
+from turnin.projectmanage import compress_project, extract_project
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
@@ -26,6 +26,8 @@ if __name__ == '__main__':
             help='Initialize this project')
     parser.add_option('-p', '--compress', action='store_true',
             help='Compress this project')
+    parser.add_option('-x', '--extract', action='store_true',
+            help='Extract this project')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('--config', help='Use an alternate config file')
@@ -82,12 +84,16 @@ if __name__ == '__main__':
             sys.exit("Successfully deleted the project %s" % args[0])
         except ValueError, e:
             sys.exit(e)
-    elif options.compress:
-        try:
+    # Compress or decompress
+    try:
+        if options.compress:
             compress_project(config, default_course, args[0])
             sys.exit("Successfully compressed the project %s" % args[0])
-        except ValueError, e:
-            sys.exit(e)
+        elif options.extract:
+            extract_project(config, default_course, args[0])
+            sys.exit("Successfully extracted the project %s" % args[0])
+    except ValueError, e:
+        sys.exit(e)
 
 
     project = ProjectProject(config, default_course, args[0])

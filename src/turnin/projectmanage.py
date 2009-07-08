@@ -87,15 +87,43 @@ def compress_project(config_file, course, project):
             raise ValueError("Project %s is already compressed." % project)
         archive_name = os.path.join(project_obj.course['directory'],
                 project_obj.name + '.tar.gz')
-        print archive_name
         tar = tarfile.open(archive_name, 'w:gz')
-        print project_obj.project['directory']
         tar.add(project_obj.project['directory'], project_obj.name)
-        print tar.members
         tar.close()
         project_obj.project['tarball'] = archive_name
         project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
+    else:
+        raise ValueError("%s is not an existing project in the course %s" %
+                (project, course))
+
+def extract_project(config_file, course, project):
+    """
+    Uncompress the project 'project'.
+
+    @type config_file: string
+    @param config_file: path to the configuration file
+    @type course: string
+    @param course: course name
+    @type project: string
+    @param project: project name
+    @rtype: None
+    @raise ValueError: The project is not compressed
+    @raise ValueError: The project does not exist.
+
+    """
+    if ProjectCourse(config_file, course).course.has_key(project):
+        project_obj = ProjectProject(config_file, course, project)
+        if not project_obj.project['tarball']:
+            raise ValueError("This project is not compressed.")
+        print project_obj.project['tarball']
+        tar = tarfile.open(project_obj.project['tarball'], 'r:gz')
+        # Extract it to the course directory instead of to '.'
+        tar.extractall(path=project_obj.course['directory'])
+        tar.close()
+        os.remove(project_obj.project['tarball'])
+        project_obj.project['tarball'] = ''
+        project_obj.config.write()
     else:
         raise ValueError("%s is not an existing project in the course %s" %
                 (project, course))
