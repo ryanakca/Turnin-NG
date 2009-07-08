@@ -36,6 +36,7 @@ class ProjectGlobal(object):
         @type course: string
         @param course: Name of the course we want to set as default
         @rtype: None
+        @raise ValueError: We try to set a non-existent course as default.
 
         """
         if self.config.has_key(course):
@@ -66,7 +67,7 @@ class ProjectCourse(ProjectGlobal):
             self.config[course]['default'] = ''
             self.config.write()
         self.course = self.config[course]
-        """ A shortcut to access the course configurations. """
+        """ @ivar: A shortcut to access the course configurations. """
 
     def set_default(self, project):
         """
@@ -75,6 +76,7 @@ class ProjectCourse(ProjectGlobal):
         @type project: string
         @param project: Name of the project we want to set as default
         @rtype: None
+        @raise ValueError: We try to set a non-existent project as default.
 
         """
         if self.course.has_key(project):
@@ -138,6 +140,7 @@ class ProjectProject(ProjectCourse):
             self.config[course][project]['enabled'] = False
             self.config.write()
         self.project = self.course[project]
+        """ @ivar: shortcut to the project configurations """
         self.project['directory'] = os.path.join(self.course['directory'],
                                 project)
         self.name = project
@@ -186,6 +189,8 @@ class TurninGlobal(object):
         @type config_file: string
         @param config_file: path to the project configuration file
         @rtype: None
+        @raise ValueError: The user is trying to use a poorly formatted
+        configuration file.
 
         """
 
@@ -210,12 +215,14 @@ class TurninCourse(TurninGlobal):
         @type course: string
         @param course: name of the course
         @rtype: None
+        @raise ValueError: The course isn't defined in the config file.
 
         """
         super(TurninCourse, self).__init__(config_file)
         if not self.config.has_key(course):
             raise ValueError("Course %s does not exists!" % course)
         self.course = self.config[course]
+        """ @ivar: shortcut to the course configurations. """
 
 
     def read(self):
@@ -241,13 +248,15 @@ class TurninProject(TurninCourse):
         @type project: string
         @param project: name of the project.
         @rtype: None
+        @raise ValueError: The project isn't defined in the config file.
 
         """
-       super(TurninProject, self).__init__(config_file, course)
+        super(TurninProject, self).__init__(config_file, course)
         if not self.course.has_key(project):
             raise ValueError("Project %s does not exist in course %s!" %
                     (project, course))
         self.project = self.course[project]
+        """ @ivar: shortcut to the project configurations. """
         self.project['directory'] = os.path.join(self.course['directory'],
                 project)
         self.name = project
