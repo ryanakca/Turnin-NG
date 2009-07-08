@@ -14,7 +14,7 @@ if __name__ == '__main__':
             'assignment to.')
     parser.add_option('-l', '--list', help='Lists projects for the course. ' +
             'also displays wether or not the project is open.',
-            action='set_true')
+            action='store_true')
     parser.add_option('-p', '--project', help='Set the project to submit the '+
             'assigmnent to.')
     parser.add_option('-C', '--config', help='Set a custom configuration ' +
