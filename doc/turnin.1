@@ -1,0 +1,47 @@
+.TH TURNIN 1 "JULY 2009" Turnin-NG "Queen's University"
+.SH TURNIN
+turnin \- submit assignments to be graded
+.SH SYNOPSYS
+.B turnin [
+.I OPTIONS
+.B ] -c [
+.I course-name
+.B ] files
+.SH DESCRIPTION
+Submits assignments to be graded. We submit to the default project if it is not
+specified as an option.
+
+.SH REQUIRED ARGUMENTS
+.IP "\-c, \-\-course"
+Sets the course to which we'll submit our assignments.
+.IP files
+A list of files we wish to submit. They will be compressed using
+.B tar(1)
+and 
+.B gzip(1)
+formats before being copied to the submission directory.
+.SH OPTIONS
+.IP \-\-version
+Print turnin's version
+.IP "\-h, \-\-help"
+Print a help message
+.IP "\-l, \-\-list"
+Prints a list of projects, along with wether or not they are enabled and shows
+which project is the default project.
+.IP "\-p, \-\-project"
+Sets the project to which we'll submit our assignments.
+.IP "\-C, \-\-config"
+Path to an alternate configuration file
+.IP "\-v, \-\-verbose"
+Prints a list of submitted files once they have been submitted.
+
+.SH FILES
+.I ~/.turnin.cf
+
+.SH AUTHOR
+Turnin-NG and this manpage were written by Ryan Kavanagh <ryanakca@kubuntu.org>
+in July 2009. It is a replacement for the 'project' and 'turnin' commands
+written in 1990 for the SPARC architecture by an unknown author.
+
+Both Turnin-NG and this manpage are distributed under the terms of the GNU
+General Public License version 2, or (at your option) any later version.
