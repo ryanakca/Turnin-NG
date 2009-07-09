@@ -34,7 +34,7 @@ def create_course(config_file, course):
     """
     course = ProjectCourse(config_file, course)
     user = raw_input("Username [usually your UNIX login]: ")
-    directory = raw_input("Full path to project directory: ")
+    directory = raw_input("Full path to the course directory: ")
     group = raw_input("Group: ")
     os.makedirs(directory) # We could supply the mode here, but it might get
                            #ignored on some systems. We'll do it here instead
