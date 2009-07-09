@@ -35,6 +35,8 @@ if __name__ == '__main__':
             'assigmnent to.')
     parser.add_option('-C', '--config', help='Set a custom configuration ' +
             'file.')
+    parser.add_option('-k', '--keyid', help='Cryptographically sign this ' +
+            'assignment using this key.')
     parser.add_option('-v', '--verbose', action='store_true', help='Print ' +
             'a list of submitted files.')
 
@@ -77,7 +79,8 @@ if __name__ == '__main__':
     # assignments. We can now proceed to submit them.
     # Check that the current user is in the submitter group.
     if check_group(project.course['group']):
-        files = submit_files(options.course, project, args)
+        files = submit_files(options.course, project, args,
+                gpg_key=options.keyid)
         if options.verbose:
             print "Submitted files:"
             for file in files:
