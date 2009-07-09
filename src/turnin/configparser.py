@@ -103,14 +103,6 @@ class ProjectCourse(ProjectGlobal):
         else:
             raise ValueError("Please add the project %s first." % project)
 
-    def read(self):
-        """ Reads the self.course section in the config file. """
-        self.config.reload()
-        self.user = self.course['user']
-        self.directory = self.course['directory']
-        self.group = self.course['group']
-        self.sections = self.course['sections']
-
     def write(self, user='', directory='', group='', sections=''):
         """ Modifies the config file.
 
@@ -162,13 +154,6 @@ class ProjectProject(ProjectCourse):
         self.project['directory'] = os.path.join(self.course['directory'],
                                 project)
         self.name = project
-
-    def read(self):
-        """ Reads the project from the config file. """
-        self.config.reload()
-        self.description = self.project['description']
-        self.enabled = self.project['enabled']
-        self.directory = self.project['directory']
 
     def write(self, enabled, description='', directory='', tarball='', 
             default=False):
@@ -243,14 +228,6 @@ class TurninCourse(TurninGlobal):
         """ @ivar: shortcut to the course configurations. """
 
 
-    def read(self):
-        """ Reads the self.course section in the config file. """
-        self.config.reload()
-        self.user = self.course['user']
-        self.directory = self.course['directory']
-        self.group = self.course['group']
-        self.sections = self.course['sections']
-
 class TurninProject(TurninCourse):
     """ This class represents a turnin course's project object. """
 
@@ -278,10 +255,3 @@ class TurninProject(TurninCourse):
         self.project['directory'] = os.path.join(self.course['directory'],
                 project)
         self.name = project
-
-    def read(self):
-        """ Reads the project from the config file. """
-        self.config.reload()
-        self.description = self.project['description']
-        self.enabled = self.project['enabled']
-        self.directory = self.project['directory']
