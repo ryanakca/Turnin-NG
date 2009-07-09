@@ -144,6 +144,7 @@ class ProjectProject(ProjectCourse):
         if not self.course.has_key(project):
             self.config[course][project] = {}
             self.config[course][project]['enabled'] = False
+            self.config[course][project]['description'] = ''
             self.config.write()
         self.project = self.course[project]
         """ @ivar: shortcut to the project configurations """
