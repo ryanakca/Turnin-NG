@@ -103,7 +103,7 @@ class ProjectCourse(ProjectGlobal):
         else:
             raise ValueError("Please add the project %s first." % project)
 
-    def write(self, user='', directory='', group='', sections=''):
+    def write(self, user='', directory='', group=''):
         """ Modifies the config file.
 
         @type user: string
@@ -112,8 +112,6 @@ class ProjectCourse(ProjectGlobal):
         @param directory: path to the course submission directory.
         @type group: string
         @param group: group that owns teh course directory.
-        @type section: python list
-        @param section: I don't know. It was in the original turnin.cf
 
         """
         #self.config.reload() # We don't want to clobber something
@@ -123,8 +121,6 @@ class ProjectCourse(ProjectGlobal):
             self.course['directory'] = directory
         if group:
             self.course['group'] = group
-        if sections:
-            self.course['sections'] = sections
         self.config.write()
 
 class ProjectProject(ProjectCourse):

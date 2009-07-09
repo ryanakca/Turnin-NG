@@ -36,12 +36,11 @@ def create_course(config_file, course):
     user = raw_input("Username [usually your UNIX login]: ")
     directory = raw_input("Full path to project directory: ")
     group = raw_input("Group: ")
-    sections = raw_input("Sections: ")
     os.makedirs(directory) # We could supply the mode here, but it might get
                            #ignored on some systems. We'll do it here instead
     os.chmod(directory, 0730)
     chown(directory, user, group)
-    course.write(user, directory, group, sections) 
+    course.write(user, directory, group)
 
 def delete_course(config_file, course):
     """
