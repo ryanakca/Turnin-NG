@@ -96,13 +96,31 @@ def list_projects(config, course):
     @return: List of (Enabled/Disabled, Project_name, Description) tuples
 
     """
-    projects = ['(Enabled, Project, Description)']
+    projects = [['Enabled', 'Project', 'Description']]
     course_obj = TurninCourse(config, course)
     default = course_obj.course['default']
     for i in course_obj.course.__dict__['sections']:
         if default == i:
-            projects.append(('Default', i, course_obj.course[i]['description']))
+            projects.append(['Default', i, course_obj.course[i]['description']])
         else:
-            projects.append((course_obj.course[i]['enabled'], i,
-                course_obj.course[i]['description']))
+            projects.append([course_obj.course[i]['enabled'], i,
+                course_obj.course[i]['description']])
+    maxlen = [0,0,0]
+    for p, project in enumerate(projects):
+        for i, item in enumerate(project):
+            # We need to convert item to string since item might be a bool.
+            projects[p][i] = str(item)
+            if len(str(item)) > maxlen[i]:
+                maxlen[i] = len(str(item))
+    for p, project in enumerate(projects):
+        new_line = ''
+        for i, item in enumerate(project):
+            # We need the space difference + 1 so that we don't get "item|"
+            new_line += '| ' + item + (maxlen[i] - len(item) + 1) * ' '
+        new_line += '|'
+        projects[p] = new_line
+    # Let's insert the top, the header seperater and the bottom
+    projects.insert(0, len(projects[0]) * '-')
+    projects.insert(2, projects[0])
+    projects.append(projects[0])
     return projects
