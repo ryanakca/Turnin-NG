@@ -23,7 +23,7 @@ import sys
 from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from turnin.coursemanage import create_course, delete_course, switch_course
 from turnin.projectmanage import create_project, delete_project
-from turnin.projectmanage import compress_project, extract_project
+from turnin.projectmanage import compress_project, extract_project, verify_sig
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
@@ -44,6 +44,8 @@ if __name__ == '__main__':
             help='Compress this project')
     parser.add_option('-x', '--extract', action='store_true',
             help='Extract this project')
+    parser.add_option('-v', '--verify', action='store_true',
+            help='Verify signatures on submitted projects')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('-C', '--config', help='Use an alternate config file')
@@ -136,3 +138,9 @@ if __name__ == '__main__':
             extract_project(config, default_course, project_name)
         project.write(True)
         sys.exit("Successfully enabled the project %s" % project_name)
+    elif options.verify:
+        try:
+            unsigned = verify_sig(project)
+            sys.exit("\n".join(unsigned))
+        except ValueError, e:
+            sys.exit(e)

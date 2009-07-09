@@ -18,6 +18,7 @@
 import os
 import os.path
 import shutil
+import subprocess
 import tarfile
 
 from turnin.configparser import ProjectCourse, ProjectProject
@@ -149,3 +150,37 @@ def extract_project(config_file, course, project):
     else:
         raise ValueError("%s is not an existing project in the course %s" %
                 (project, course))
+
+def verify_sig(project_obj):
+    """
+    Verify the signatures of the projects with a signature.
+
+    @type project_obj: ProjectProject
+    @param project_obj: Project for which we'll verify the signatures
+    @rtype: list
+    @return: unsigned submissions
+    @raise subprocess.CalledProcessError: gpg encounters an issue when verifying
+
+    """
+    # We need to sort so that we get ['archive.tar.gz', 'archive.tar.gz.sig']
+    submissions = os.listdir(project_obj.project['directory'])
+    if not submissions:
+        raise ValueError("No assignments have been submitted yet.")
+    signatures = []
+    submissions.sort()
+    for i, submission in enumerate(submissions):
+        if submission.endswith('.sig'):
+            signatures.append(submissions.pop(i)) # Signature file
+            submissions.pop(i-1)                  # Archive
+    for sig in signatures:
+        print "Verifying %s" % sig[:-4]
+        retcode = subprocess.call(['gpg', '--verify',
+            os.path.join(project_obj.project['directory'], sig)])
+        if retcode < 0:
+            raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
+    ret = ['Unsigned submissions: ']
+    if len(submissions) == 0:
+        ret.append('None')
+    else:
+        ret += submissions
+    return ret
