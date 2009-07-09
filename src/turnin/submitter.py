@@ -58,9 +58,10 @@ def submit_files(course_name, project, files, gpg_key=''):
     @param gpg_key: GnuPG public-key ID
     @rtype: list
     @return: Python list of submitted files
+    @raise subprocess.CalledProcessError: GnuPG fails to sign
 
     """
-    temparchive = tempfile.NamedTemporaryFile()
+    temparchive = tempfile.NamedTemporaryFile(suffix='.tar.gz')
     filename =  '%(username)s.tar.gz' % \
         {'username': pwd.getpwuid(os.getuid())[0]} # This is the username that
                                                    # that owns the process
@@ -79,19 +80,21 @@ def submit_files(course_name, project, files, gpg_key=''):
     submitted_files = tar.members
     tar.close()
     if gpg_key:
-        s = subprocess.call(['gpg', '--sign', '-u ' + gpg_key, '-b',
+        retcode = subprocess.call(['gpg', '--sign', '-u ' + gpg_key, '-b',
             temparchive.name])
-        chown(temparchive.name + '.asc', project.course['user'],
+        chown(temparchive.name + '.sig', project.course['user'],
                 project.course['group'])
-        shutil.copy(temparchive.name,
-                os.path.join(project.project['directory'], filename))
-        os.rm(temparchive.name + '.asc')
-        if s.retcode < 0:
+        if retcode < 0:
             raise subprocess.CalledProcessError(s, ' '.join(cargs))
     # This chown() command will require we run setuid for the course.
     chown(temparchive.name, project.course['user'], project.course['group'])
     shutil.copy(temparchive.name,
             os.path.join(project.project['directory'], filename))
+    # We want the signature's timestamp to be more recent than the archive's.
+    if gpg_key:
+        shutil.copy(temparchive.name + '.sig',
+                os.path.join(project.project['directory'], filename + '.sig'))
+        os.remove(temparchive.name + '.sig')
     temparchive.close()
     shutil.rmtree(tempdir, ignore_errors=True)
     for j, file in enumerate(submitted_files):
