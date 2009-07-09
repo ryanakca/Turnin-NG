@@ -80,12 +80,12 @@ def submit_files(course_name, project, files, gpg_key=''):
     submitted_files = tar.members
     tar.close()
     if gpg_key:
-        retcode = subprocess.call(['gpg', '--sign', '-u ' + gpg_key, '-b',
-            temparchive.name])
+        cargs = ['gpg', '--sign', '-u ' + gpg_key, '-b', temparchive.name]
+        retcode = subprocess.call(cargs)
         chown(temparchive.name + '.sig', project.course['user'],
                 project.course['group'])
         if retcode < 0:
-            raise subprocess.CalledProcessError(s, ' '.join(cargs))
+            raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
     # This chown() command will require we run setuid for the course.
     chown(temparchive.name, project.course['user'], project.course['group'])
     shutil.copy(temparchive.name,
