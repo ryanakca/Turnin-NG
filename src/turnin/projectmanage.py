@@ -63,11 +63,9 @@ def delete_project(config_file, course, project):
     """
     if ProjectCourse(config_file, course).course.has_key(project):
         project_obj = ProjectProject(config_file, course, project)
-        certain = raw_input("If you really want to delete this project and " +
-                "all associated files, enter 'yes' in capital letters: ")
-        if certain == 'YES':
-            directory = project_obj.project['directory']
-            shutil.rmtree(directory, ignore_errors=True)
+        if raw_input("If you really want to delete this project and all " +
+                "associated files, enter 'yes' in capital letters: ") == 'YES':
+            shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
             if project_obj.course['default'] == project:
                 project_obj.course['default'] = ''
             del project_obj.course[project]
@@ -99,6 +97,9 @@ def compress_project(config_file, course, project):
         if project_obj.project['enabled']:
             raise ValueError("Project %s is enabled, please disable it first." %
                     project)
+        # We need to check that it has a key before checking if it's Null or
+        # not. If we skipped straight to checking if Null, and the key didn't
+        # exist,  we would get a KeyError.
         elif (project_obj.project.has_key('tarball') and
                             project_obj.project['tarball']):
             raise ValueError("Project %s is already compressed." % project)
@@ -106,7 +107,7 @@ def compress_project(config_file, course, project):
                 project_obj.name + '.tar.gz')
         tar = tarfile.open(archive_name, 'w:gz')
         tar.add(project_obj.project['directory'], project_obj.name)
-        tar.close()
+        tar.close() # This writes the tarball
         project_obj.project['tarball'] = archive_name
         project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
@@ -131,7 +132,11 @@ def extract_project(config_file, course, project):
     """
     if ProjectCourse(config_file, course).course.has_key(project):
         project_obj = ProjectProject(config_file, course, project)
-        if not project_obj.project['tarball']:
+        # We need to check that it has a key before checking if it's Null or
+        # not. If we skipped straight to checking if Null, and the key didn't
+        # exist,  we would get a KeyError.
+        if (project_obj.project.has_key('tarball') and not
+                                        project_obj.project['tarball']):
             raise ValueError("This project is not compressed.")
         print project_obj.project['tarball']
         tar = tarfile.open(project_obj.project['tarball'], 'r:gz')
