@@ -57,24 +57,25 @@ def submit_files(course_name, project, files):
     @return: Python list of submitted files
 
     """
-    # Maybe we should use pwd.getpwuid(os.getuid())[4].replace(' ', '') ---
-    # that's to say, their full name stored in GECOS.
     temparchive = tempfile.NamedTemporaryFile()
     filename =  '%(username)s.tar.gz' % \
-        {'username': pwd.getpwuid(os.getuid())[0]}
+        {'username': pwd.getpwuid(os.getuid())[0]} # This is the username that
+                                                   # that owns the process
     tempdir = tempfile.mkdtemp()
     for file in files:
         if os.path.isdir(file):
             shutil.copytree(file, os.path.join(tempdir, file))
         else:
             shutil.copy(file, tempdir)
-    os.listdir(tempdir)
     tar = tarfile.open(temparchive.name, 'w:gz')
+    # We want the uncompressed directory to have the username in it so the
+    # professor can easily find a student's assignment.
     tar.add(tempdir, '%(projectname)s-%(username)s' %
                            {'projectname': project.name,
                             'username': pwd.getpwuid(os.getuid())[0]})
-    submitted_files = tar.members # tar.list(verbose=True)
+    submitted_files = tar.members
     tar.close()
+    # This chown() command will require we run setuid for the course.
     chown(temparchive.name, project.course['user'], project.course['group'])
     shutil.copy(temparchive.name,
             os.path.join(project.project['directory'], filename))
