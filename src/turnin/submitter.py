@@ -20,6 +20,7 @@ import os
 import os.path
 import pwd
 import shutil
+import subprocess
 import tarfile
 import tempfile
 
@@ -43,7 +44,7 @@ def check_group(group):
         return True
     return False
 
-def submit_files(course_name, project, files):
+def submit_files(course_name, project, files, gpg_key=''):
     """
     Submits the files to the project.
 
@@ -53,6 +54,8 @@ def submit_files(course_name, project, files):
     @param project: Project to which we should submit the files
     @type files: list
     @param files: Python list of files.
+    @type gpg_key: string
+    @param gpg_key: GnuPG public-key ID
     @rtype: list
     @return: Python list of submitted files
 
@@ -75,6 +78,16 @@ def submit_files(course_name, project, files):
                             'username': pwd.getpwuid(os.getuid())[0]})
     submitted_files = tar.members
     tar.close()
+    if gpg_key:
+        s = subprocess.call(['gpg', '--sign', '-u ' + gpg_key, '-b',
+            temparchive.name])
+        chown(temparchive.name + '.asc', project.course['user'],
+                project.course['group'])
+        shutil.copy(temparchive.name,
+                os.path.join(project.project['directory'], filename))
+        os.rm(temparchive.name + '.asc')
+        if s.retcode < 0:
+            raise subprocess.CalledProcessError(s, ' '.join(cargs))
     # This chown() command will require we run setuid for the course.
     chown(temparchive.name, project.course['user'], project.course['group'])
     shutil.copy(temparchive.name,
