@@ -57,11 +57,12 @@ def delete_course(config_file, course):
     """
     course_obj = ProjectCourse(config_file, course)
     if course_obj.config.has_key(course):
-        certain = raw_input("If you really want to delete this course and all " +
-                "associated files, enter 'yes' in capital letters: ")
-        if certain == 'YES':
+        if raw_input("If you really want to delete this course and all " +
+                "associated files, enter 'yes' in capital letters: ") == 'YES':
             shutil.rmtree(course_obj.course['directory'], ignore_errors=True)
             del course_obj.config[course]
+            # We need to check that Global has the key 'default', otherwise we
+            # get a KeyError if it doesn't.
             if ((course_obj.config['Global'].has_key('default')) and
                     (course_obj.config['Global']['default'] == course)):
                 course_obj.config['Global']['default'] = ''
