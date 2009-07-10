@@ -86,6 +86,8 @@ if __name__ == '__main__':
             for file in files:
                 print file
             sys.exit()
+        else:
+            sys.exit("Successfully submitted your assignment for grading.")
     else:
         sys.exit("You need to be in the group %s to submit files" %
                 project.course['group'])
