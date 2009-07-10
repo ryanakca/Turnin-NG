@@ -34,19 +34,18 @@ notice and this notice are preserved.
 @contents
 
 @ifnottex
-@node Top
+@node Top, Introduction to Turnin-NG, (dir), (dir)
 @top Turnin-NG
 
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 @end ifnottex
 
+@comment * Distributing Turnin-NG::
 @menu
 * Introduction to Turnin-NG::
 * turnin::
-@comment * project::
-@comment * Distributing Turnin-NG::
+* project::
 @end menu
-
 
 @node Introduction to Turnin-NG, turnin, Top, Top
 @comment node-name, next, previous, up
@@ -58,7 +57,7 @@ submit an assignment to a course. @command{project} permits teaching assistants
 (TAs) and professors to manage submitted assignments, making it easier to grade
 them.
 
-@node turnin, Top, Introduction to Turnin-NG, Top
+@node turnin, project, Introduction to Turnin-NG, Top
 @chapter turnin
 
 @command{turnin} compresses your assignements using the @command{tar} and
@@ -113,7 +112,7 @@ The files we want to submit
 @end table
 
 
-@node Making turnin easier to use, Top, Using turnin, turnin
+@node Making turnin easier to use,  , Using turnin, turnin
 @section Making turnin easier to use
 
 You can set aliases in your shell's configuration. If you are only in one
@@ -146,5 +145,10 @@ and 'E95EDDC9' by your GnuPG key id.
 @comment @unnumbered Index
 
 @comment @printindex cp
+
+@node project, , turnin, Top
+@chapter project
+
+Blah
 
 @bye
