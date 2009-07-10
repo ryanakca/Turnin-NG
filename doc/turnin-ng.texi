@@ -2,7 +2,7 @@
 @set VERSION 0.1~beta1
 @set UPDATED 2009-07-09
 @setfilename turnin-ng.texi
-@settitle GNU Sample @value{VERSION}
+@settitle Turnin-NG @value{VERSION}
 @syncodeindex pg cp
 @comment %**end of header
 @copying
@@ -43,14 +43,14 @@ This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 @menu
 * Introduction to Turnin-NG::
 * turnin::
-* project::
-* Distributing Turnin-NG::
+@comment * project::
+@comment * Distributing Turnin-NG::
 @end menu
 
 
-@node Introduction to Turnin-NG::, turnin::, Top, Top
+@node Introduction to Turnin-NG, turnin, Top, Top
 @comment node-name, next, previous, up
-@chapter Introduction
+@chapter Introduction to Turnin-NG
 
 Turnin-NG is an assignment submission suite written in Python and comprised of
 @command{turnin} and @command{project}.  @command{turnin} permits a student to
@@ -58,57 +58,54 @@ submit an assignment to a course. @command{project} permits teaching assistants
 (TAs) and professors to manage submitted assignments, making it easier to grade
 them.
 
-@node turnin::, project::, Top, Top
-@menu
-* Intruduction to @command{turnin}:
-* Using @command{turnin}:
-* Making @command{turnin} easier to use:
-@end menu
-
-@node Introduction to @command{turnin}, Using @command{turnin}, turnin::, turnin::
-@chapter Introduction to @command{turnin}
+@node turnin, Top, Introduction to Turnin-NG, Top
+@chapter turnin
 
 @command{turnin} compresses your assignements using the @command{tar} and
 @command{gzip} formats before submitting them to be graded. If you feel so
 inclined, @command{turnin} can cryptographically sign your assignments using
 @command{GnuPG}.
 
-@node Using @command{turnin}, Making @command{turnin} easier to use, Introduction to @command{turnin}, turnin::
-@chapter Using @command{turnin}
+@menu
+* Using turnin::
+* Making turnin easier to use::
+@end menu
+
+@node Using turnin, Making turnin easier to use, turnin, turnin
+@section Using turnin
 
 The author of Turnin-NG strived to make @command{turnin} as easy to use, all
 while retaining the functionality of the original @command{turnin} command.
 
 The command line format for turnin is as follows.
 
-@Example
-turnin [ -vhl ] [ -p@var{project} ] [ -C@var{config} ] [ -k@var{keyid} ] 
-         -c@var{course} @var{files}@dots{}
-@endExample
-
+@code{
+@command{turnin} [ @option{-vhl} ] [ @option{-p}@var{project} ] [ @option{-C}@var{config} ] [ @option{-k}@var{keyid} ]
+         @option{-c}@var{course} @file{files@dots{}}
+}
 You must provide the course name and a list of files to submit.
 
 @table @samp
-@item -v, --verbose
+@item @option{-v}, @option{--verbose}
 Print a list of submitted files once they have been submitted.
 
-@item -h, --help
+@item @option{-h}, @option{--help}
 Print a help message.
 
-@item -l, --list
+@item @option{-l}, @option{--list}
 Print a list of projects, along with wether or not they are enabled and if the
 project is the default project.
 
-@item -p, --project
+@item @option{-p}, @option{--project}
 Set the project to which we'll submit our assignments.
 
-@item -C, --config
+@item @option{-C}, @option{--config}
 Path to an alternate configuration file.
 
-@item -k, --keyid
+@item @option{-k}, @option{--keyid}
 Cryptographically sign an assignment using @command{gpg}.
 
-@item -c, --course
+@item @option{-c}, @option{--course}
 Set the course to which we'll submit our assignments.
 
 @item files
@@ -116,39 +113,38 @@ The files we want to submit
 @end table
 
 
-@node Making @command{turnin} easier to use, project::, turnin::
-@chapter Making @command{turnin} easier to use
+@node Making turnin easier to use, Top, Using turnin, turnin
+@section Making turnin easier to use
 
 You can set aliases in your shell's configuration. If you are only in one
 course, you could use the following alias:
 
-@Example
+@code{
 alias turnin='turnin -c YOUR_COURSE'
-@endExample
+}
 
 If you are in multiple courses, the following aliases may be useful:
 
-@Example
+@code{
 alias turnin-COURSE1='turnin -c COURSE1'
 alias turnin-COURSE2='turnin -c COURSE2'
 # ...
 alias turnin-COURSEX='turnin -c COURSEX'
-@endExample
+}
 
 If you want to always sign your assignments before submitting them, you could
 use an alias like this one:
 
-@Example
+@code{
 alias turnin='turnin -k E95EDDC9'
-@endExample
+}
 
 Just make sure to replace the text in capitals with the appropriate information
 and 'E95EDDC9' by your GnuPG key id.
 
-@node Index
-@unnumbered Index
+@comment @node Index
+@comment @unnumbered Index
 
-@printindex cp
+@comment @printindex cp
 
 @bye
-
