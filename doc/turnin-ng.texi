@@ -4,6 +4,7 @@
 @setfilename turnin-ng.texi
 @settitle Turnin-NG @value{VERSION}
 @syncodeindex pg cp
+@allowcodebreaks false
 @comment %**end of header
 @copying
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
@@ -53,9 +54,9 @@ This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 
 Turnin-NG is an assignment submission suite written in Python and comprised of
 @command{turnin} and @command{project}.  @command{turnin} permits a student to
-submit an assignment to a course. @command{project} permits teaching assistants
-(TAs) and professors to manage submitted assignments, making it easier to grade
-them.
+submit an assignment to a course. @command{project} permits @acronym{TAs,
+teaching assistants} and professors to manage submitted assignments, making it
+easier to grade them.
 
 @node turnin, project, Introduction to Turnin-NG, Top
 @chapter turnin
@@ -79,12 +80,13 @@ while retaining the functionality of the original @command{turnin} command.
 The command line format for turnin is as follows.
 
 @code{
-@command{turnin} [ @option{-vhl} ] [ @option{-p}@var{project} ] [ @option{-C}@var{config} ] [ @option{-k}@var{keyid} ]
-         @option{-c}@var{course} @file{files@dots{}}
+@command{turnin} [ -vhl ] [ -p@var{project} ] [ -C@var{config} ] [ -k@var{keyid} ]
+                   -c@var{course} files
 }
+
 You must provide the course name and a list of files to submit.
 
-@table @samp
+@table @code
 @item @option{-v}, @option{--verbose}
 Print a list of submitted files once they have been submitted.
 
@@ -96,7 +98,9 @@ Print a list of projects, along with wether or not they are enabled and if the
 project is the default project.
 
 @item @option{-p}, @option{--project}
-Set the project to which we'll submit our assignments.
+Set the project to which we'll submit our assignments. The project must be
+enabled. If we do not pass this option, @command{turnin} will submit to the
+@key{Default} project listed by the @option{-l} or @option{--list} option.
 
 @item @option{-C}, @option{--config}
 Path to an alternate configuration file.
@@ -107,48 +111,105 @@ Cryptographically sign an assignment using @command{gpg}.
 @item @option{-c}, @option{--course}
 Set the course to which we'll submit our assignments.
 
-@item files
+@item @file{files}
 The files we want to submit
 @end table
 
 
-@node Making turnin easier to use,  , Using turnin, turnin
+@node Making turnin easier to use, Examples, Using turnin, turnin
 @section Making turnin easier to use
 
 You can set aliases in your shell's configuration. If you are only in one
 course, you could use the following alias:
 
-@code{
-alias turnin='turnin -c YOUR_COURSE'
-}
+@example
+@code{alias turnin='turnin -c YOUR_COURSE'}
+@end example
 
 If you are in multiple courses, the following aliases may be useful:
 
-@code{
-alias turnin-COURSE1='turnin -c COURSE1'
-alias turnin-COURSE2='turnin -c COURSE2'
-# ...
-alias turnin-COURSEX='turnin -c COURSEX'
-}
+@example
+@code{alias turnin-COURSE1='turnin -c COURSE1'}
+@code{alias turnin-COURSE2='turnin -c COURSE2'}
+@code{# ...}
+@code{alias turnin-COURSEX='turnin -c COURSEX'}
+@end example
 
 If you want to always sign your assignments before submitting them, you could
 use an alias like this one:
 
-@code{
-alias turnin='turnin -k E95EDDC9'
-}
+@example
+@code{alias turnin='turnin -k E95EDDC9'}
+@end example
 
 Just make sure to replace the text in capitals with the appropriate information
 and 'E95EDDC9' by your GnuPG key id.
+
+@node Examples, ,Making turnin easier to use, turnin
+@section Examples
+
+You want to submit an assignment, the files @file{bubblesort.hs} and
+@file{radixsort.hs} to the course 'cisc2323', but you aren't sure of the project
+name. You would start by finding the project list. To do this, you need to pass
+the @option{-l} option to turnin, along with the required @option{-c
+@var{coursename}} argument.
+
+@smallexample
+@code{
+ryanakca@@zeus:~@$ turnin -c cisc2323 -l
+------------------------------------------------------------------------------------
+| Enabled | Project      | Description                                             |
+------------------------------------------------------------------------------------
+| False   | searching    | Implement a binary search                               |
+| True    | haskell_sort | Implement the bubble sort and the radix sort in Haskell |
+| Default | bake         | Bake cookies for the professor                          |
+| True    | museum_guard | Write a paper about the museum guard problem            |
+| False   | packing      | Implement a packing algorithm                           |
+------------------------------------------------------------------------------------}
+@end smallexample
+
+You see that you want the @option{sort}. Since it is not the default course, we
+will have to pass the @option{-p @var{project}} option, in this case, @option{-p
+@var{haskell_sort}}, to turnin when we invoke it.
+
+We now proceed to submit our assignments.
+@smallexample
+@code{
+ryanakca@@zeus:~@$ turnin -c cisc2323 -p haskell_sort bubblesort.hs radixsort.hs
+Successfully submitted your assignment for grading.
+}
+@end smallexample
+
+If we want to make sure @command{turnin} did not forget a file, we can pass the
+@option{-v} or @option{--verbose} option when we invoke it.
+
+@smallexample
+@code{
+ryanakca@@zeus:~@$ turnin -c cisc2323 -p haskell_sort -v bubblesort.hs radixsort.hs
+Submitted files:
+sort-ryanakca
+sort-ryanakca/bubblesort.hs
+sort-ryanakca/radixsort.hs
+}
+@end smallexample
+
+If we want to resubmit our project at a later date, we may do so by rerunning
+the @command{turnin} command.
+
+@node project, , turnin, Top
+@chapter project
+
+Turnin-NG's @command{project} command retains most of the functionality of the
+original @command{project} command and seeks to make assignment management as
+easy as possible. To make file management and storage as easy and efficient as
+possible, each submission is compressed using the @command{tar} and
+@command{gzip} formats.
+
 
 @comment @node Index
 @comment @unnumbered Index
 
 @comment @printindex cp
 
-@node project, , turnin, Top
-@chapter project
-
-Blah
 
 @bye
