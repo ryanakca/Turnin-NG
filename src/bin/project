@@ -56,12 +56,11 @@ if __name__ == '__main__':
     parser.add_option('-c', '--switch', help='Switch between the course you ' +
         'are currently administering.')
     parser.add_option_group(admin)
+    parser.set_defaults(config=os.path.join(os.path.expanduser('~'),
+        'turnin.cf'))
     (options, args) = parser.parse_args()
 
-    if options.config:
-        config = options.config
-    else:
-        config = os.path.join(os.path.expanduser('~'), 'turnin.cf')
+    config = options.config
 
     # Administrative functions :
     if options.create_course:
