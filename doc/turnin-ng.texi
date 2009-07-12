@@ -67,13 +67,13 @@ inclined, @command{turnin} can cryptographically sign your assignments using
 @command{GnuPG}.
 
 @menu
-* Using turnin::
+* Invoking turnin::
 * Making turnin easier to use::
-* Examples::
+* Common situations for turnin::
 @end menu
 
-@node Using turnin, Making turnin easier to use, turnin, turnin
-@section Using turnin
+@node Invoking turnin, Making turnin easier to use, turnin, turnin
+@section Invoking turnin
 
 The author of Turnin-NG strived to make @command{turnin} as easy to use, all
 while retaining the functionality of the original @command{turnin} command.
@@ -117,7 +117,7 @@ The files we want to submit
 @end table
 
 
-@node Making turnin easier to use, Examples, Using turnin, turnin
+@node Making turnin easier to use, Common situations for turnin, Invoking turnin, turnin
 @section Making turnin easier to use
 
 You can set aliases in your shell's configuration. If you are only in one
@@ -146,7 +146,7 @@ use an alias like this one:
 Just make sure to replace the text in capitals with the appropriate information
 and 'E95EDDC9' by your GnuPG key id.
 
-@node Examples, ,Making turnin easier to use, turnin
+@node Common situations for turnin,  , Making turnin easier to use, turnin
 @section Examples
 
 You want to submit an assignment, the files @file{bubblesort.hs} and
@@ -197,7 +197,7 @@ sort-ryanakca/radixsort.hs
 If we want to resubmit our project at a later date, we may do so by rerunning
 the @command{turnin} command.
 
-@node project, , turnin, Top
+@node project,  , turnin, Top
 @chapter project
 
 Turnin-NG's @command{project} command retains most of the functionality of the
@@ -205,6 +205,81 @@ original @command{project} command and seeks to make assignment management as
 easy as possible. To make file management and storage as easy and efficient as
 possible, each submission is compressed using the @command{tar} and
 @command{gzip} formats.
+
+@menu
+* Invoking project::
+* Common situations for project::
+@end menu
+
+@node Invoking project, Common situations for project, project, project
+@section Invoking project
+
+The author of Turnin-NG strived to make @command{project} as easy to use, all
+while retaining the used functionality of the original @command{project}
+command.
+
+The command line format for turnin is as follows.
+
+@code{
+@command{project} [ -hdelripxv ] [--version] [ -C @var{config} ] [ -c
+@var{course} ] [ --create-course @var{course} ] [ --delete-course @var{course} ]
+[ @var{project name} ]
+}
+
+You m
+
+@table @code
+@item @option{--version}
+Print @command{project}'s version.
+
+@item @option{-h}, @option{--help}
+Print a help message.
+
+@item @option{-d}, @option{--disable}
+Disable the current project.
+
+@item @option{-e}, @option{--enable}
+Enable submissions for the current project and make it the default project.
+
+@item @option{-l}
+Enable submissions for the current project but don't make it default.
+
+@item @option{-r}, @option{--remove}
+Remove the current project and all associated files.
+
+@item @option{-i}, @option{--init}
+Initialize this project.
+
+@item @option{-p}, @option{--compress}
+Compress this project using the @command{tar} and @command{gzip} formats.
+
+@item @option{-x}, @option{--extract}
+Extract this project.
+
+@item @option{-v}, @option{--verify}
+Verify signatures on submitted projects.
+
+@item @option{-C}, @option{--config}
+Path to an alternate configuration file. The default configuration file is a
+symbolic link from @file{$HOME/.turnin.cf} to a file in the root of the submit directory
+(usually @file{/srv/submit/PROFESSORS_USERNAME.cf})
+
+@item @option{--create-course}
+Create a course.
+
+@item @option{--delete-course}
+Delete a course.
+@end table
+
+@node Common situations for project,  , Invoking project, project
+@section Examples
+
+You want to create the project 'haskell_sort' for your students, enable
+submissions for it and make it the default project (the default project is the
+project to which @command{turnin} submits assignments if the student doesn't
+pass the @option{--project @var{PROJECT}} option when invoking @command{turnin}).
+
+
 
 
 @comment @node Index
