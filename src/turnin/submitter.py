@@ -24,7 +24,7 @@ import subprocess
 import tarfile
 import tempfile
 
-from turnin.sys import chown
+from turnin.sys import chown, chgrp
 from turnin.configparser import TurninCourse
 
 def check_group(group):
@@ -86,10 +86,11 @@ def submit_files(course_name, project, files, gpg_key=''):
                 project.course['group'])
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
-    # This chown() command will require we run setuid for the course.
-    chown(temparchive.name, project.course['user'], project.course['group'])
     shutil.copy(temparchive.name,
             os.path.join(project.project['directory'], filename))
+    chgrp(os.path.join(project.project['directory'], filename),
+            project.course['group'])
+    os.chmod(os.path.join(project.project['directory'], filename), 0644)
     # We want the signature's timestamp to be more recent than the archive's.
     if gpg_key:
         shutil.copy(temparchive.name + '.sig',

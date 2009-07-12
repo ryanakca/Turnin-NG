@@ -34,3 +34,17 @@ def chown(path, user, group):
 
     """
     return os.chown(path, pwd.getpwnam(user)[2], grp.getgrnam(group)[2])
+
+def chgrp(path, group):
+    """
+    Change the group of 'path'
+
+    @type path: string
+    @param path: file / directory for which to change the group
+    @type group: string
+    @param group: groupname
+    @rtype: function
+    @return: Function that changes the group of 'path'
+
+    """
+    return os.chown(path, os.stat(path)[4], grp.getgrnam(group)[2])
