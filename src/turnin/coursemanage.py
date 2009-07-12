@@ -38,8 +38,11 @@ def create_course(config_file, course):
     group = raw_input("Group: ")
     os.makedirs(directory) # We could supply the mode here, but it might get
                            #ignored on some systems. We'll do it here instead
-    os.chmod(directory, 0730)
+    os.symlink(config_file, os.path.join(directory, 'turnin.cf'))
+    os.chmod(directory, 0750)
     chown(directory, user, group)
+    os.chmod(config_file, 0640)
+    chown(config_file, user, group)
     course.write(user, directory, group)
 
 def delete_course(config_file, course):
