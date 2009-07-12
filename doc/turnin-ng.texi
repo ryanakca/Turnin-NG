@@ -69,6 +69,7 @@ inclined, @command{turnin} can cryptographically sign your assignments using
 @menu
 * Using turnin::
 * Making turnin easier to use::
+* Examples::
 @end menu
 
 @node Using turnin, Making turnin easier to use, turnin, turnin
@@ -156,7 +157,7 @@ the @option{-l} option to turnin, along with the required @option{-c
 
 @smallexample
 @code{
-ryanakca@@zeus:~@$ turnin -c cisc2323 -l
+ryanakca@@zeus:~$ turnin -c cisc2323 -l
 ------------------------------------------------------------------------------------
 | Enabled | Project      | Description                                             |
 ------------------------------------------------------------------------------------
@@ -170,12 +171,12 @@ ryanakca@@zeus:~@$ turnin -c cisc2323 -l
 
 You see that you want the @option{sort}. Since it is not the default course, we
 will have to pass the @option{-p @var{project}} option, in this case, @option{-p
-@var{haskell_sort}}, to turnin when we invoke it.
+haskell_sort}, to turnin when we invoke it.
 
 We now proceed to submit our assignments.
 @smallexample
 @code{
-ryanakca@@zeus:~@$ turnin -c cisc2323 -p haskell_sort bubblesort.hs radixsort.hs
+ryanakca@@zeus:~$ turnin -c cisc2323 -p haskell_sort bubblesort.hs radixsort.hs
 Successfully submitted your assignment for grading.
 }
 @end smallexample
@@ -185,7 +186,7 @@ If we want to make sure @command{turnin} did not forget a file, we can pass the
 
 @smallexample
 @code{
-ryanakca@@zeus:~@$ turnin -c cisc2323 -p haskell_sort -v bubblesort.hs radixsort.hs
+ryanakca@@zeus:~$ turnin -c cisc2323 -p haskell_sort -v bubblesort.hs radixsort.hs
 Submitted files:
 sort-ryanakca
 sort-ryanakca/bubblesort.hs
