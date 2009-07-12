@@ -57,7 +57,7 @@ if __name__ == '__main__':
         'are currently administering.')
     parser.add_option_group(admin)
     parser.set_defaults(config=os.path.join(os.path.expanduser('~'),
-        'turnin.cf'))
+        '.turnin.cf'))
     (options, args) = parser.parse_args()
 
     config = options.config
