@@ -41,11 +41,11 @@ notice and this notice are preserved.
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 @end ifnottex
 
-@comment * Distributing Turnin-NG::
 @menu
 * Introduction to Turnin-NG::
 * turnin::
 * project::
+* Distributing Turnin-NG::
 @end menu
 
 @node Introduction to Turnin-NG, turnin, Top, Top
@@ -200,7 +200,7 @@ sort-ryanakca/radixsort.hs
 If we want to resubmit our project at a later date, we may do so by rerunning
 the @command{turnin} command.
 
-@node project,  , turnin, Top
+@node project, Distributing Turnin-NG, turnin, Top
 @chapter project
 
 Turnin-NG's @command{project} command retains most of the functionality of the
@@ -302,7 +302,21 @@ project `haskell_sort' by running the command @command{project -i haskell_sort}.
 Finally, we enabled it and set it default by running @command{project -e
 haskell_sort}.
 
+@node Distributing Turnin-NG, , project, Top
+@chapter Distributing Turnin-NG
 
+Turnin-NG is Copyright @copyright{} 2009 Ryan Kavanagh
+@email{ryanakca@@kubuntu.org}. It is licensed under the terms of the GNU General
+Public License version 2, or (at your option) any later version.
+
+@menu
+* GNU General Public License version 2::
+@end menu
+
+@node GNU General Public License version 2, , , Distributing Turnin-NG
+@section GNU General Public License version 2
+
+@include gpl-2.0.texi
 @comment @node Index
 @comment @unnumbered Index
 
