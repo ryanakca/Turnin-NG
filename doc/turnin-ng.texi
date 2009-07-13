@@ -1,0 +1,362 @@
+\input texinfo   @c -*-texinfo-*-
+@set VERSION 0.1~beta1
+@set UPDATED 2009-07-09
+@setfilename turnin-ng.texi
+@settitle Turnin-NG @value{VERSION}
+@syncodeindex pg cp
+@allowcodebreaks false
+@comment %**end of header
+@copying
+This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
+
+Copyright @copyright{} 2009 Ryan Kavanagh (@email{ryanakca@@kubuntu.org}).
+
+@quotation
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+@end quotation
+@end copying
+
+@dircategory Turnin-NG documentation system
+@direntry
+* Turnin-NG:  using Turnin-NG
+@end direntry
+
+@titlepage
+@title Turnin-NG
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author Ryan Kavanagh (@email{ryanakca@@kubuntu.org})
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top, Introduction to Turnin-NG, (dir), (dir)
+@top Turnin-NG
+
+This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
+@end ifnottex
+
+@menu
+* Introduction to Turnin-NG::
+* turnin::
+* project::
+* Distributing Turnin-NG::
+@end menu
+
+@node Introduction to Turnin-NG, turnin, Top, Top
+@comment node-name, next, previous, up
+@chapter Introduction to Turnin-NG
+
+Turnin-NG is an assignment submission suite written in Python and composed of
+@command{turnin} and @command{project}. Students can use the @command{turnin}
+command to submit an assignment to a course. Professors and @acronym{TAs,
+teaching assistants} can use @command{project} permits @acronym{TAs, teaching
+assistants} to manage submitted assignments, making them easier to grade.
+
+@node turnin, project, Introduction to Turnin-NG, Top
+@chapter turnin
+
+@command{turnin} compresses your assignements using the @command{tar} and
+@command{gzip} formats before submitting them to be graded. If you feel so
+inclined, @command{turnin} can cryptographically sign your assignments using
+@command{GnuPG} to prevent someone from submitting an assignment in your name.
+
+@menu
+* Invoking turnin::
+* Making turnin easier to use::
+* Common situations for turnin::
+@end menu
+
+@node Invoking turnin, Making turnin easier to use, turnin, turnin
+@section Invoking turnin
+
+@command{turnin} was designed with ease of use in mind, all while retaining the
+functionality of the original @command{turnin} command.
+
+The command line format for turnin is as follows.
+
+@code{
+@command{turnin} [ -vhl ] [ --version ] [ -p @var{project} ] [ -C @var{config} ]
+                 [ -k @var{keyid} ] -c @var{course} files
+}
+
+You must provide the course name and a list of files to submit.
+
+@table @code
+@item @option{-v}, @option{--verbose}
+Print a list of submitted files once they have been submitted.
+
+@item @option{-h}, @option{--help}
+Print a help message.
+
+@item @option{-l}, @option{--list}
+Print a list of projects, along with wether or not they are enabled and if the
+project is the default project.
+
+@item @option{--version}
+Print turnin's version.
+
+@item @option{-p}, @option{--project}
+Set the project to which we'll submit our assignments. The project must be
+enabled. If we do not pass this option, @command{turnin} will submit to the
+@key{Default} project listed by the @option{-l} or @option{--list} option.
+
+@item @option{-C}, @option{--config}
+Path to an alternate configuration file.
+
+@item @option{-k}, @option{--keyid}
+Cryptographically sign an assignment using @command{gpg}.
+
+@item @option{-c}, @option{--course}
+Set the course to which we'll submit our assignments.
+
+@item @file{files}
+The files we want to submit
+@end table
+
+
+@node Making turnin easier to use, Common situations for turnin, Invoking turnin, turnin
+@section Making turnin easier to use
+
+You can use your shell's built in @command{alias} command to reduce the typing
+required when using @command{turnin}. These aliases should be appended to your
+shell's configuration file (@file{$HOME/.profile} for Bourne compatible shells).
+If you are only in one course, you could use the following alias:
+
+@example
+@code{alias turnin='turnin -c YOUR_COURSE'}
+@end example
+
+If you are in multiple courses, the following aliases may be useful:
+
+@example
+@code{alias turnin-COURSE1='turnin -c COURSE1'}
+@code{alias turnin-COURSE2='turnin -c COURSE2'}
+@code{# ...}
+@code{alias turnin-COURSEX='turnin -c COURSEX'}
+@end example
+
+If you want to always sign your assignments before submitting them, you could
+use an alias like this one:
+
+@example
+@code{alias turnin='turnin -k E95EDDC9'}
+@end example
+
+Just make sure to replace the text in capitals with the appropriate information
+and 'E95EDDC9' with your GnuPG key id.
+
+@node Common situations for turnin,  , Making turnin easier to use, turnin
+@section Examples
+
+You want to submit an assignment, the files @file{bubblesort.hs} and
+@file{radixsort.hs} to the course `cisc2323', but you aren't sure of the project
+name. You start by finding the project list. To do this, you need to pass
+the @option{-l} option to turnin, along with the required @option{-c
+@var{coursename}} argument.
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ turnin -c cisc2323 -l
+------------------------------------------------------------------------------------
+| Enabled | Project      | Description                                             |
+------------------------------------------------------------------------------------
+| False   | searching    | Implement a binary search                               |
+| True    | haskell_sort | Implement the bubble sort and the radix sort in Haskell |
+| Default | bake         | Bake cookies for the professor                          |
+| True    | museum_guard | Write a paper about the museum guard problem            |
+| False   | packing      | Implement a packing algorithm                           |
+------------------------------------------------------------------------------------}
+@end smallexample
+
+You see that you want the @option{haskell_sort} project. Since it is not the
+default project, we will have to pass the @option{-p @var{project}} option, in
+this case, @option{-p haskell_sort}, to turnin when we invoke it.
+
+We now proceed to submit our assignments.
+@smallexample
+@code{
+ryanakca@@zeus:~$ turnin -c cisc2323 -p haskell_sort bubblesort.hs radixsort.hs
+Successfully submitted your assignment for grading.
+}
+@end smallexample
+
+If we want to make sure @command{turnin} did not forget a file, we can pass the
+@option{-v} or @option{--verbose} option when we invoke it.
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ turnin -c cisc2323 -p haskell_sort -v bubblesort.hs radixsort.hs
+Submitted files:
+sort-ryanakca
+sort-ryanakca/bubblesort.hs
+sort-ryanakca/radixsort.hs
+}
+@end smallexample
+
+We decide that we had wanted to sign our submission, we can do so by passing the
+@option{-k @var{KEYID}}.
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ turnin -c cisc-2323 -p haskell_sort -kD295EAC1 \
+> bubblesort.hs radixsort.hs
+
+You need a passphrase to unlock the secret key for
+user: "Ryan Kavanagh <ryanakca@@kubuntu.org>"
+1024-bit RSA key, ID D295EAC1, created 2009-07-13
+
+gpg: gpg-agent is not available in this session
+Successfully submitted your assignment for grading.
+}
+@end smallexample
+
+If the project is still enabled and we want to resubmit our assignment, we may
+do so by rerunning the @command{turnin} command.
+
+@node project, Distributing Turnin-NG, turnin, Top
+@chapter project
+
+Turnin-NG's @command{project} command retains most of the functionality of the
+original @command{project} command and seeks to make assignment management as
+easy as possible. To make file management and storage as easy and efficient as
+possible, each submission is compressed using the @command{tar} and
+@command{gzip} formats.
+
+@menu
+* Invoking project::
+* Common situations for project::
+@end menu
+
+@node Invoking project, Common situations for project, project, project
+@section Invoking project
+
+The author of Turnin-NG strived to make @command{project} as easy to use, all
+while retaining the used functionality of the original @command{project}
+command.
+
+The command line format for turnin is as follows.
+
+@code{
+@command{project} [ -hdelripxv ] [--version] [ -C @var{config} ] [ -c
+@var{course} ] [ --create-course @var{course} ] [ --delete-course @var{course} ]
+[ @var{project name} ]
+}
+
+You m
+
+@table @code
+@item @option{--version}
+Print @command{project}'s version.
+
+@item @option{-h}, @option{--help}
+Print a help message.
+
+@item @option{-d}, @option{--disable}
+Disable the current project.
+
+@item @option{-e}, @option{--enable}
+Enable submissions for the current project and make it the default project.
+
+@item @option{-l}
+Enable submissions for the current project but don't make it default.
+
+@item @option{-r}, @option{--remove}
+Remove the current project and all associated files.
+
+@item @option{-i}, @option{--init}
+Initialize this project.
+
+@item @option{-p}, @option{--compress}
+Compress this project using the @command{tar} and @command{gzip} formats.
+
+@item @option{-x}, @option{--extract}
+Extract this project.
+
+@item @option{-v}, @option{--verify}
+Verify @command{GnuPG} signatures on submitted projects.
+
+@item @option{-C}, @option{--config}
+Path to an alternate configuration file. The default configuration file is a
+symbolic link from @file{$HOME/.turnin.cf} to a file in the root of the submit directory
+(usually @file{/srv/submit/PROFESSORS_USERNAME.cf})
+
+@item @option{--create-course}
+Create a course.
+
+@item @option{--delete-course}
+Delete a course.
+@end table
+
+@node Common situations for project,  , Invoking project, project
+@section Examples
+
+You want to create the project `haskell_sort' for your students, enable
+submissions for it and make it the default project (the default project is the
+project to which @command{turnin} submits assignments if the student doesn't
+pass the @option{--project @var{PROJECT}} option when invoking @command{turnin}).
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ ls -lash .turnin.cf
+4.0K lrwxrwxrwx 1 ryanakca ryanakca 104 2009-07-13 13:48 .turnin.cf -> /srv/submit/ryanakca.cf
+ryanakca@@zeus:~$ project -c cisc2323
+Successfully switched the default course to cisc2323
+ryanakca@@zeus:~$ project -i haskell_sort
+[Optional] Project description: Implement a bubble sort and the radix sort using Haskell
+Successfully created the project haskell_sort in the course cisc2323
+ryanakca@@zeus:~$ project -e haskell_sort
+Successfully enabled and set default the project haskell_sort
+}
+@end smallexample
+
+In the previous example, we switched our session to the `cisc2323' course using
+the @command{project -c cisc2323} command. We then proceeded to create the
+project `haskell_sort' by running the command @command{project -i haskell_sort}.
+Finally, we enabled it and set it default by running @command{project -e
+haskell_sort}.
+
+We want to close submissions for the project `haskell_sort' and compress it at
+24:00 UTC, September 15 2009. We can do this using the @command{at} command.
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ at 2400 UTC Sep 15 2009
+warning: commands will be executed using /bin/sh
+at> project -c cisc2323
+at> project -d haskell_sort
+at> project -p haskell_sort
+job 92 at Tue Sep 15 19:00:00 2009
+}
+@end smallexample
+
+For more details on @command{at}'s time format, please see it's @command{man}
+page.
+
+@node Distributing Turnin-NG, , project, Top
+@chapter Distributing Turnin-NG
+
+Turnin-NG is Copyright @copyright{} 2009 Ryan Kavanagh
+(@email{ryanakca@@kubuntu.org}). It is licensed under the terms of the GNU
+General Public License version 2, or (at your option) any later version.
+
+@menu
+* GNU General Public License version 2::
+@end menu
+
+@node GNU General Public License version 2, , , Distributing Turnin-NG
+@section GNU General Public License version 2
+
+@include gpl-2.0.texi
+@comment @node Index
+@comment @unnumbered Index
+
+@comment @printindex cp
+
+
+@bye
