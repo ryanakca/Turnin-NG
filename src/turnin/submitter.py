@@ -82,8 +82,7 @@ def submit_files(course_name, project, files, gpg_key=''):
     if gpg_key:
         cargs = ['gpg', '--sign', '-u ' + gpg_key, '-b', temparchive.name]
         retcode = subprocess.call(cargs)
-        chown(temparchive.name + '.sig', project.course['user'],
-                project.course['group'])
+        chgrp(temparchive.name + '.sig', project.course['group'])
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
     shutil.copy(temparchive.name,
