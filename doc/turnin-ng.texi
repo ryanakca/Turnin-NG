@@ -81,8 +81,8 @@ while retaining the functionality of the original @command{turnin} command.
 The command line format for turnin is as follows.
 
 @code{
-@command{turnin} [ -vhl ] [ -p@var{project} ] [ -C@var{config} ] [ -k@var{keyid} ]
-                   -c@var{course} files
+@command{turnin} [ -vhl ] [ --version ] [ -p @var{project} ] [ -C @var{config} ]
+                 [ -k @var{keyid} ] -c @var{course} files
 }
 
 You must provide the course name and a list of files to submit.
@@ -97,6 +97,9 @@ Print a help message.
 @item @option{-l}, @option{--list}
 Print a list of projects, along with wether or not they are enabled and if the
 project is the default project.
+
+@item @option{--version}
+Print turnin's version.
 
 @item @option{-p}, @option{--project}
 Set the project to which we'll submit our assignments. The project must be
@@ -274,12 +277,30 @@ Delete a course.
 @node Common situations for project,  , Invoking project, project
 @section Examples
 
-You want to create the project 'haskell_sort' for your students, enable
+You want to create the project `haskell_sort' for your students, enable
 submissions for it and make it the default project (the default project is the
 project to which @command{turnin} submits assignments if the student doesn't
 pass the @option{--project @var{PROJECT}} option when invoking @command{turnin}).
 
+@smallexample
+@code{
+ryanakca@@zeus:~$ ls -lash .turnin.cf
+4.0K lrwxrwxrwx 1 ryanakca ryanakca 104 2009-07-13 13:48 .turnin.cf -> /srv/submit/ryanakca.cf
+ryanakca@@zeus:~$ project -c cisc2323
+Successfully switched the default course to cisc2323
+ryanakca@@zeus:~$ project -i haskell_sort
+[Optional] Project description: Implement a bubble sort and the radix sort using Haskell
+Successfully created the project haskell_sort in the course cisc2323
+ryanakca@@zeus:~$ project -e haskell_sort
+Successfully enabled and set default the project haskell_sort
+}
+@end smallexample
 
+In the previous example, we switched our session to the `cisc2323' course using
+the @command{project -c cisc2323} command. We then proceeded to create the
+project `haskell_sort' by running the command @command{project -i haskell_sort}.
+Finally, we enabled it and set it default by running @command{project -e
+haskell_sort}.
 
 
 @comment @node Index
