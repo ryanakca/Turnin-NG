@@ -9,7 +9,7 @@
 @copying
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 
-Copyright @copyright{} 2009 Ryan Kavanagh
+Copyright @copyright{} 2009 Ryan Kavanagh (@email{ryanakca@@kubuntu.org}).
 
 @quotation
 Copying and distribution of this file, with or without modification,
@@ -52,11 +52,11 @@ This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 @comment node-name, next, previous, up
 @chapter Introduction to Turnin-NG
 
-Turnin-NG is an assignment submission suite written in Python and comprised of
-@command{turnin} and @command{project}.  @command{turnin} permits a student to
-submit an assignment to a course. @command{project} permits @acronym{TAs,
-teaching assistants} and professors to manage submitted assignments, making it
-easier to grade them.
+Turnin-NG is an assignment submission suite written in Python and composed of
+@command{turnin} and @command{project}. Students can use the @command{turnin}
+command to submit an assignment to a course. Professors and @acronym{TAs,
+teaching assistants} can use @command{project} permits @acronym{TAs, teaching
+assistants} to manage submitted assignments, making them easier to grade.
 
 @node turnin, project, Introduction to Turnin-NG, Top
 @chapter turnin
@@ -64,7 +64,7 @@ easier to grade them.
 @command{turnin} compresses your assignements using the @command{tar} and
 @command{gzip} formats before submitting them to be graded. If you feel so
 inclined, @command{turnin} can cryptographically sign your assignments using
-@command{GnuPG}.
+@command{GnuPG} to prevent someone from submitting an assignment in your name.
 
 @menu
 * Invoking turnin::
@@ -75,8 +75,8 @@ inclined, @command{turnin} can cryptographically sign your assignments using
 @node Invoking turnin, Making turnin easier to use, turnin, turnin
 @section Invoking turnin
 
-The author of Turnin-NG strived to make @command{turnin} as easy to use, all
-while retaining the functionality of the original @command{turnin} command.
+@command{turnin} was designed with ease of use in mind, all while retaining the
+functionality of the original @command{turnin} command.
 
 The command line format for turnin is as follows.
 
@@ -123,8 +123,10 @@ The files we want to submit
 @node Making turnin easier to use, Common situations for turnin, Invoking turnin, turnin
 @section Making turnin easier to use
 
-You can set aliases in your shell's configuration. If you are only in one
-course, you could use the following alias:
+You can use your shell's built in @command{alias} command to reduce the typing
+required when using @command{turnin}. These aliases should be appended to your
+shell's configuration file (@file{$HOME/.profile} for Bourne compatible shells).
+If you are only in one course, you could use the following alias:
 
 @example
 @code{alias turnin='turnin -c YOUR_COURSE'}
@@ -147,14 +149,14 @@ use an alias like this one:
 @end example
 
 Just make sure to replace the text in capitals with the appropriate information
-and 'E95EDDC9' by your GnuPG key id.
+and 'E95EDDC9' with your GnuPG key id.
 
 @node Common situations for turnin,  , Making turnin easier to use, turnin
 @section Examples
 
 You want to submit an assignment, the files @file{bubblesort.hs} and
-@file{radixsort.hs} to the course 'cisc2323', but you aren't sure of the project
-name. You would start by finding the project list. To do this, you need to pass
+@file{radixsort.hs} to the course `cisc2323', but you aren't sure of the project
+name. You start by finding the project list. To do this, you need to pass
 the @option{-l} option to turnin, along with the required @option{-c
 @var{coursename}} argument.
 
@@ -172,9 +174,9 @@ ryanakca@@zeus:~$ turnin -c cisc2323 -l
 ------------------------------------------------------------------------------------}
 @end smallexample
 
-You see that you want the @option{sort}. Since it is not the default course, we
-will have to pass the @option{-p @var{project}} option, in this case, @option{-p
-haskell_sort}, to turnin when we invoke it.
+You see that you want the @option{haskell_sort} project. Since it is not the
+default project, we will have to pass the @option{-p @var{project}} option, in
+this case, @option{-p haskell_sort}, to turnin when we invoke it.
 
 We now proceed to submit our assignments.
 @smallexample
@@ -197,8 +199,25 @@ sort-ryanakca/radixsort.hs
 }
 @end smallexample
 
-If we want to resubmit our project at a later date, we may do so by rerunning
-the @command{turnin} command.
+We decide that we had wanted to sign our submission, we can do so by passing the
+@option{-k @var{KEYID}}.
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ turnin -c cisc-2323 -p haskell_sort -kD295EAC1 \
+> bubblesort.hs radixsort.hs
+
+You need a passphrase to unlock the secret key for
+user: "Ryan Kavanagh <ryanakca@@kubuntu.org>"
+1024-bit RSA key, ID D295EAC1, created 2009-07-13
+
+gpg: gpg-agent is not available in this session
+Successfully submitted your assignment for grading.
+}
+@end smallexample
+
+If the project is still enabled and we want to resubmit our assignment, we may
+do so by rerunning the @command{turnin} command.
 
 @node project, Distributing Turnin-NG, turnin, Top
 @chapter project
@@ -260,7 +279,7 @@ Compress this project using the @command{tar} and @command{gzip} formats.
 Extract this project.
 
 @item @option{-v}, @option{--verify}
-Verify signatures on submitted projects.
+Verify @command{GnuPG} signatures on submitted projects.
 
 @item @option{-C}, @option{--config}
 Path to an alternate configuration file. The default configuration file is a
@@ -302,12 +321,29 @@ project `haskell_sort' by running the command @command{project -i haskell_sort}.
 Finally, we enabled it and set it default by running @command{project -e
 haskell_sort}.
 
+We want to close submissions for the project `haskell_sort' and compress it at
+24:00 UTC, September 15 2009. We can do this using the @command{at} command.
+
+@smallexample
+@code{
+ryanakca@@zeus:~$ at 2400 UTC Sep 15 2009
+warning: commands will be executed using /bin/sh
+at> project -c cisc2323
+at> project -d haskell_sort
+at> project -p haskell_sort
+job 92 at Tue Sep 15 19:00:00 2009
+}
+@end smallexample
+
+For more details on @command{at}'s time format, please see it's @command{man}
+page.
+
 @node Distributing Turnin-NG, , project, Top
 @chapter Distributing Turnin-NG
 
 Turnin-NG is Copyright @copyright{} 2009 Ryan Kavanagh
-@email{ryanakca@@kubuntu.org}. It is licensed under the terms of the GNU General
-Public License version 2, or (at your option) any later version.
+(@email{ryanakca@@kubuntu.org}). It is licensed under the terms of the GNU
+General Public License version 2, or (at your option) any later version.
 
 @menu
 * GNU General Public License version 2::
