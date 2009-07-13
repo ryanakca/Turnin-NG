@@ -90,7 +90,7 @@ def submit_files(course_name, project, files, gpg_key=''):
             os.path.join(project.project['directory'], filename))
     chgrp(os.path.join(project.project['directory'], filename),
             project.course['group'])
-    os.chmod(os.path.join(project.project['directory'], filename), 0644)
+    os.chmod(os.path.join(project.project['directory'], filename), 0640)
     # We want the signature's timestamp to be more recent than the archive's.
     if gpg_key:
         shutil.copy(temparchive.name + '.sig',
