@@ -8,7 +8,7 @@ Standards-Version: 3.8.2
 XS-Python-Version: 2.5
 
 Package: turnin-ng
-Architecture: any
+Architecture: all
 XB-Python-Version: 2.5
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-configobj
 Description: <insert up to 60 chars description>
