@@ -26,3 +26,8 @@ If you want to create another course, for professor2, substitute professor1
 for professor2 and cisc-2323 for the course in the project command.
 It is also recommended that you add aliases in /etc/profile for each course, ex:
 alias turnin-cisc2323='turnin -C /srv/submit/professor1.cf -c cisc-2323'
+
+To generate the documentation, run:
+% texi2pdf doc/turnin-ng.texi # Generate the PDF documentation
+% sudo makeinfo -o /usr/share/info/turnin-ng.info doc/turnin-ng.texi && \
+  sudo install-info /usr/share/info/turnin-ng.info # Generate the info files.
