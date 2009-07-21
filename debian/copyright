@@ -6,7 +6,7 @@ It was downloaded from:
 
     http://github.com/ryanakca/Turnin-NG/downloads
 
-Upstream Author(s):
+Upstream Author:
 
     Ryan Kavanagh <ryanakca@kubuntu.org>
 
@@ -35,7 +35,7 @@ Public License can be found in `/usr/share/common-licenses/GPL'.
 
 The Debian packaging is:
 
-    Copyright C) 2009, Ryan Kavanagh <ryanakca@kubuntu.org>
+    Copyright (C) 2009, Ryan Kavanagh <ryanakca@kubuntu.org>
 
 and is licensed under the GPL, either version 2 of the License, or (at your
 option) any later version, see above.
