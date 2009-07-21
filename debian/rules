@@ -6,7 +6,7 @@ DEB_COMPRESS_EXCLUDE := .py
 DEB_INSTALL_MANPAGES_turnin-ng := doc/turnin.1 docs/project.1
 
 build/turnin-ng::
-	makeinfo -o $(CURDIR)/debian/usr/share/info/turnin-ng.info $(CURDIR)/doc/turnin-ng.texi
+	makeinfo -o $(CURDIR)/debian/turnin-ng/usr/share/info/turnin-ng.info $(CURDIR)/doc/turnin-ng.texi
 
 binary-post-install/turnin-ng::
 	dh_pysupport
