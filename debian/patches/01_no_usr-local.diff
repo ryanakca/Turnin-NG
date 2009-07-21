@@ -1,0 +1,11 @@
+Index: Turnin-NG/setup.py
+===================================================================
+--- Turnin-NG.orig/setup.py	2009-07-21 16:09:37.277205036 -0400
++++ Turnin-NG/setup.py	2009-07-21 16:09:59.441940716 -0400
+@@ -12,5 +12,5 @@
+       scripts=['src/bin/project', 'src/bin/turnin'],
+       packages=['turnin'],
+       package_dir={'turnin':'src/turnin'},
+-      data_files=[('/usr/local/man1/', ['doc/turnin.1', 'doc/project.1'])]
++      data_files=[('/usr/share/man/man1/', ['doc/turnin.1', 'doc/project.1'])]
+ )
