@@ -3,16 +3,14 @@ Section: utils
 Priority: optional
 Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
 Build-Depends: cdbs, debhelper (>= 7), python (>= 2.5),
- python-support (>= 0.8.3), texinfo
+Build-Depends-Indep: python-support (>= 0.5.3), texinfo
 Standards-Version: 3.8.2
-XS-Python-Version: 2.5
 Homepage: http://github.com/ryanakca/Turnin-NG
 Vcs-git: git://github.com/ryanakca/Turnin-NG.git
 Vcs-Browser: http://github.com/ryanakca/Turnin-NG/tree/master
 
 Package: turnin-ng
 Architecture: all
-XB-Python-Version: 2.5
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-configobj
 Description: Assignment submitter and manager
  Turnin-NG is an assignment submission suite written in Python and composed of
