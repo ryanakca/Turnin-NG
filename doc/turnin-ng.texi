@@ -20,7 +20,7 @@ notice and this notice are preserved.
 
 @dircategory Turnin-NG documentation system
 @direntry
-* Turnin-NG:  using Turnin-NG
+* Turnin-NG::  using Turnin-NG
 @end direntry
 
 @titlepage
