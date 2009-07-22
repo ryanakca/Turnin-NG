@@ -248,8 +248,6 @@ The command line format for turnin is as follows.
 [ @var{project name} ]
 }
 
-You m
-
 @table @code
 @item @option{--version}
 Print @command{project}'s version.
