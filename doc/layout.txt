@@ -2,7 +2,7 @@ Suggested layout for project and turnin. The path /srv/submit may be changed to
 whatever suits your fancy.
 
               +---------- home directory for restricted users courseX
-              |           professorY:courseX, 0730, drwx-wx---
+              |           professorY:courseX, 0733, drwx-wx-wx
               |
               V
 /srv/submit/course1/project1/

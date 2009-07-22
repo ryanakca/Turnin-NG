@@ -42,7 +42,7 @@ def create_project(config_file, course, project):
     group = project_obj.course['group']
     directory = project_obj.project['directory']
     os.makedirs(directory)
-    os.chmod(directory, 0730)
+    os.chmod(directory, 0733)
     chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
     project_obj.write(True, description)

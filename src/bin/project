@@ -139,7 +139,7 @@ if __name__ == '__main__':
             extract_project(config, default_course, project_name)
             print "Extracted the project %s" % project_name
         # Set the directory writable by the student group.
-        os.chmod(project.project['directory'], 0730)
+        os.chmod(project.project['directory'], 0733)
         project.write(True, default=True)
         sys.exit("Successfully enabled and set default the project %s" % project_name)
     elif options.enabled == False: # Disable it. I know, using '== False' is
