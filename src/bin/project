@@ -23,6 +23,7 @@ import sys
 
 from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from turnin.coursemanage import create_course, delete_course, switch_course
+from turnin.coursemanage import archive_course
 from turnin.projectmanage import create_project, delete_project
 from turnin.projectmanage import compress_project, extract_project, verify_sig
 
@@ -54,6 +55,7 @@ if __name__ == '__main__':
             "These options can add or remove courses, etc.")
     admin.add_option('--create-course', help='Creates a course')
     admin.add_option('--delete-course', help='Deletes a course')
+    admin.add_option('--archive-course', help='Archive a course')
     parser.add_option('-c', '--switch', help='Switch between the course you ' +
         'are currently administering.')
     parser.add_option_group(admin)
@@ -78,6 +80,11 @@ if __name__ == '__main__':
             switch_course(config, options.switch)
             sys.exit("Successfully switched the default course to %s" %
                     options.switch)
+        except ValueError, e:
+            sys.exit(e)
+    if options.archive:
+        try:
+            archive_course(config, options.archive)
         except ValueError, e:
             sys.exit(e)
 
