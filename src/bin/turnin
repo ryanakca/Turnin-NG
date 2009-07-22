@@ -24,7 +24,7 @@ from turnin.configparser import TurninGlobal, TurninCourse, TurninProject
 from turnin.submitter import submit_files, check_group, list_projects
 
 if __name__ == '__main__':
-    usage = '%prog [options] [project name]'
+    usage = '%prog [options] [files]'
     parser = OptionParser(version='1.0~beta1', usage=usage)
     parser.add_option('-c', '--course', help='Set the course to submit the ' +
             'assignment to.')
@@ -44,7 +44,9 @@ if __name__ == '__main__':
 
     # If we're listing projects, it's obvious we won't be submitting to one.
     if not options.list and not args:
-        sys.exit(ValueError("Error, please submit at least one document."))
+        print ValueError("Error, please submit at least one document.")
+        parser.print_help()
+        sys.exit(ValueError(''))
     if not options.course:
         sys.exit(ValueError("Error, please specify a course."))
     try:

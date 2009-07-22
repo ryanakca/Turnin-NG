@@ -36,13 +36,32 @@ def create_course(config_file, course):
     user = raw_input("Username [usually your UNIX login]: ")
     directory = raw_input("Full path to the course directory: ")
     group = raw_input("Group: ")
-    os.makedirs(directory) # We could supply the mode here, but it might get
-                           #ignored on some systems. We'll do it here instead
-    os.symlink(config_file, os.path.join(directory, 'turnin.cf'))
-    os.chmod(directory, 0750)
-    chown(directory, user, group)
-    os.chmod(config_file, 0640)
-    chown(config_file, user, group)
+    try:
+        try:
+            os.makedirs(directory) # We could supply the mode here, but it might get
+                                   #ignored on some systems. We'll do it here instead
+        except OSError, e:
+            # We don't want to abort of the directory already exists
+            if e.errno == 17:
+                print e
+                print 'Continuing'
+            else:
+                sys.exit(e)
+        try:
+            os.symlink(config_file, os.path.join(directory, 'turnin.cf'))
+        except OSError, e:
+            # We don't want to abort if the symlink already exists
+            if e.errno == 17:
+                print e
+                print 'Continuing'
+            else:
+                sys.exit(e)
+        os.chmod(directory, 0750)
+        chown(directory, user, group)
+        os.chmod(config_file, 0640)
+        chown(config_file, user, group)
+    except OSError, e:
+        print e
     course.write(user, directory, group)
 
 def delete_course(config_file, course):

@@ -3,6 +3,10 @@ http://www.voidspace.org.uk/python/configobj.html to get it.
 
 Then, in the source's root directory, run:
 % sudo python setup.py install
+This will install turnin-ng to your system's default location, /usr under UNIX.
+If you wanted to install it under /usr/local, pass the --prefix option:
+% sudo python setup.py install --prefix=/usr/local
+
 % sudo mkdir -p /srv/submit
 % cd /srv/submit
 % # Make the first course

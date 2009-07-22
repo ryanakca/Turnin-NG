@@ -12,5 +12,5 @@ setup(name='turnin-ng',
       scripts=['src/bin/project', 'src/bin/turnin'],
       packages=['turnin'],
       package_dir={'turnin':'src/turnin'},
-      data_files=[('/usr/local/man1/', ['doc/turnin.1', 'doc/project.1'])]
+      data_files=[('/usr/local/share/man/man1/', ['doc/turnin.1', 'doc/project.1'])]
 )
