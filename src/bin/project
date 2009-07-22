@@ -154,6 +154,10 @@ if __name__ == '__main__':
             sys.exit("\n".join(unsigned))
         except ValueError, e:
             sys.exit(e)
+    elif args:
+        create_project(config, default_course, project_name)
+        sys.exit("Successfully created the project %s in the course %s" %
+                (project_name, default_course))
     else:
         # We didn't get anything.
         parser.print_help()
