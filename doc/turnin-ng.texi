@@ -20,7 +20,7 @@ notice and this notice are preserved.
 
 @dircategory Turnin-NG documentation system
 @direntry
-* Turnin-NG:  using Turnin-NG
+* Turnin-NG::  using Turnin-NG
 @end direntry
 
 @titlepage
@@ -247,8 +247,6 @@ The command line format for turnin is as follows.
 @var{course} ] [ --create-course @var{course} ] [ --delete-course @var{course} ]
 [ @var{project name} ]
 }
-
-You m
 
 @table @code
 @item @option{--version}
