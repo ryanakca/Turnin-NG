@@ -119,9 +119,9 @@ if __name__ == '__main__':
         sys.exit(e)
 
 
-    project = ProjectProject(config, default_course, project_name)
     # Enable submissions for a project
     if options.enabled:
+        project = ProjectProject(config, default_course, project_name)
         if project.project.has_key('tarball') and project.project['tarball']:
             extract_project(config, default_course, project_name)
             print "Extracted the project %s" % project_name
@@ -136,18 +136,24 @@ if __name__ == '__main__':
         # rather be explicit than implicit ;)
         #       This chmod line is to prevent students from manually uploading
         # assignments to a project once it's disabled.
+        project = ProjectProject(config, default_course, project_name)
         os.chmod(project.project['directory'], 0700)
         project.write(False)
         sys.exit("Successfully disabled the project %s" % project_name)
     elif options.enabled_nodefault:
+        project = ProjectProject(config, default_course, project_name)
         if project.project.has_key('tarball') and project.project['tarball']:
             extract_project(config, default_course, project_name)
             print "Extracted the project %s" % project_name
         project.write(True)
         sys.exit("Successfully enabled the project %s" % project_name)
     elif options.verify:
+        project = ProjectProject(config, default_course, project_name)
         try:
             unsigned = verify_sig(project)
             sys.exit("\n".join(unsigned))
         except ValueError, e:
             sys.exit(e)
+    else:
+        # We didn't get anything.
+        parser.print_help()
