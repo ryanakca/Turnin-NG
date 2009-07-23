@@ -245,7 +245,7 @@ The command line format for turnin is as follows.
 @code{
 @command{project} [ -hdelripxv ] [--version] [ -C @var{config} ] [ -c
 @var{course} ] [ --create-course @var{course} ] [ --delete-course @var{course} ]
-[ @var{project name} ]
+[ --archive-course @var{course} ] [ @var{project name} ]
 }
 
 @table @code
@@ -289,6 +289,9 @@ Create a course.
 
 @item @option{--delete-course}
 Delete a course.
+
+@item @option{--archive-course}
+Archive a course using the @command{tar} and @command{gzip} formats
 @end table
 
 @node Common situations for project,  , Invoking project, project
