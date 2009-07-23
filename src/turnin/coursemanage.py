@@ -15,8 +15,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import datetime
 import os
+import os.path
 import shutil
+import tarfile
 
 from turnin.configparser import ProjectGlobal, ProjectCourse
 from turnin.sys import chown
@@ -107,3 +110,49 @@ def switch_course(config_file, course):
     """
     global_obj = ProjectGlobal(config_file)
     global_obj.set_default(course)
+
+def archive_course(config_file, course, ret_path=False):
+    """
+    Archive the course in .tar.gz format.
+
+    @type config_file: string
+    @param config_file: path to the configuration file
+    @type course: string
+    @param course: course name
+    @type ret_path: bool
+    @param ret_path: Do we return the archive's path?
+    @rtype: string
+    @return: Path to the archive.
+    @raise ValueError: The user enters anything but 'YES' at the prompt.
+    @raise ValueError: The course does not exist.
+
+    """
+    config_obj = ProjectCourse(config_file, course)
+    if config_obj.config.has_key(course):
+        if raw_input("If you really want to archive this course and erase it "+
+                "from the configuration file, enter 'yes' in capital " +
+                "letters: ") == 'YES':
+            archive_path = os.path.normpath(os.path.join(
+                    config_obj.course['directory'],
+                    os.pardir,
+                    course + '-' + str(datetime.datetime.now().year) +
+                             '.tar.gz'))
+            tar = tarfile.open(archive_path, 'w:gz')
+            tar.add(config_obj.course['directory'], course + '-' +
+                    str(datetime.datetime.now().year))
+            tar.close()
+            shutil.rmtree(config_obj.course['directory'], ignore_errors=True)
+            del config_obj.config[course]
+            # We need to check that Global has the key 'default', otherwise we
+            # get a KeyError if it doesn't.
+            if ((config_obj.config['Global'].has_key('default')) and
+                    (config_obj.config['Global']['default'] == course)):
+                config_obj.config['Global']['default'] = ''
+            config_obj.config.write()
+            if ret_path:
+                return archive_path
+        else:
+            raise ValueError("Aborting and keeping course %s unarchived" %
+                    course)
+    else:
+        raise ValueError("%s is not an existing course" % course)
