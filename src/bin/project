@@ -82,11 +82,17 @@ if __name__ == '__main__':
                     options.switch)
         except ValueError, e:
             sys.exit(e)
-    if options.archive:
+    if options.archive_course:
         try:
-            archive_course(config, options.archive)
+            path = archive_course(config, options.archive_course, ret_path=True)
+            sys.exit("Successfully archived the course %s to %s" %
+                    (options.archive_course, path))
         except ValueError, e:
             sys.exit(e)
+        except OSError, e:
+            if e.errno == 2:
+                print "Has someone already moved the submission directory?"
+                sys.exit(e)
 
 
     # End user functions :
