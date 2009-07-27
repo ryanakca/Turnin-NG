@@ -61,7 +61,7 @@ class ProjectAdminCourse(ProjectGlobal):
         @rtype: None
 
         """
-        super(ProjectCourse, self).__init__(config_file)
+        super(ProjectAdminCourse, self).__init__(config_file)
         if not self.config.has_key(course):
             self.config.reload() # We don't want to clobber something
             self.config[course] = {}
@@ -92,7 +92,7 @@ class ProjectAdminCourse(ProjectGlobal):
         self.course['projlist'] = os.path.join(self.course['directory'],
                                   'turnin.cf')
         self.config.write()
-        projlist = ProjectCourse(self.course['projlist'], self.name)
+        projlist = ProjectCourse(self.course['projlist'], self.course.name)
         projlist.write(user = self.course['user'],
                        directory = self.course['directory'],
                        group = self.course['group'])

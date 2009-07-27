@@ -21,7 +21,7 @@ import os.path
 import shutil
 import tarfile
 
-from turnin.configparser import ProjectGlobal, ProjectCourse
+from turnin.configparser import ProjectGlobal, ProjectAdminCourse
 from turnin.sys import chown
 
 def create_course(config_file, course):
@@ -35,7 +35,7 @@ def create_course(config_file, course):
     @rtype: None
 
     """
-    course = ProjectCourse(config_file, course)
+    course = ProjectAdminCourse(config_file, course)
     user = raw_input("Username [usually your UNIX login]: ")
     directory = raw_input("Full path to the course directory: ")
     group = raw_input("Group: ")
@@ -80,7 +80,7 @@ def delete_course(config_file, course):
     @raise ValueError: The course does not exist.
 
     """
-    course_obj = ProjectCourse(config_file, course)
+    course_obj = ProjectAdminCourse(config_file, course)
     if course_obj.config.has_key(course):
         if raw_input("If you really want to delete this course and all " +
                 "associated files, enter 'yes' in capital letters: ") == 'YES':
@@ -113,7 +113,7 @@ def archive_course(config_file, course, ret_path=False):
     @raise ValueError: The course does not exist.
 
     """
-    config_obj = ProjectCourse(config_file, course)
+    config_obj = ProjectAdminCourse(config_file, course)
     if config_obj.config.has_key(course):
         if raw_input("If you really want to archive this course and erase it "+
                 "from the configuration file, enter 'yes' in capital " +
