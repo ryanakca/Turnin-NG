@@ -59,9 +59,9 @@ def create_course(config_file, course):
                 print 'Continuing'
             else:
                 sys.exit(e)
-        os.chmod(directory, 0750)
+        os.chmod(directory, 0733)
         chown(directory, user, group)
-        os.chmod(config_file, 0640)
+        os.chmod(config_file, 0644)
         chown(config_file, user, group)
     except OSError, e:
         print e
