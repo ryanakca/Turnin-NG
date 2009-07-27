@@ -66,6 +66,8 @@ def create_course(config_file, course):
     except OSError, e:
         print e
     course.write(user, directory, group)
+    chown(course.course['projlist'], user, group)
+    os.chmod(course.course['projlist'], 0644)
 
 def delete_course(config_file, course):
     """
