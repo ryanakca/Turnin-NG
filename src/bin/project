@@ -22,8 +22,7 @@ import os.path
 import sys
 
 from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
-from turnin.coursemanage import create_course, delete_course, switch_course
-from turnin.coursemanage import archive_course
+from turnin.coursemanage import create_course, delete_course, archive_course
 from turnin.projectmanage import create_project, delete_project
 from turnin.projectmanage import compress_project, extract_project, verify_sig
 from turnin.projectmanage import strip_random_suffix
