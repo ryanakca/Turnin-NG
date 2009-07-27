@@ -97,20 +97,6 @@ def delete_course(config_file, course):
     else:
         raise ValueError("%s is not an existing course" % course)
 
-def switch_course(config_file, course):
-    """
-    Sets the default course in the configuration file.
-
-    @type config_file: string
-    @param config_file: path to the configuration file
-    @type course: string
-    @param course: course name
-    @rtype: None
-
-    """
-    global_obj = ProjectGlobal(config_file)
-    global_obj.set_default(course)
-
 def archive_course(config_file, course, ret_path=False):
     """
     Archive the course in .tar.gz format.

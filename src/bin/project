@@ -64,8 +64,6 @@ if __name__ == '__main__':
     admin.add_option('--create-course', help='Creates a course')
     admin.add_option('--delete-course', help='Deletes a course')
     admin.add_option('--archive-course', help='Archive a course')
-    parser.add_option('-c', '--switch', help='Switch between the course you ' +
-        'are currently administering.')
     parser.add_option_group(admin)
     parser.set_defaults(config=os.path.join(os.path.expanduser('~'),
         '.turnin.cf'))
@@ -81,13 +79,6 @@ if __name__ == '__main__':
         try:
             delete_course(config, options.delete_course)
             sys.exit("Successfully deleted the course %s" % options.delete_course)
-        except ValueError, e:
-            sys.exit(e)
-    if options.switch:
-        try:
-            switch_course(config, options.switch)
-            sys.exit("Successfully switched the default course to %s" %
-                    options.switch)
         except ValueError, e:
             sys.exit(e)
     if options.archive_course:

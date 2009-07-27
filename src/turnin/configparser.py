@@ -44,24 +44,7 @@ class ProjectGlobal(object):
         self.config.reload()
         if not self.config.has_key('Global'):
             self.config['Global'] = {}
-            self.config['Global']['default'] = ''
             self.config.write()
-
-    def set_default(self, course):
-        """
-        Set the course 'course' as the default course for this professor.
-
-        @type course: string
-        @param course: Name of the course we want to set as default
-        @rtype: None
-        @raise ValueError: We try to set a non-existent course as default.
-
-        """
-        if self.config.has_key(course):
-            self.config['Global']['default'] = course
-            self.config.write()
-        else:
-            raise ValueError("Please add the course %s first." % course)
 
 class ProjectCourse(ProjectGlobal):
     """ This class represents a course object for project. """
