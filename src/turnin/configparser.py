@@ -46,6 +46,57 @@ class ProjectGlobal(object):
             self.config['Global'] = {}
             self.config.write()
 
+class ProjectAdminCourse(ProjectGlobal):
+    """ This class represents a course object for project. """
+
+    def __init__(self, config_file, course):
+        """
+        Initialize the course. If it doesn't already exist, we'll create it.
+        self.course will be a shortcut to access the course configurations.
+
+        @type config_file: string
+        @param config_file: path to the project configuration file
+        @type course: string
+        @param course: name of the course
+        @rtype: None
+
+        """
+        super(ProjectCourse, self).__init__(config_file)
+        if not self.config.has_key(course):
+            self.config.reload() # We don't want to clobber something
+            self.config[course] = {}
+            self.config[course]['default'] = ''
+            self.config[course]['projlist'] = ''
+            self.config.write()
+        self.course = self.config[course]
+        """ @ivar: A shortcut to access the course configurations. """
+
+    def write(self, user='', directory='', group=''):
+        """ Modifies the config file.
+
+        @type user: string
+        @param user: username that owns the course directory.
+        @type directory: string
+        @param directory: path to the course submission directory.
+        @type group: string
+        @param group: group that owns teh course directory.
+
+        """
+        #self.config.reload() # We don't want to clobber something
+        if user:
+            self.course['user'] = user
+        if directory:
+            self.course['directory'] = directory
+        if group:
+            self.course['group'] = group
+        self.course['projlist'] = os.path.join(self.course['directory'],
+                                  'turnin.cf')
+        self.config.write()
+        projlist = ProjectCourse(self.course['projlist'], self.name)
+        projlist.write(user = self.course['user'],
+                       directory = self.course['directory'],
+                       group = self.course['group'])
+
 class ProjectCourse(ProjectGlobal):
     """ This class represents a course object for project. """
 
