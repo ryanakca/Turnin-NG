@@ -55,6 +55,7 @@ if __name__ == '__main__':
     parser.add_option('--list', help='Lists projects for the course. ' +
             'also displays wether or not the project is open.',
             action='store_true')
+    parser.add_option('-c', '--course', help='Course name')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('-C', '--config', help='Use an alternate config file')
@@ -94,10 +95,11 @@ if __name__ == '__main__':
 
 
     # End user functions :
-    default_course = ProjectGlobal(config).config['Global']['default']
-    if not default_course:
-        sys.exit("Please set the default course using the '-c course' or " +
-            "'--switch=COURSE' options.")
+    if options.course:
+        default_course = options.course
+    else:
+        sys.exit("Please specify your course using the '-c course' or " +
+            "'--course=COURSE' options.")
 
     # Let's set the project_name variable
     if len(args) > 1:

@@ -65,7 +65,7 @@ if __name__ == '__main__':
     except ValueError, e:
         sys.exit(e)
 
-    course = TurninCourse(config, option.course)
+    course = TurninCourse(config, options.course)
     try:
         # We're creating after having run list because if the user is asking for
         # a list of projects, the user won't be passing a project.
