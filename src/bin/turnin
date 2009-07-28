@@ -79,17 +79,12 @@ if __name__ == '__main__':
 
     # We have checked that the user has provided a course, a project and
     # assignments. We can now proceed to submit them.
-    # Check that the current user is in the submitter group.
-    if check_group(project.course['group']):
-        files = submit_files(options.course, project, args,
-                gpg_key=options.keyid)
-        if options.verbose:
-            print "Submitted files:"
-            for file in files:
-                print file
-            sys.exit()
-        else:
-            sys.exit("Successfully submitted your assignment for grading.")
+    files = submit_files(options.course, project, args,
+            gpg_key=options.keyid)
+    if options.verbose:
+        print "Submitted files:"
+        for file in files:
+            print file
+        sys.exit()
     else:
-        sys.exit("You need to be in the group %s to submit files" %
-                project.course['group'])
+        sys.exit("Successfully submitted your assignment for grading.")
