@@ -19,7 +19,9 @@ import grp
 import os
 import os.path
 import pwd
+import random
 import shutil
+import string
 import subprocess
 import tarfile
 import tempfile
@@ -61,10 +63,15 @@ def submit_files(course_name, project, files, gpg_key=''):
     @raise subprocess.CalledProcessError: GnuPG fails to sign
 
     """
+    chars = string.letters + string.digits
+    random_suffix = ''
+    for i in range(17):
+        random_suffix += random.choice(chars)
     temparchive = tempfile.NamedTemporaryFile(suffix='.tar.gz')
-    filename =  '%(username)s.tar.gz' % \
-        {'username': pwd.getpwuid(os.getuid())[0]} # This is the username that
+    filename =  '%(username)s-%(suffix)s.tar.gz' % \
+        {'username': pwd.getpwuid(os.getuid())[0], # This is the username that
                                                    # that owns the process
+         'suffix': random_suffix}
     tempdir = tempfile.mkdtemp()
     for file in files:
         if os.path.isdir(file):
