@@ -72,8 +72,13 @@ if __name__ == '__main__':
         if options.project:
             project = TurninProject(course.course['projlist'], options.course, options.project)
         else:
-            project = TurninProject(course.course['projlist'], options.course,
+            if course.course['default']:
+                project = TurninProject(course.course['projlist'], options.course,
                                     course.course['default'])
+            else:
+                raise ValueError("It appears that this course does not have a "+
+                        "default project. You will have to specify one " +
+                        "yourself using the '-p' or '--project' option")
     except ValueError, e:
         sys.exit(e)
 
