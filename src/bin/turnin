@@ -65,14 +65,15 @@ if __name__ == '__main__':
     except ValueError, e:
         sys.exit(e)
 
+    course = TurninCourse(config, option.course)
     try:
         # We're creating after having run list because if the user is asking for
         # a list of projects, the user won't be passing a project.
         if options.project:
-            project = TurninProject(config, options.course, options.project)
+            project = TurninProject(course.course['projlist'], options.course, options.project)
         else:
-            project = TurninProject(config, options.course, TurninCourse(config,
-                options.course).course['default'])
+            project = TurninProject(course.course['projlist'], options.course,
+                                    course.course['default'])
     except ValueError, e:
         sys.exit(e)
 
