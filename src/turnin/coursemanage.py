@@ -82,8 +82,9 @@ def delete_course(config_file, course):
     @raise ValueError: The course does not exist.
 
     """
-    course_obj = ProjectAdminCourse(config_file, course)
-    if course_obj.config.has_key(course):
+    config_obj = ProjectGlobal(config_file)
+    if config_obj.config.has_key(course):
+        course_obj = ProjectAdminCourse(config_file, course)
         if raw_input("If you really want to delete this course and all " +
                 "associated files, enter 'yes' in capital letters: ") == 'YES':
             shutil.rmtree(course_obj.course['directory'], ignore_errors=True)
