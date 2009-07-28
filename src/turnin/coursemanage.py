@@ -116,8 +116,9 @@ def archive_course(config_file, course, ret_path=False):
     @raise ValueError: The course does not exist.
 
     """
-    config_obj = ProjectAdminCourse(config_file, course)
+    config_obj = ProjectGlobal(config_file)
     if config_obj.config.has_key(course):
+        config_obj = ProjectAdminCourse(config_file, course)
         if raw_input("If you really want to archive this course and erase it "+
                 "from the configuration file, enter 'yes' in capital " +
                 "letters: ") == 'YES':
