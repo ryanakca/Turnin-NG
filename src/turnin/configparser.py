@@ -276,7 +276,6 @@ class TurninList:
         """
         course = project.course.name
         uuid = project.project['uuid']
-        print uuid
         if not self.config.has_key(course):
             self.config[course] = {}
         self.config[course][uuid] = suffix
