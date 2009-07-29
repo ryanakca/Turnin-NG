@@ -184,3 +184,29 @@ def verify_sig(project_obj):
     else:
         ret += submissions
     return ret
+
+def strip_random_suffix(project_obj):
+    """
+    Remove the 16 byte suffixes of the style username-XXXXXXXXXXXXXXXX.tar.gz
+
+    @type project_obj: ProjectProject
+    @param project_obj: Project for which we will strip the suffixes
+    @raise ValueError: No assignments have been submitted.
+
+    """
+    submissions = os.listdir(project_obj.project['directory'])
+    if not submissions:
+        raise ValueError("No assignments have been submitted yet. Not " +
+                "stripping suffixes")
+    for submission in submissions:
+        # Check that it's the right length before checking the format so that we
+        # don't get string index out of range errors.
+        if (len(submission) > 24) and (submission[-24] == '-') and \
+                (submission[-7:] == '.tar.gz'):
+            os.rename(
+                os.path.join(project_obj.project['directory'], submission),
+                os.path.join(project_obj.project['directory'],
+                                submission[:-24] + '.tar.gz'))
+        else:
+            print ValueError("File %s does not have " % submission +
+                    "the format username-XXXXXXXXXXXXXXXX.tar.gz, skipping.")

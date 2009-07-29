@@ -26,6 +26,7 @@ from turnin.coursemanage import create_course, delete_course, switch_course
 from turnin.coursemanage import archive_course
 from turnin.projectmanage import create_project, delete_project
 from turnin.projectmanage import compress_project, extract_project, verify_sig
+from turnin.projectmanage import strip_random_suffix
 from turnin.submitter import list_projects
 
 if __name__ == '__main__':
@@ -33,6 +34,9 @@ if __name__ == '__main__':
     parser = OptionParser(version='1.0~beta1', usage=usage)
     parser.add_option('-d', '--disable', action='store_false', dest='enabled',
             help='Disable submissions for the current project.')
+    parser.add_option('-D', '--perm-disable', action='store_true',
+            dest='pdisable',
+            help='Permanently disable submissions for the current project.')
     parser.add_option('-e', '--enable', action='store_true', dest='enabled',
             help='Enable submissions for the current project and make it ' +
             'the default project.')
@@ -196,6 +200,20 @@ if __name__ == '__main__':
             sys.exit("\n".join(unsigned))
         except ValueError, e:
             sys.exit(e)
+    elif options.pdisable:
+        if ProjectCourse(config, default_course).course.has_key(project_name):
+            project = ProjectProject(config, default_course, project_name)
+        else:
+            sys.exit(ValueError('Course %s does not have the project %s' %
+                (default_course, project_name)))
+        os.chmod(project.project['directory'], 0700)
+        project.write(False)
+        try:
+            strip_random_suffix(project)
+        except ValueError, e:
+            sys.exit(e)
+        sys.exit("Successfully disabled the project %s and stripped " +
+            "random suffixes")
     elif args:
         create_project(config, default_course, project_name)
         sys.exit("Successfully created the project %s in the course %s" %

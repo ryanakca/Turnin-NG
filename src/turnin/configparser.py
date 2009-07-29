@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os.path
+import uuid
 
 from configobj import ConfigObj
 
@@ -144,6 +145,7 @@ class ProjectProject(ProjectCourse):
             self.config[course][project] = {}
             self.config[course][project]['enabled'] = False
             self.config[course][project]['description'] = ''
+            self.config[course][project]['uuid'] = str(uuid.uuid4())
             self.config.write()
         self.project = self.course[project]
         """ @ivar: shortcut to the project configurations """
@@ -251,3 +253,31 @@ class TurninProject(TurninCourse):
         self.project['directory'] = os.path.join(self.course['directory'],
                 project)
         self.name = project
+
+class TurninList:
+    """ This class represents a list of suffixes for submitted assignments. """
+
+    def __init__(self, config_file):
+        self.config = ConfigObj()
+        self.config.filename = config_file
+        self.config.indent_type = '    '
+        self.config.unrepr = True
+        self.config.reload()
+
+    def write(self, project, suffix):
+        """
+        Write the project submission's suffix to the list file.
+
+        @type project: TurninProject
+        @param project: Project to which we submitted
+        @type suffix: string
+        @param suffix: submitted archive's unique suffix
+
+        """
+        course = project.course.name
+        uuid = project.project['uuid']
+        print uuid
+        if not self.config.has_key(course):
+            self.config[course] = {}
+        self.config[course][uuid] = suffix
+        self.config.write()
