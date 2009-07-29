@@ -66,6 +66,9 @@ def create_course(config_file, course):
     except OSError, e:
         print e
     course.write(user, directory, group)
+    # We want to set the default course for the per course config.
+    global_course_conf = ProjectGlobal(course.course['projlist'])
+    global_course_conf.set_default(course.course.name)
     chown(course.course['projlist'], user, group)
     os.chmod(course.course['projlist'], 0644)
 
