@@ -57,16 +57,16 @@ if __name__ == '__main__':
         else:
             config = os.path.join("/srv/submit", options.course, "turnin.cf")
         # We're listing the courses:
+        course = TurninCourse(TurninCourse(config,
+                    options.course).course['projlist'], options.course)
         if options.list:
-            projects = list_projects(config, options.course)
+            projects = list_projects(course.config.filename, options.course)
             for i in projects:
                 print i
             sys.exit()
     except ValueError, e:
         sys.exit(e)
 
-    course = TurninCourse(TurninCourse(config,
-                    options.course).course['projlist'], options.course)
     try:
         # We're creating after having run list because if the user is asking for
         # a list of projects, the user won't be passing a project.
