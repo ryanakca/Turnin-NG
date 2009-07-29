@@ -65,15 +65,16 @@ if __name__ == '__main__':
     except ValueError, e:
         sys.exit(e)
 
-    course = TurninCourse(config, options.course)
+    course = TurninCourse(TurninCourse(config,
+                    options.course).course['projlist'], options.course)
     try:
         # We're creating after having run list because if the user is asking for
         # a list of projects, the user won't be passing a project.
         if options.project:
-            project = TurninProject(course.course['projlist'], options.course, options.project)
+            project = TurninProject(course.config.filename, options.course, options.project)
         else:
-            if course.course['default']:
-                project = TurninProject(course.course['projlist'], options.course,
+            if course.course.has_key('default') and course.course['default']:
+                project = TurninProject(course.config.filename, options.course,
                                     course.course['default'])
             else:
                 raise ValueError("It appears that this course does not have a "+
