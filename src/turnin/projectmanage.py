@@ -199,7 +199,10 @@ def strip_random_suffix(project_obj):
         raise ValueError("No assignments have been submitted yet. Not " +
                 "stripping suffixes")
     for submission in submissions:
-        if (submission[-24] == '-') and (submission[-7:] == '.tar.gz'):
+        # Check that it's the right length before checking the format so that we
+        # don't get string index out of range errors.
+        if (len(submission) > 24) and (submission[-24] == '-') and \
+                (submission[-7:] == '.tar.gz'):
             os.rename(
                 os.path.join(project_obj.project['directory'], submission),
                 os.path.join(project_obj.project['directory'],
