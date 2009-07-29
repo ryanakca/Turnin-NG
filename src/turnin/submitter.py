@@ -136,7 +136,9 @@ def list_projects(config, course):
     """
     projects = [['Enabled', 'Project', 'Description']]
     course_obj = TurninCourse(config, course)
-    default = course_obj.course['default']
+    default = ''
+    if course_obj.course.has_key('default'):
+        default = course_obj.course['default']
     for i in course_obj.course.__dict__['sections']:
         if default == i:
             projects.append(['Default', i, course_obj.course[i]['description']])
