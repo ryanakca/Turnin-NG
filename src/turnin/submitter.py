@@ -80,7 +80,7 @@ def submit_files(course_name, project, files, list='', gpg_key=''):
                     project.project['uuid']]
     if not random_suffix:
         chars = string.letters + string.digits
-        for i in range(15):
+        for i in range(16):
             random_suffix += random.choice(chars)
         list_file.write(project, random_suffix)
     temparchive = tempfile.NamedTemporaryFile(suffix='.tar.gz')
