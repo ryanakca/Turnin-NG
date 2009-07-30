@@ -20,6 +20,7 @@ from optparse import OptionParser, OptionGroup
 import os.path
 import sys
 
+import turnin
 from turnin.configparser import TurninGlobal, TurninCourse, TurninProject
 from turnin.submitter import submit_files, check_group, list_projects
 
@@ -39,6 +40,8 @@ if __name__ == '__main__':
             'assignment using this key.')
     parser.add_option('-v', '--verbose', action='store_true', help='Print ' +
             'a list of submitted files.')
+    parser.add_option('-w', '--legal', action='store_true',
+            help='Print warranty and license information.')
 
     (options, args) = parser.parse_args()
 

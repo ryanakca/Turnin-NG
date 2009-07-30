@@ -21,6 +21,7 @@ import os
 import os.path
 import sys
 
+import turnin
 from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from turnin.coursemanage import create_course, delete_course, archive_course
 from turnin.projectmanage import create_project, delete_project
@@ -59,6 +60,8 @@ if __name__ == '__main__':
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('-C', '--config', help='Use an alternate config file')
+    parser.add_option('-w', '--legal', action='store_true',
+            help='Print warranty and license information.')
     admin = OptionGroup(parser, "Administrative options",
             "These options can add or remove courses, etc.")
     admin.add_option('--create-course', help='Creates a course')
@@ -70,6 +73,9 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     config = options.config
+
+    if options.legal:
+        sys.exit(turnin.__license__)
 
     # Administrative functions :
     if options.create_course:
