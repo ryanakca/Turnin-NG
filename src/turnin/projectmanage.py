@@ -17,6 +17,8 @@
 
 import os
 import os.path
+import pwd
+import re
 import shutil
 import subprocess
 import tarfile
@@ -194,19 +196,64 @@ def strip_random_suffix(project_obj):
     @raise ValueError: No assignments have been submitted.
 
     """
-    submissions = os.listdir(project_obj.project['directory'])
-    if not submissions:
+    files = os.listdir(project_obj.project['directory'])
+    if not files:
         raise ValueError("No assignments have been submitted yet. Not " +
                 "stripping suffixes")
-    for submission in submissions:
-        # Check that it's the right length before checking the format so that we
-        # don't get string index out of range errors.
-        if (len(submission) > 24) and (submission[-24] == '-') and \
-                (submission[-7:] == '.tar.gz'):
-            os.rename(
-                os.path.join(project_obj.project['directory'], submission),
-                os.path.join(project_obj.project['directory'],
-                                submission[:-24] + '.tar.gz'))
+    # They need to be sorted since there is no guarantee that os.listdir will
+    # read files in alphabetical order.
+    submissions = {}
+    rejects = []
+    for submission in files:
+        if re.match('^(?P<username>\w+)-\w{16}\.tar\.gz(|.sig)$', submission):
+            username = re.match('^(?P<username>\w+)-\w{16}\.tar\.gz(|.sig)$',
+                submission).group('username')
+            if not submissions.has_key(username):
+                submissions[username] = []
+            submissions[username].append(submission)
         else:
-            print ValueError("File %s does not have " % submission +
-                    "the format username-XXXXXXXXXXXXXXXX.tar.gz, skipping.")
+            rejects.append(submission)
+
+    for user, subs in submissions.items():
+        if len(subs) != 1:
+            # Let's get rid of assignments other people submitted for the user
+            for submission in subs:
+                owner = pwd.getpwuid(os.stat(os.path.join(
+                    project_obj.project['directory'],
+                    submission)).st_uid).pw_name
+                if owner != user:
+                    print Warning('Error: Student %s submitted an ' % owner +
+                        'assignment for the student %s. Skipping file %s.' %
+                        (user, submission))
+                    submissions[user].remove(submission)
+            # It might still be that the user submitted more than one
+            # assignment, but at least we know that the student submitted them.
+            if len(submissions[user]) > 1:
+                print Warning('Error: Student %s submitted ' % user +
+                    'more than one assignment, skipping the files: %s' %
+                    ' '.join(submissions.pop(user)))
+            # We don't want to print the above error if we are out of
+            # submissions, but we don't want to match a nonexistent submission
+            # later on
+            if not submissions[user]:
+                submissions.pop(user)
+        owner = pwd.getpwuid(os.stat(os.path.join(project_obj.project['directory'],
+                            subs[0])).st_uid).pw_name
+
+        if owner != user:
+            print Warning('Error: Student %s submitted an ' % owner +
+                    'assignment for the student %s. Skipping file %s.' % (user,
+                        submissions.pop(user)[0]))
+    if rejects:
+        print ValueError("Error: The following file(s) do not have the " +
+            "the format username-XXXXXXXXXXXXXXXX.tar.gz or " +
+            "username-XXXXXXXXXXXXXXX.tar.gz.sig, skipping: %s" %
+            '\n'.join(rejects))
+
+    for user, submission in submissions.items():
+        format = re.match(user +
+                '-\w{16}(?P<format>(\.tar\.gz|\.tar\.gz\.sig))$',
+                submission[0]).group('format')
+        os.rename(
+            os.path.join(project_obj.project['directory'], submission[0]),
+            os.path.join(project_obj.project['directory'], user + format))
