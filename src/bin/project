@@ -206,8 +206,8 @@ if __name__ == '__main__':
             strip_random_suffix(project)
         except ValueError, e:
             sys.exit(e)
-        sys.exit("Successfully disabled the project %s and stripped " +
-            "random suffixes")
+        sys.exit("Successfully disabled the project %s and " % project_name +
+            "stripped random suffixes")
     elif args:
         create_project(config, default_course, project_name)
         sys.exit("Successfully created the project %s in the course %s" %
