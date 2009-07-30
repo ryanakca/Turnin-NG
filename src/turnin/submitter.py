@@ -26,25 +26,8 @@ import subprocess
 import tarfile
 import tempfile
 
-from turnin.sys import chown, chgrp
+from turnin.sys import chown
 from turnin.configparser import TurninCourse, TurninList
-
-def check_group(group):
-    """
-    Checks if the user / runner belongs to the group 'group'.
-
-    @type group: string
-    @param group: UNIX group name
-    @rtype: Bool
-    @return: True if the user belongs to the group, False otherwise.
-
-    """
-    # Gets the group database entry, selects [2] from the tuple (gr_name,
-    # gr_passwd, gr_gid, gr_mem). Checks if the gid is in the process owner's
-    # groups list.
-    if grp.getgrnam(group)[2] in os.getgroups():
-        return True
-    return False
 
 def submit_files(course_name, project, files, list='', gpg_key=''):
     """
@@ -105,7 +88,6 @@ def submit_files(course_name, project, files, list='', gpg_key=''):
     if gpg_key:
         cargs = ['gpg', '--sign', '-u ' + gpg_key, '-b', temparchive.name]
         retcode = subprocess.call(cargs)
-        chgrp(temparchive.name + '.sig', project.course['group'])
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
     shutil.copy(temparchive.name,
