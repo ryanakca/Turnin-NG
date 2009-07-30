@@ -1,30 +1,22 @@
 Suggested layout for project and turnin. The path /srv/submit may be changed to
 whatever suits your fancy.
 
-              +---------- home directory for restricted users courseX
-              |           professorY:courseX, 0733, drwx-wx-wx
-              |
-              V
+/srv/submit/turnin-ng.cf
 /srv/submit/course1/project1/
                     project2/
                     project3/
-                    turnin.cf -> /srv/submit/professor1.cf
+                    turnin-ng.cf
             course2/project1/
                     project2/
                     project3/
-                    turnin.cf -> /srv/submit/professor2.cf
+                    turnin-ng.cf
             ......
             courseZ/project1/
                     ....
                     projectX/
-                    turnin.cf -> /srv/submit/professorN.cf
-            professor1.cf                          <-----+
-            professor2.cf                          <-----+       configuration
-            professor3.cf                          <-----+------ files for each
-            .....                                  <-----+       professor
-            professorN.cf                          <-----+
-~professor1/turnin.cf -> /srv/submit/professor1.cf
-~professor2/turnin.cf -> /srv/submit/professor2.cf
-~professor3/turnin.cf -> /srv/submit/professor3.cf
+                    turnin-ng.cf
+~professor1/.turnin-ng/turnin-ng.cf -> /srv/submit/course1/turnin-ng.cf
+~professor2/.turnin-ng/turnin-ng.cf -> /srv/submit/course2/turnin-ng.cf
+~professor3/.turnin-ng/turnin-ng.cf -> /srv/submit/course3/turnin-ng.cf
 .....
-~professorN/turnin.cf -> /srv/submit/professorN.cf
+~professorN/.turnin-ng/turnin-ng.cf -> /srv/submit/courseN/turnin-ng.cf

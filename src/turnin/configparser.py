@@ -106,7 +106,7 @@ class ProjectAdminCourse(ProjectGlobal):
         if group:
             self.course['group'] = group
         self.course['projlist'] = os.path.join(self.course['directory'],
-                                  'turnin.cf')
+                                  'turnin-ng.cf')
         self.config.write()
         projlist = ProjectCourse(self.course['projlist'], self.course.name)
         projlist.write(user = self.course['user'],

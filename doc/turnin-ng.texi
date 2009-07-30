@@ -284,9 +284,12 @@ Extract this project.
 Verify @command{GnuPG} signatures on submitted projects.
 
 @item @option{-C}, @option{--config}
-Path to an alternate configuration file. The default configuration file is a
-symbolic link from @file{$HOME/.turnin.cf} to a file in the root of the submit directory
-(usually @file{/srv/submit/PROFESSORS_USERNAME.cf})
+Path to an alternate configuration file. The default configuration file for
+students, and administrators is a symbolic link from
+@file{$HOME/.turnin-ng/turnin-ng.cf} to a file in the root of the submit
+directory (usually @file{/srv/submit/turnin-ng.cf}). For TAs and professors, it
+should point to a file in the root of the course diretory (usually
+@file{/srv/submit/COURSE/turnin-ng.cf}).
 
 @item @option{--create-course}
 Create a course.

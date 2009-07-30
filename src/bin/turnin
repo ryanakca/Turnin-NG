@@ -55,7 +55,7 @@ if __name__ == '__main__':
         if options.config:
             config = options.config
         else:
-            config = os.path.join("/srv/submit", options.course, "turnin.cf")
+            config = os.path.join("/srv/submit", "turnin-ng.cf")
         # We're listing the courses:
         course = TurninCourse(TurninCourse(config,
                     options.course).course['projlist'], options.course)
