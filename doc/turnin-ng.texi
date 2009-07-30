@@ -255,6 +255,10 @@ Print @command{project}'s version.
 @item @option{-h}, @option{--help}
 Print a help message.
 
+@item @option{-D}, @option{--perm-disable}
+Permanently disable the current project and strip all unique suffixes. You will
+generally want to use this option instead of @option{--disable}.
+
 @item @option{-d}, @option{--disable}
 Disable the current project.
 
@@ -330,7 +334,7 @@ We want to close submissions for the project `haskell_sort' and compress it at
 ryanakca@@zeus:~$ at 2400 UTC Sep 15 2009
 warning: commands will be executed using /bin/sh
 at> project -c cisc2323
-at> project -d haskell_sort
+at> project -D haskell_sort
 at> project -p haskell_sort
 job 92 at Tue Sep 15 19:00:00 2009
 }
