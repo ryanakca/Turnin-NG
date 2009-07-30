@@ -50,15 +50,6 @@ def create_course(config_file, course):
                 print 'Continuing'
             else:
                 sys.exit(e)
-        try:
-            os.symlink(config_file, os.path.join(directory, 'turnin.cf'))
-        except OSError, e:
-            # We don't want to abort if the symlink already exists
-            if e.errno == 17:
-                print e
-                print 'Continuing'
-            else:
-                sys.exit(e)
         os.chmod(directory, 0733)
         chown(directory, user, group)
         os.chmod(config_file, 0644)
