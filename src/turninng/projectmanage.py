@@ -23,8 +23,8 @@ import shutil
 import subprocess
 import tarfile
 
-from turnin.configparser import ProjectCourse, ProjectProject
-from turnin.sys import chown
+from turninng.configparser import ProjectCourse, ProjectProject
+from turninng.sys import chown
 
 def create_project(config_file, course, project):
     """

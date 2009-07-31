@@ -21,8 +21,8 @@ import os.path
 import shutil
 import tarfile
 
-from turnin.configparser import ProjectGlobal, ProjectAdminCourse
-from turnin.sys import chown
+from turninng.configparser import ProjectGlobal, ProjectAdminCourse
+from turninng.sys import chown
 
 def create_course(config_file, course):
     """

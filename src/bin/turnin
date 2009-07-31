@@ -20,9 +20,9 @@ from optparse import OptionParser, OptionGroup
 import os.path
 import sys
 
-import turnin
-from turnin.configparser import TurninGlobal, TurninCourse, TurninProject
-from turnin.submitter import submit_files, check_group, list_projects
+import turninng
+from turninng.configparser import TurninGlobal, TurninCourse, TurninProject
+from turninng.submitter import submit_files, check_group, list_projects
 
 if __name__ == '__main__':
     usage = '%prog [options] [files]'
