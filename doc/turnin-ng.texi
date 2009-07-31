@@ -1,12 +1,16 @@
 \input texinfo   @c -*-texinfo-*-
 @set VERSION 1.0~beta1
-@set UPDATED 2009-07-21
-@setfilename turnin-ng.texi
-@settitle Turnin-NG @value{VERSION}
+@set UPDATED 31 July 2009
+@set UPDATED-MONTH July 2009
+@setfilename turnin-ng.info
+@settitle Turnin-NG
 @syncodeindex pg cp
 @allowcodebreaks false
 @comment %**end of header
 @copying
+@set VERSION 1.0~beta1
+@set UPDATED 31 July 2009
+@set UPDATED-MONTH July 2009
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 
 Copyright @copyright{} 2009 Ryan Kavanagh (@email{ryanakca@@kubuntu.org}).
@@ -18,14 +22,15 @@ notice and this notice are preserved.
 @end quotation
 @end copying
 
-@dircategory Turnin-NG documentation system
+@dircategory Turnin-NG Assignment Submission Suite
 @direntry
-* Turnin-NG::  using Turnin-NG
+* Turnin-NG:: Turnin-NG
 @end direntry
 
 @titlepage
 @title Turnin-NG
-@subtitle for version @value{VERSION}, @value{UPDATED}
+@subtitle Assignment Submission Suite
+@subtitle Version @value{VERSION}, @value{UPDATED-MONTH}
 @author Ryan Kavanagh (@email{ryanakca@@kubuntu.org})
 @page
 @vskip 0pt plus 1filll
@@ -37,8 +42,9 @@ notice and this notice are preserved.
 @ifnottex
 @node Top, Introduction to Turnin-NG, (dir), (dir)
 @top Turnin-NG
-
-This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
+@ifinfo
+This manual is for @code{Turnin-NG} (version @value{VERSION}, @value{UPDATED}).
+@end ifinfo
 @end ifnottex
 
 @menu
