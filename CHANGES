@@ -15,6 +15,7 @@
     KeyErrors.
   * Rename config files to turnin-ng.cf
   * Add option to print warranty information, as suggested by GPL
+  * Set the default configuration file in /etc/turnin-ng.cf
  
  turnin:
   * Use random 16 character suffixes (username-XXXXXXXXXXXXXXXX.tar.gz) when

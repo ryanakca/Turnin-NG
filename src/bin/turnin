@@ -42,8 +42,11 @@ if __name__ == '__main__':
             'a list of submitted files.')
     parser.add_option('-w', '--legal', action='store_true',
             help='Print warranty and license information.')
+    parser.set_defaults(config=os.path.join('/etc', 'turnin-ng.cf'))
 
     (options, args) = parser.parse_args()
+
+    config = options.config
 
     # If we're listing projects, it's obvious we won't be submitting to one.
     if not options.list and not args:
@@ -53,12 +56,6 @@ if __name__ == '__main__':
     if not options.course:
         sys.exit(ValueError("Error, please specify a course."))
     try:
-        # We're nesting this in a try: because we might find out the requested
-        # course or project doesn't exist.
-        if options.config:
-            config = options.config
-        else:
-            config = os.path.join("/srv/submit", "turnin-ng.cf")
         # We're listing the courses:
         course = TurninCourse(TurninCourse(config,
                     options.course).course['projlist'], options.course)

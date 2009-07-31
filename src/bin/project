@@ -68,11 +68,16 @@ if __name__ == '__main__':
     admin.add_option('--delete-course', help='Deletes a course')
     admin.add_option('--archive-course', help='Archive a course')
     parser.add_option_group(admin)
-    parser.set_defaults(config=os.path.join(os.path.expanduser('~'),
-        '.turnin-ng', 'turnin-ng.cf'))
+    parser.set_defaults(config=os.path.join('/etc', 'turnin-ng.cf'))
     (options, args) = parser.parse_args()
 
-    config = options.config
+    # If we aren't doing admin stuff, we want the per course config file.
+    if not options.create_course and not options.delete_course and \
+                                     not options.archive_course:
+        config = ProjectCourse(options.config,
+                options.course).course['projlist']
+    else:
+        config = options.config
 
     if options.legal:
         sys.exit(turnin.__license__)

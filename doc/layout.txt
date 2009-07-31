@@ -1,7 +1,7 @@
 Suggested layout for project and turnin. The path /srv/submit may be changed to
 whatever suits your fancy.
 
-/srv/submit/turnin-ng.cf
+/etc/turnin-ng.cf
 /srv/submit/course1/project1/
                     project2/
                     project3/
@@ -15,8 +15,3 @@ whatever suits your fancy.
                     ....
                     projectX/
                     turnin-ng.cf
-~professor1/.turnin-ng/turnin-ng.cf -> /srv/submit/course1/turnin-ng.cf
-~professor2/.turnin-ng/turnin-ng.cf -> /srv/submit/course2/turnin-ng.cf
-~professor3/.turnin-ng/turnin-ng.cf -> /srv/submit/course3/turnin-ng.cf
-.....
-~professorN/.turnin-ng/turnin-ng.cf -> /srv/submit/courseN/turnin-ng.cf
