@@ -125,7 +125,7 @@ Set the course to which we'll submit our assignments.
 Print warranty and license information.
 
 @item @file{files}
-The files we want to submit
+The files and directories we want to submit
 @end table
 
 
@@ -316,17 +316,17 @@ Archive a course using the @command{tar} and @command{gzip} formats
 @node Common situations for project,  , Invoking project, project
 @section Examples
 
-You want to create the project `haskell_sort' for your students, enable
-submissions for it and make it the default project (the default project is the
-project to which @command{turnin} submits assignments if the student doesn't
-pass the @option{--project @var{PROJECT}} option when invoking @command{turnin}).
+You're the professor for the course cisc2323 and want to create the project
+`haskell_sort' for your students, enable submissions for it and make it the
+default project (the default project is the project to which @command{turnin}
+submits assignments if the student doesn't pass the @option{--project
+@var{PROJECT}} option when invoking @command{turnin}).
 
 @smallexample
 @code{
-ryanakca@@zeus:~$ ls -lash .turnin.cf
-4.0K lrwxrwxrwx 1 ryanakca ryanakca 104 2009-07-13 13:48 .turnin.cf -> /srv/submit/ryanakca.cf
-ryanakca@@zeus:~$ project -c cisc2323
-Successfully switched the default course to cisc2323
+ryanakca@@zeus:~$ ls -l $HOME/.turnin-ng/
+lrwxrwxrwx 1 ryanakca ryanakca 104 2009-07-13 13:48 turnin-ng.cf -> /srv/submit/cisc2323
+/turnin-ng.cf
 ryanakca@@zeus:~$ project -i haskell_sort
 [Optional] Project description: Implement a bubble sort and the radix sort using Haskell
 Successfully created the project haskell_sort in the course cisc2323
@@ -335,11 +335,9 @@ Successfully enabled and set default the project haskell_sort
 }
 @end smallexample
 
-In the previous example, we switched our session to the `cisc2323' course using
-the @command{project -c cisc2323} command. We then proceeded to create the
-project `haskell_sort' by running the command @command{project -i haskell_sort}.
-Finally, we enabled it and set it default by running @command{project -e
-haskell_sort}.
+In the previous example, we created the project `haskell_sort' by running the
+command @command{project -i haskell_sort}.  Finally, we enabled it and set it
+default by running @command{project -e haskell_sort}.
 
 We want to close submissions for the project `haskell_sort' and compress it at
 24:00 UTC, September 15 2009. We can do this using the @command{at} command.
@@ -356,7 +354,10 @@ job 92 at Tue Sep 15 19:00:00 2009
 @end smallexample
 
 For more details on @command{at}'s time format, please see it's @command{man}
-page.
+page. In this case we passed the @command{project -D haskell_sort} command
+instead of the @command{project -d haskell_sort} command since we do not want
+the long suffixed filenames in the archive, we want them in the
+@file{username.tar.gz} format.
 
 @node Distributing Turnin-NG, , project, Top
 @chapter Distributing Turnin-NG
