@@ -117,8 +117,12 @@ if __name__ == '__main__':
         raise ValueError("Error, please pass one project name at a time.")
     elif len(args) == 1:
         project_name = args[0]
-    else:
+    elif ProjectCourse(config, default_course).course['default']:
         project_name = ProjectCourse(config, default_course).course['default']
+    else:
+        print "Please specify the project or set a default project."
+        sys.exit(parser.print_help())
+
     # Create, delete or (un)compress the project if needed before creating an 
     # object
     if options.init:
