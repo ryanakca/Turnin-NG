@@ -40,8 +40,10 @@
   * Professors can no longer switch between courses. Leave the 'default' option
     in the per course config so that TAs/professors don't have to specify the -c
     course option.
-  * [BUG FIX]: Check that a course exists before archiving or deleting it.
+  * [BUG FIX]: Check that a course exists before archiving, creating or deleting
+    it.
   * [BUG FIX]: Print project name instead of %s when disabling a project.
+  * [BUG FIX]: Reset course directory to 755 when creating it instead of 733.
 
  Documentation:
   * Updated with all the above changes
