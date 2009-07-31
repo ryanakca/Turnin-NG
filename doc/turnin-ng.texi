@@ -61,8 +61,8 @@ This manual is for @code{Turnin-NG} (version @value{VERSION}, @value{UPDATED}).
 Turnin-NG is an assignment submission suite written in Python and composed of
 @command{turnin} and @command{project}. Students can use the @command{turnin}
 command to submit an assignment to a course. Professors and @acronym{TAs,
-teaching assistants} can use @command{project} permits @acronym{TAs, teaching
-assistants} to manage submitted assignments, making them easier to grade.
+teaching assistants} can use @command{project} permits TAs to manage submitted
+assignments, making them easier to grade.
 
 @node turnin, project, Introduction to Turnin-NG, Top
 @chapter turnin
