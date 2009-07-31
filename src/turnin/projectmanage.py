@@ -112,6 +112,7 @@ def compress_project(config_file, course, project):
         tar.add(project_obj.project['directory'], project_obj.name)
         tar.close() # This writes the tarball
         project_obj.project['tarball'] = archive_name
+        os.chmod(archive_name, 0600)
         project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:
