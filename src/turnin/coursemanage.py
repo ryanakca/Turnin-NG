@@ -33,35 +33,40 @@ def create_course(config_file, course):
     @type course: string
     @param course: course name
     @rtype: None
+    @raise ValueError: The course already exists.
 
     """
-    course = ProjectAdminCourse(config_file, course)
-    user = raw_input("Username [usually your UNIX login]: ")
-    directory = raw_input("Full path to the course directory: ")
-    group = raw_input("Group: ")
-    try:
+    config_obj = ProjectGlobal(config_file)
+    if not config_obj.config.has_key(course):
+        course = ProjectAdminCourse(config_file, course)
+        user = raw_input("Username [usually your UNIX login]: ")
+        directory = raw_input("Full path to the course directory: ")
+        group = raw_input("Group: ")
         try:
-            os.makedirs(directory) # We could supply the mode here, but it might get
-                                   #ignored on some systems. We'll do it here instead
+            try:
+                os.makedirs(directory) # We could supply the mode here, but it might get
+                                       #ignored on some systems. We'll do it here instead
+            except OSError, e:
+                # We don't want to abort of the directory already exists
+                if e.errno == 17:
+                    print e
+                    print 'Continuing'
+                else:
+                    sys.exit(e)
+            os.chmod(directory, 0733)
+            chown(directory, user, group)
+            os.chmod(config_file, 0644)
+            chown(config_file, user, group)
         except OSError, e:
-            # We don't want to abort of the directory already exists
-            if e.errno == 17:
-                print e
-                print 'Continuing'
-            else:
-                sys.exit(e)
-        os.chmod(directory, 0733)
-        chown(directory, user, group)
-        os.chmod(config_file, 0644)
-        chown(config_file, user, group)
-    except OSError, e:
-        print e
-    course.write(user, directory, group)
-    # We want to set the default course for the per course config.
-    global_course_conf = ProjectGlobal(course.course['projlist'])
-    global_course_conf.set_default(course.course.name)
-    chown(course.course['projlist'], user, group)
-    os.chmod(course.course['projlist'], 0644)
+            print e
+        course.write(user, directory, group)
+        # We want to set the default course for the per course config.
+        global_course_conf = ProjectGlobal(course.course['projlist'])
+        global_course_conf.set_default(course.course.name)
+        chown(course.course['projlist'], user, group)
+        os.chmod(course.course['projlist'], 0644)
+    else:
+        raise ValueError ('The course %s already exists, aborting' % course)
 
 def delete_course(config_file, course):
     """

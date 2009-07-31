@@ -79,8 +79,11 @@ if __name__ == '__main__':
 
     # Administrative functions :
     if options.create_course:
-        create_course(config, options.create_course) 
-        sys.exit("Successfully created the course %s" % options.create_course)
+        try:
+            create_course(config, options.create_course) 
+            sys.exit("Successfully created the course %s" % options.create_course)
+        except ValueError, e:
+            sys.exit(e)
     if options.delete_course:
         try:
             delete_course(config, options.delete_course)
