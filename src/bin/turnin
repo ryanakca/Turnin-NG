@@ -46,6 +46,9 @@ if __name__ == '__main__':
 
     (options, args) = parser.parse_args()
 
+    if options.legal:
+        sys.exit(turninng.__license__)
+
     config = options.config
 
     # If we're listing projects, it's obvious we won't be submitting to one.
