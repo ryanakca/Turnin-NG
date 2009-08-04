@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='turnin-ng',
-      version='1.0~beta1',
+      version='1.0~beta2',
       description='Turn in your assignments with turnin',
       author='Ryan Kavanagh',
       author_email='ryanakca@kubuntu.org',

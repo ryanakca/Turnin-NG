@@ -31,7 +31,7 @@ from turninng.submitter import list_projects
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
-    parser = OptionParser(version='1.0~beta1', usage=usage)
+    parser = OptionParser(version='1.0~beta2', usage=usage)
     parser.add_option('-d', '--disable', action='store_false', dest='enabled',
             help='Disable submissions for the current project.')
     parser.add_option('-D', '--perm-disable', action='store_true',
