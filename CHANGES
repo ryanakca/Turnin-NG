@@ -1,0 +1,75 @@
+1.0~beta2 2009-08-04
+ Global:
+  * Get rid of 'No `START-INFO-DIR-ENTRY' and no `This file documents' when
+    installing the info file.
+  * If users don't pass any arguments, print --help message
+  * Add --prefix note to the INSTALL file so sysadmins don't have to search
+    online for how to install under /usr/local/
+  * Install man pages in the right directories.
+  * Project submission directory is 733 now, it would be too much of a hassle
+    sysadmins to create a group per course and add students to a group per
+    course. Drop group checking.
+  * Split the configurations into a global config file (used by students and
+    administrators) and a course config file (used by professors and TAs).
+  * [BUG FIX]: When listing projects, check for a 'default' project. This avoids
+    KeyErrors.
+  * Rename config files to turnin-ng.cf
+  * Add option to print warranty information, as suggested by GPL
+  * Set the default configuration file in /etc/turnin-ng.cf
+  * Rename the turnin package to turninng
+ 
+ turnin:
+  * Use random 16 character suffixes (username-XXXXXXXXXXXXXXXX.tar.gz) when
+    submitting to prevent users from copying each other or overwriting each
+    other's assignments.
+  * Store these suffixes in $HOME/.turnin-ng/submissions and use UUIDs to
+    identify each project. This is to prevent a course having the project A,
+    removing it, and then recreating it. 
+  * Have the user specify a project if the course doesn't have a default one.
+ 
+ project:
+  * Don't abort creating the course if the directory already exists.
+  * [BUG FIX]: When run without args, we should not create a course and write to
+    config file.
+  * Initialize a project if we pass only a project name
+  * Add turnin's list projects option.
+  * When we compress projects, print the path to the tarball.
+  * Add an option to compress a whole course directory.
+  * Add an option to strip the random suffixes (-D / --perm-disable).
+  * [BUG FIX]: Check that a project exists in a course before
+    enabling/disabling/etc'ing it.
+  * Professors can no longer switch between courses. Leave the 'default' option
+    in the per course config so that TAs/professors don't have to specify the -c
+    course option.
+  * [BUG FIX]: Check that a course exists before archiving, creating or deleting
+    it.
+  * [BUG FIX]: Print project name instead of %s when disabling a project.
+  * [BUG FIX]: Reset course directory to 755 when creating it instead of 733.
+
+ Documentation:
+  * Updated with all the above changes
+  * [BUG FIX]: Info page now properly displays VERSION & UPDATED values.
+  * Added this changelog
+
+1.0~beta1 First release tested on a Queens server.
+ Global:
+  * Dropped course 'section' in the configuration files
+
+ turnin:
+  * Add option to sign submissions with GPG
+  * Display project list in a table
+  * No longer needs to be run setuid
+
+ project:
+  * Add option to verify GPG signatures
+  * [BUG FIX]: Use path to course directory instead of project when creating
+    courses
+  * [BUG FIX]: Set the project directory as drwx------ after disabling so that
+    students can't manually submit assignments after it's disabled.
+
+ Documentation:
+  * Added an INSTALL file
+  * Added a Texinfo document
+  * Fixed manpage header so that lexgrog / apropos work
+
+0.1~beta1 First release, following the release early and release often idea

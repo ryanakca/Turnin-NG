@@ -19,32 +19,17 @@ import grp
 import os
 import os.path
 import pwd
+import random
 import shutil
+import string
 import subprocess
 import tarfile
 import tempfile
 
-from turnin.sys import chown, chgrp
-from turnin.configparser import TurninCourse
+from turninng.sys import chown
+from turninng.configparser import TurninCourse, TurninList
 
-def check_group(group):
-    """
-    Checks if the user / runner belongs to the group 'group'.
-
-    @type group: string
-    @param group: UNIX group name
-    @rtype: Bool
-    @return: True if the user belongs to the group, False otherwise.
-
-    """
-    # Gets the group database entry, selects [2] from the tuple (gr_name,
-    # gr_passwd, gr_gid, gr_mem). Checks if the gid is in the process owner's
-    # groups list.
-    if grp.getgrnam(group)[2] in os.getgroups():
-        return True
-    return False
-
-def submit_files(course_name, project, files, gpg_key=''):
+def submit_files(course_name, project, files, list='', gpg_key=''):
     """
     Submits the files to the project.
 
@@ -54,6 +39,8 @@ def submit_files(course_name, project, files, gpg_key=''):
     @param project: Project to which we should submit the files
     @type files: list
     @param files: Python list of files.
+    @type list: TurninList
+    @param list: list of submitted files
     @type gpg_key: string
     @param gpg_key: GnuPG public-key ID
     @rtype: list
@@ -61,10 +48,29 @@ def submit_files(course_name, project, files, gpg_key=''):
     @raise subprocess.CalledProcessError: GnuPG fails to sign
 
     """
+    if not list:
+        list = os.path.join(os.path.expanduser('~'), '.turnin-ng',
+                'submissions')
+        # We don't want something like /home/ryan/.turning-ng/submissions../
+        if not os.path.isdir(os.path.normpath(os.path.join(list, os.pardir))):
+            os.makedirs(os.path.normpath(os.path.join(list, os.pardir)))
+    list_file = TurninList(list)
+    random_suffix = ''
+    if list_file.config.has_key(project.course.name):
+        if list_file.config[project.course.name].has_key(
+                project.project['uuid']):
+            random_suffix = list_file.config[project.course.name][
+                    project.project['uuid']]
+    if not random_suffix:
+        chars = string.letters + string.digits
+        for i in range(16):
+            random_suffix += random.choice(chars)
+        list_file.write(project, random_suffix)
     temparchive = tempfile.NamedTemporaryFile(suffix='.tar.gz')
-    filename =  '%(username)s.tar.gz' % \
-        {'username': pwd.getpwuid(os.getuid())[0]} # This is the username that
+    filename =  '%(username)s-%(suffix)s.tar.gz' % \
+        {'username': pwd.getpwuid(os.getuid())[0], # This is the username that
                                                    # that owns the process
+         'suffix': random_suffix}
     tempdir = tempfile.mkdtemp()
     for file in files:
         if os.path.isdir(file):
@@ -82,14 +88,11 @@ def submit_files(course_name, project, files, gpg_key=''):
     if gpg_key:
         cargs = ['gpg', '--sign', '-u ' + gpg_key, '-b', temparchive.name]
         retcode = subprocess.call(cargs)
-        chgrp(temparchive.name + '.sig', project.course['group'])
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
     shutil.copy(temparchive.name,
             os.path.join(project.project['directory'], filename))
-    chgrp(os.path.join(project.project['directory'], filename),
-            project.course['group'])
-    os.chmod(os.path.join(project.project['directory'], filename), 0640)
+    os.chmod(os.path.join(project.project['directory'], filename), 0666)
     # We want the signature's timestamp to be more recent than the archive's.
     if gpg_key:
         shutil.copy(temparchive.name + '.sig',
@@ -115,7 +118,9 @@ def list_projects(config, course):
     """
     projects = [['Enabled', 'Project', 'Description']]
     course_obj = TurninCourse(config, course)
-    default = course_obj.course['default']
+    default = ''
+    if course_obj.course.has_key('default'):
+        default = course_obj.course['default']
     for i in course_obj.course.__dict__['sections']:
         if default == i:
             projects.append(['Default', i, course_obj.course[i]['description']])

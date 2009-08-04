@@ -26,6 +26,8 @@ to use the default project.
 Print project's version
 .IP "\-h, \-\-help"
 Print these options
+.IP "\-D, \-\-perm-disable"
+Permanently disable submissions for the current project.
 .IP "\-d, \-\-disable"
 Disables the current project.
 .IP "\-e, \-\-enable"
@@ -53,15 +55,23 @@ Verify's the cryptographic signatures on submitted assignments using
 May require you to fetch the student's public key.
 .IP "\-\-config=CONFIG"
 Path to an alternate configuration file.
+.IP "\-w, \-\-legal"
+Print warranty and license information.
 .IP "\-c COURSE, \-\-switch=COURSE"
 Switch between the courses you are currently administering.
 .IP "\-\-create-course=COURSE"
 Creates the course COURSE
 .IP "\-\-delete-course=COURSE"
 Deletes the course COURSE
+.IP "\-\-archive-course=COURSE"
+Archives the course using the
+.B tar (1)
+and
+.B gzip (1)
+formats.
 
 .SH FILES
-.I ~/.turnin.cf
+.I /etc/turnin-ng.cf
 
 .SH AUTHOR
 Turnin-NG and this manpage were written by Ryan Kavanagh <ryanakca@kubuntu.org>

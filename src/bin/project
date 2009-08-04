@@ -21,16 +21,22 @@ import os
 import os.path
 import sys
 
-from turnin.configparser import ProjectGlobal, ProjectCourse, ProjectProject
-from turnin.coursemanage import create_course, delete_course, switch_course
-from turnin.projectmanage import create_project, delete_project
-from turnin.projectmanage import compress_project, extract_project, verify_sig
+import turninng
+from turninng.configparser import ProjectGlobal, ProjectCourse, ProjectProject
+from turninng.coursemanage import create_course, delete_course, archive_course
+from turninng.projectmanage import create_project, delete_project, verify_sig
+from turninng.projectmanage import compress_project, extract_project
+from turninng.projectmanage import strip_random_suffix
+from turninng.submitter import list_projects
 
 if __name__ == '__main__':
     usage = '%prog [options] [project name]'
-    parser = OptionParser(version='1.0~beta1', usage=usage)
+    parser = OptionParser(version='1.0~beta2', usage=usage)
     parser.add_option('-d', '--disable', action='store_false', dest='enabled',
             help='Disable submissions for the current project.')
+    parser.add_option('-D', '--perm-disable', action='store_true',
+            dest='pdisable',
+            help='Permanently disable submissions for the current project.')
     parser.add_option('-e', '--enable', action='store_true', dest='enabled',
             help='Enable submissions for the current project and make it ' +
             'the default project.')
@@ -47,54 +53,81 @@ if __name__ == '__main__':
             help='Extract this project')
     parser.add_option('-v', '--verify', action='store_true',
             help='Verify signatures on submitted projects')
+    parser.add_option('--list', help='Lists projects for the course. ' +
+            'also displays wether or not the project is open.',
+            action='store_true')
+    parser.add_option('-c', '--course', help='Course name')
 #    parser.add_option('-v', '--verbose', action='store_true', dest='verbose',
 #            help='Verbose. Print shell commands as they are executed.')
     parser.add_option('-C', '--config', help='Use an alternate config file')
+    parser.add_option('-w', '--legal', action='store_true',
+            help='Print warranty and license information.')
     admin = OptionGroup(parser, "Administrative options",
             "These options can add or remove courses, etc.")
     admin.add_option('--create-course', help='Creates a course')
     admin.add_option('--delete-course', help='Deletes a course')
-    parser.add_option('-c', '--switch', help='Switch between the course you ' +
-        'are currently administering.')
+    admin.add_option('--archive-course', help='Archive a course')
     parser.add_option_group(admin)
-    parser.set_defaults(config=os.path.join(os.path.expanduser('~'),
-        '.turnin.cf'))
+    parser.set_defaults(config=os.path.join('/etc', 'turnin-ng.cf'))
     (options, args) = parser.parse_args()
 
-    config = options.config
+    # If we aren't doing admin stuff, we want the per course config file.
+    if not options.create_course and not options.delete_course and \
+                                     not options.archive_course:
+        config = ProjectCourse(options.config,
+                options.course).course['projlist']
+    else:
+        config = options.config
+
+    if options.legal:
+        sys.exit(turninng.__license__)
 
     # Administrative functions :
     if options.create_course:
-        create_course(config, options.create_course) 
-        sys.exit("Successfully created the course %s" % options.create_course)
+        try:
+            create_course(config, options.create_course) 
+            sys.exit("Successfully created the course %s" % options.create_course)
+        except ValueError, e:
+            sys.exit(e)
     if options.delete_course:
         try:
             delete_course(config, options.delete_course)
             sys.exit("Successfully deleted the course %s" % options.delete_course)
         except ValueError, e:
             sys.exit(e)
-    if options.switch:
+    if options.archive_course:
         try:
-            switch_course(config, options.switch)
-            sys.exit("Successfully switched the default course to %s" %
-                    options.switch)
+            path = archive_course(config, options.archive_course, ret_path=True)
+            sys.exit("Successfully archived the course %s to %s" %
+                    (options.archive_course, path))
         except ValueError, e:
             sys.exit(e)
+        except OSError, e:
+            if e.errno == 2:
+                print "Has someone already moved the submission directory?"
+                sys.exit(e)
 
 
     # End user functions :
-    default_course = ProjectGlobal(config).config['Global']['default']
-    if not default_course:
-        sys.exit("Please set the default course using the '-c course' or " +
-            "'--switch=COURSE' options.")
+    if options.course:
+        default_course = options.course
+    elif ProjectGlobal(config).config['Global']['default']:
+        default_course = ProjectGlobal(config).config['Global']['default']
+    else:
+        sys.exit("Please specify your course using the '-c course' or " +
+            "'--course=COURSE' options.")
 
     # Let's set the project_name variable
     if len(args) > 1:
         raise ValueError("Error, please pass one project name at a time.")
     elif len(args) == 1:
         project_name = args[0]
-    else:
+    elif ProjectCourse(config, default_course).course['default']:
         project_name = ProjectCourse(config, default_course).course['default']
+    else:
+        print "Please specify the project or set a default project."
+        sys.exit(parser.print_help())
+
     # Create, delete or (un)compress the project if needed before creating an 
     # object
     if options.init:
@@ -117,16 +150,29 @@ if __name__ == '__main__':
             sys.exit("Successfully extracted the project %s" % project_name)
     except ValueError, e:
         sys.exit(e)
+    # List projects
+    try:
+        if options.list:
+            projects = list_projects(config, default_course)
+            for i in projects:
+                print i
+            sys.exit()
+    except ValueError, e:
+        sys.exit(e)
 
 
-    project = ProjectProject(config, default_course, project_name)
     # Enable submissions for a project
     if options.enabled:
+        if ProjectCourse(config, default_course).course.has_key(project_name):
+            project = ProjectProject(config, default_course, project_name)
+        else:
+            sys.exit(ValueError('Course %s does not have the project %s' %
+                (default_course, project_name)))
         if project.project.has_key('tarball') and project.project['tarball']:
             extract_project(config, default_course, project_name)
             print "Extracted the project %s" % project_name
         # Set the directory writable by the student group.
-        os.chmod(project.project['directory'], 0730)
+        os.chmod(project.project['directory'], 0733)
         project.write(True, default=True)
         sys.exit("Successfully enabled and set default the project %s" % project_name)
     elif options.enabled == False: # Disable it. I know, using '== False' is
@@ -136,18 +182,54 @@ if __name__ == '__main__':
         # rather be explicit than implicit ;)
         #       This chmod line is to prevent students from manually uploading
         # assignments to a project once it's disabled.
+        if ProjectCourse(config, default_course).course.has_key(project_name):
+            project = ProjectProject(config, default_course, project_name)
+        else:
+            sys.exit(ValueError('Course %s does not have the project %s' %
+                (default_course, project_name)))
         os.chmod(project.project['directory'], 0700)
         project.write(False)
         sys.exit("Successfully disabled the project %s" % project_name)
     elif options.enabled_nodefault:
+        if ProjectCourse(config, default_course).course.has_key(project_name):
+            project = ProjectProject(config, default_course, project_name)
+        else:
+            sys.exit(ValueError('Course %s does not have the project %s' %
+                (default_course, project_name)))
         if project.project.has_key('tarball') and project.project['tarball']:
             extract_project(config, default_course, project_name)
             print "Extracted the project %s" % project_name
         project.write(True)
         sys.exit("Successfully enabled the project %s" % project_name)
     elif options.verify:
+        if ProjectCourse(config, default_course).course.has_key(project_name):
+            project = ProjectProject(config, default_course, project_name)
+        else:
+            sys.exit(ValueError('Course %s does not have the project %s' %
+                (default_course, project_name)))
         try:
             unsigned = verify_sig(project)
             sys.exit("\n".join(unsigned))
         except ValueError, e:
             sys.exit(e)
+    elif options.pdisable:
+        if ProjectCourse(config, default_course).course.has_key(project_name):
+            project = ProjectProject(config, default_course, project_name)
+        else:
+            sys.exit(ValueError('Course %s does not have the project %s' %
+                (default_course, project_name)))
+        os.chmod(project.project['directory'], 0700)
+        project.write(False)
+        try:
+            strip_random_suffix(project)
+        except ValueError, e:
+            sys.exit(e)
+        sys.exit("Successfully disabled the project %s and " % project_name +
+            "stripped random suffixes")
+    elif args:
+        create_project(config, default_course, project_name)
+        sys.exit("Successfully created the project %s in the course %s" %
+                (project_name, default_course))
+    else:
+        # We didn't get anything.
+        parser.print_help()

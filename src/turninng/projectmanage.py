@@ -17,12 +17,14 @@
 
 import os
 import os.path
+import pwd
+import re
 import shutil
 import subprocess
 import tarfile
 
-from turnin.configparser import ProjectCourse, ProjectProject
-from turnin.sys import chown
+from turninng.configparser import ProjectCourse, ProjectProject
+from turninng.sys import chown
 
 def create_project(config_file, course, project):
     """
@@ -42,7 +44,7 @@ def create_project(config_file, course, project):
     group = project_obj.course['group']
     directory = project_obj.project['directory']
     os.makedirs(directory)
-    os.chmod(directory, 0730)
+    os.chmod(directory, 0733)
     chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
     project_obj.write(True, description)
@@ -110,6 +112,7 @@ def compress_project(config_file, course, project):
         tar.add(project_obj.project['directory'], project_obj.name)
         tar.close() # This writes the tarball
         project_obj.project['tarball'] = archive_name
+        os.chmod(archive_name, 0600)
         project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:
@@ -184,3 +187,74 @@ def verify_sig(project_obj):
     else:
         ret += submissions
     return ret
+
+def strip_random_suffix(project_obj):
+    """
+    Remove the 16 byte suffixes of the style username-XXXXXXXXXXXXXXXX.tar.gz
+
+    @type project_obj: ProjectProject
+    @param project_obj: Project for which we will strip the suffixes
+    @raise ValueError: No assignments have been submitted.
+
+    """
+    files = os.listdir(project_obj.project['directory'])
+    if not files:
+        raise ValueError("No assignments have been submitted yet. Not " +
+                "stripping suffixes")
+    # They need to be sorted since there is no guarantee that os.listdir will
+    # read files in alphabetical order.
+    submissions = {}
+    rejects = []
+    for submission in files:
+        if re.match('^(?P<username>\w+)-\w{16}\.tar\.gz(|.sig)$', submission):
+            username = re.match('^(?P<username>\w+)-\w{16}\.tar\.gz(|.sig)$',
+                submission).group('username')
+            if not submissions.has_key(username):
+                submissions[username] = []
+            submissions[username].append(submission)
+        else:
+            rejects.append(submission)
+
+    for user, subs in submissions.items():
+        if len(subs) != 1:
+            # Let's get rid of assignments other people submitted for the user
+            for submission in subs:
+                owner = pwd.getpwuid(os.stat(os.path.join(
+                    project_obj.project['directory'],
+                    submission)).st_uid).pw_name
+                if owner != user:
+                    print Warning('Error: Student %s submitted an ' % owner +
+                        'assignment for the student %s. Skipping file %s.' %
+                        (user, submission))
+                    submissions[user].remove(submission)
+            # It might still be that the user submitted more than one
+            # assignment, but at least we know that the student submitted them.
+            if len(submissions[user]) > 1:
+                print Warning('Error: Student %s submitted ' % user +
+                    'more than one assignment, skipping the files: %s' %
+                    ' '.join(submissions.pop(user)))
+            # We don't want to print the above error if we are out of
+            # submissions, but we don't want to match a nonexistent submission
+            # later on
+            if not submissions[user]:
+                submissions.pop(user)
+        owner = pwd.getpwuid(os.stat(os.path.join(project_obj.project['directory'],
+                            subs[0])).st_uid).pw_name
+
+        if owner != user:
+            print Warning('Error: Student %s submitted an ' % owner +
+                    'assignment for the student %s. Skipping file %s.' % (user,
+                        submissions.pop(user)[0]))
+    if rejects:
+        print ValueError("Error: The following file(s) do not have the " +
+            "the format username-XXXXXXXXXXXXXXXX.tar.gz or " +
+            "username-XXXXXXXXXXXXXXX.tar.gz.sig, skipping: %s" %
+            '\n'.join(rejects))
+
+    for user, submission in submissions.items():
+        format = re.match(user +
+                '-\w{16}(?P<format>(\.tar\.gz|\.tar\.gz\.sig))$',
+                submission[0]).group('format')
+        os.rename(
+            os.path.join(project_obj.project['directory'], submission[0]),
+            os.path.join(project_obj.project['directory'], user + format))

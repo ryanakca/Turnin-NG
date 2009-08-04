@@ -1,4 +1,4 @@
-# Turnin-NG, an assignment submitter and manager.
+# Turnin-NG, an assignment submitter and manager. --- Custom system utilities
 # Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -14,3 +14,23 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+import pwd
+import grp
+import os
+
+def chown(path, user, group):
+    """
+    Change the owner and the group of 'path'
+
+    @type path: string
+    @param path: file / directory for which to change the owner/group
+    @type user: string
+    @param user: username
+    @type group: string
+    @param group: groupname
+    @rtype: function
+    @return: Function to change the owner and group of 'path'
+
+    """
+    return os.chown(path, pwd.getpwnam(user)[2], grp.getgrnam(group)[2])
