@@ -222,7 +222,7 @@ class ProjectProject(ProjectCourse):
             self.project['description'] = description
         if default:
             super(ProjectProject, self).set_default(self.name)
-        if directory:
+        if tarball:
             self.project['tarball'] = tarball
         self.config.write()
 
