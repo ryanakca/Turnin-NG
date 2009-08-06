@@ -71,13 +71,7 @@ if __name__ == '__main__':
     parser.set_defaults(config=os.path.join('/etc', 'turnin-ng.cf'))
     (options, args) = parser.parse_args()
 
-    # If we aren't doing admin stuff, we want the per course config file.
-    if not options.create_course and not options.delete_course and \
-                                     not options.archive_course:
-        config = ProjectCourse(options.config,
-                options.course).course['projlist']
-    else:
-        config = options.config
+    config = options.config
 
     if options.legal:
         sys.exit(turninng.__license__)
@@ -110,9 +104,9 @@ if __name__ == '__main__':
 
     # End user functions :
     if options.course:
+        # From now on we want to use the projlist as the config file
+        config = ProjectCourse(config, options.course).course['projlist']
         default_course = options.course
-    elif ProjectGlobal(config).config['Global']['default']:
-        default_course = ProjectGlobal(config).config['Global']['default']
     else:
         sys.exit("Please specify your course using the '-c course' or " +
             "'--course=COURSE' options.")
