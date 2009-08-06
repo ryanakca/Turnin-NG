@@ -41,6 +41,26 @@ Cryptographically signs an assignment using
 .IP "\-w, \-\-legal"
 Print warranty and license information.
 
+.SH EXAMPLES
+.TP \w'turnin\ 'u
+.BI turnin\ \-c \ world-cheeses \ \-\-list
+List the projects in the course world-cheeses.
+.TP
+.BI turnin\ \-c \ world-cheeses\ stilton-recipe
+Submit the file
+.ul
+stilton-recipe\fR to the default project in the course
+.ul
+world-cheeses\fR.
+.TP
+.BI turnin\ \-c \ world-cheeses \ \-p \ stilton\ stilton-recipe
+Submit the file
+.ul
+stilton-recipe\fR to the project
+.ul stilton\fR in the course
+.ul
+world-cheeses\fR.
+
 .SH FILES
 .I /etc/turnin-ng.cf
 .I ~/.turnin-ng/submissions
