@@ -1,27 +1,23 @@
-You need to have the latest (4.6.0) configobj module installed. See
-http://www.voidspace.org.uk/python/configobj.html to get it.
+[DEPENDENCIES]
+ * You need to have the configobj module installed. See
+   http://www.voidspace.org.uk/python/configobj.html to get it or install
+   the python-configobj package on Debian based systems.
+ * You also need to have the UUID module, provided in python 2.5+. If you are
+   running python <= 2.4, you can get it from http://pypi.python.org/pypi/uuid/
+   Your mileage may vary.
 
-Then, in the source's root directory, run:
+[INSTALLING]
+Once you have all the dependencies, , in the source's root directory, run:
 % sudo python setup.py install
 This will install turnin-ng to your system's default location, /usr under UNIX.
 If you wanted to install it under /usr/local, pass the --prefix option:
 % sudo python setup.py install --prefix=/usr/local
 
-% sudo mkdir -p /srv/submit
-% cd /srv/submit
-% # Make the first course
-% sudo project -C /etc/turnin-ng.cf --create-course cisc-2323
-Username [usually your UNIX login]: professor1
-Full path to the course directory: /srv/submit/cisc-2323
-Group: cisc-2323
-Successfully created the course cisc-2323
+[CONFIGURING]
+See the manpages and the info page for details and examples on configuring
+Turnin-NG.
 
-If you want to create another course, for professor2, substitute professor1
-for professor2 and cisc-2323 for the course in the project command.
-It is also recommended that you add aliases in /etc/profile for each course, ex:
-alias turnin-cisc2323='turnin -c cisc-2323'
-
-To generate the documentation, run:
+To generate the Texinfo documentation, run:
 % texi2pdf doc/turnin-ng.texi # Generate the PDF documentation
 % sudo makeinfo -o /usr/share/info/turnin-ng.info doc/turnin-ng.texi && \
   sudo install-info /usr/share/info/turnin-ng.info # Generate the info files.
