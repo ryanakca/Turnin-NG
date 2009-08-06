@@ -226,7 +226,7 @@ if __name__ == '__main__':
             sys.exit(e)
         sys.exit("Successfully disabled the project %s and " % project_name +
             "stripped random suffixes")
-    elif args:
+    elif args and default_course:
         create_project(config, default_course, project_name)
         sys.exit("Successfully created the project %s in the course %s" %
                 (project_name, default_course))
