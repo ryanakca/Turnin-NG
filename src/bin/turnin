@@ -22,7 +22,7 @@ import sys
 
 import turninng
 from turninng.configparser import TurninGlobal, TurninCourse, TurninProject
-from turninng.submitter import submit_files, check_group, list_projects
+from turninng.submitter import submit_files, list_projects
 
 if __name__ == '__main__':
     usage = '%prog [options] [files]'
