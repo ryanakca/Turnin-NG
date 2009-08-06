@@ -194,6 +194,7 @@ def strip_random_suffix(project_obj):
 
     @type project_obj: ProjectProject
     @param project_obj: Project for which we will strip the suffixes
+    @rtype: None
     @raise ValueError: No assignments have been submitted.
 
     """

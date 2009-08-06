@@ -95,7 +95,8 @@ class ProjectAdminCourse(ProjectGlobal):
         @type directory: string
         @param directory: path to the course submission directory.
         @type group: string
-        @param group: group that owns teh course directory.
+        @param group: group that owns the course directory.
+        @rtype: None
 
         """
         #self.config.reload() # We don't want to clobber something
@@ -161,7 +162,8 @@ class ProjectCourse(ProjectGlobal):
         @type directory: string
         @param directory: path to the course submission directory.
         @type group: string
-        @param group: group that owns teh course directory.
+        @param group: group that owns the course directory.
+        @rtype: None
 
         """
         #self.config.reload() # We don't want to clobber something
@@ -212,8 +214,11 @@ class ProjectProject(ProjectCourse):
         @param enabled: Is this course enabled? True/False
         @type description: string
         @param description: Optional description for this project.
+        @type directory: string
+        @param directory: project directory
         @type tarball: string
         @param tarball: Path to the compressed project's tarball.
+        @rtype: None
 
         """
         #self.config.reload() # We don't want to clobber something
@@ -222,6 +227,8 @@ class ProjectProject(ProjectCourse):
             self.project['description'] = description
         if default:
             super(ProjectProject, self).set_default(self.name)
+        if directory:
+            self.project['directory'] = directory
         if tarball:
             self.project['tarball'] = tarball
         self.config.write()
@@ -322,6 +329,7 @@ class TurninList:
         @param project: Project to which we submitted
         @type suffix: string
         @param suffix: submitted archive's unique suffix
+        @rtype: None
 
         """
         course = project.course.name
