@@ -75,6 +75,25 @@ and
 .B gzip(1)
 formats.
 
+.SH EXAMPLES
+.TP \w'project\ 'u
+.BI project\ \-\-create-course \ world-cheeses
+Create the course world-cheeses.
+.TP
+.BI project\ \-c \ world-cheeses \ \-i \ stilton
+Create the project stilton in the course world-cheeses.
+.TP
+.BI project\ \-c \ world-cheeses \ \-D \ stilton
+Permanently disable submissions for the project stilton.
+.TP
+.BI project\ \-c \ world-cheeses \ \-p \ stilton
+Compress the project stilton.
+.TP
+.BI project\ \-\-archive-course \ world-cheeses
+Compress the course
+.ul
+world-cheeses\fR and remove it from the global configuration file.
+
 .SH FILES
 .I /etc/turnin-ng.cf
 
