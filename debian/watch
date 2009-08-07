@@ -1,0 +1,3 @@
+version=3
+http://github.com/ryanakca/Turnin-NG/downloads \
+ http://cloud.github.com/downloads/ryanakca/Turnin-NG/Turnin-NG-(.*)\.tar.gz
