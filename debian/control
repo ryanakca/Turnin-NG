@@ -8,7 +8,6 @@ Standards-Version: 3.8.2
 Homepage: http://github.com/ryanakca/Turnin-NG
 Vcs-git: git://github.com/ryanakca/Turnin-NG.git
 Vcs-Browser: http://github.com/ryanakca/Turnin-NG/tree/master
-XS-Python-Version: >= 2.5
 
 Package: turnin-ng
 Architecture: all
