@@ -1,37 +1,23 @@
-You need to have the latest (4.6.0) configobj module installed. See
-http://www.voidspace.org.uk/python/configobj.html to get it.
+[DEPENDENCIES]
+ * You need to have the configobj module installed. See
+   http://www.voidspace.org.uk/python/configobj.html to get it or install
+   the python-configobj package on Debian based systems.
+ * You also need to have the UUID module, provided in python 2.5+. If you are
+   running python <= 2.4, you can get it from http://pypi.python.org/pypi/uuid/
+   Your mileage may vary.
 
-Then, in the source's root directory, run:
+[INSTALLING]
+Once you have all the dependencies, , in the source's root directory, run:
 % sudo python setup.py install
 This will install turnin-ng to your system's default location, /usr under UNIX.
 If you wanted to install it under /usr/local, pass the --prefix option:
 % sudo python setup.py install --prefix=/usr/local
 
-% sudo mkdir -p /srv/submit
-% cd /srv/submit
-% # Make the first course
-% sudo project -C /srv/submit/professor1.cf --create-course cisc-2323
-Username [usually your UNIX login]: professor1
-Full path to the course directory: /srv/submit/cisc-2323
-Group: cisc-2323
-Successfully created the course cisc-2323
-% sudo ls -lash *
-4.0K -rw-r--r-- 1 professor1 cisc-2323  165 2009-07-12 08:25 professor1.cf
+[CONFIGURING]
+See the manpages and the info page for details and examples on configuring
+Turnin-NG.
 
-cisc-2323:
-total 8.0K
-4.0K drwx-wx--- 2 professor1 cisc-2323 4.0K 2009-07-12 08:25 .
-4.0K drwxr-xr-x 3 root       root      4.0K 2009-07-12 08:25 ..
-   0 lrwxrwxrwx 1 root       root        25 2009-07-12 08:25 turnin.cf ->
-   /srv/submit/professor1.cf
-%
-
-If you want to create another course, for professor2, substitute professor1
-for professor2 and cisc-2323 for the course in the project command.
-It is also recommended that you add aliases in /etc/profile for each course, ex:
-alias turnin-cisc2323='turnin -C /srv/submit/professor1.cf -c cisc-2323'
-
-To generate the documentation, run:
+To generate the Texinfo documentation, run:
 % texi2pdf doc/turnin-ng.texi # Generate the PDF documentation
 % sudo makeinfo -o /usr/share/info/turnin-ng.info doc/turnin-ng.texi && \
   sudo install-info /usr/share/info/turnin-ng.info # Generate the info files.

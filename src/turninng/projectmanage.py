@@ -194,6 +194,7 @@ def strip_random_suffix(project_obj):
 
     @type project_obj: ProjectProject
     @param project_obj: Project for which we will strip the suffixes
+    @rtype: None
     @raise ValueError: No assignments have been submitted.
 
     """
@@ -223,14 +224,14 @@ def strip_random_suffix(project_obj):
                     project_obj.project['directory'],
                     submission)).st_uid).pw_name
                 if owner != user:
-                    print Warning('Error: Student %s submitted an ' % owner +
+                    print Warning('Warning: Student %s submitted an ' % owner +
                         'assignment for the student %s. Skipping file %s.' %
                         (user, submission))
                     submissions[user].remove(submission)
             # It might still be that the user submitted more than one
             # assignment, but at least we know that the student submitted them.
             if len(submissions[user]) > 1:
-                print Warning('Error: Student %s submitted ' % user +
+                print Warning('Warning: Student %s submitted ' % user +
                     'more than one assignment, skipping the files: %s' %
                     ' '.join(submissions.pop(user)))
             # We don't want to print the above error if we are out of
@@ -242,11 +243,11 @@ def strip_random_suffix(project_obj):
                             subs[0])).st_uid).pw_name
 
         if owner != user:
-            print Warning('Error: Student %s submitted an ' % owner +
+            print Warning('Warning: Student %s submitted an ' % owner +
                     'assignment for the student %s. Skipping file %s.' % (user,
                         submissions.pop(user)[0]))
     if rejects:
-        print ValueError("Error: The following file(s) do not have the " +
+        print ValueError("Warning: The following file(s) do not have the " +
             "the format username-XXXXXXXXXXXXXXXX.tar.gz or " +
             "username-XXXXXXXXXXXXXXX.tar.gz.sig, skipping: %s" %
             '\n'.join(rejects))

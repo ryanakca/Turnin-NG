@@ -317,9 +317,6 @@ submits assignments if the student doesn't pass the @option{--project
 
 @smallexample
 @code{
-ryanakca@@zeus:~$ ls -l $HOME/.turnin-ng/
-lrwxrwxrwx 1 ryanakca ryanakca 104 2009-07-13 13:48 turnin-ng.cf -> /srv/submit/cisc2323
-/turnin-ng.cf
 ryanakca@@zeus:~$ project -i haskell_sort
 [Optional] Project description: Implement a bubble sort and the radix sort using Haskell
 Successfully created the project haskell_sort in the course cisc2323

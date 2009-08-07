@@ -113,7 +113,8 @@ def list_projects(config, course):
     @type course: string
     @param course: course name
     @rtype: list
-    @return: List of (Enabled/Disabled, Project_name, Description) tuples
+    @return: List of '| Enabled/Disabled/Default | Project name | Description |'
+    strings
 
     """
     projects = [['Enabled', 'Project', 'Description']]

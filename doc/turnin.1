@@ -1,4 +1,4 @@
-.TH TURNIN 1 "JULY 2009" Turnin-NG "Queen's University"
+.TH TURNIN 1 "AUGUST 2009" Turnin-NG "Queen's University"
 .SH NAME
 turnin \- submit assignments to be graded
 .SH SYNOPSYS
@@ -41,13 +41,40 @@ Cryptographically signs an assignment using
 .IP "\-w, \-\-legal"
 Print warranty and license information.
 
+.SH EXAMPLES
+.TP \w'turnin\ 'u
+.BI turnin\ \-c \ world-cheeses \ \-\-list
+List the projects in the course world-cheeses.
+.TP
+.BI turnin\ \-c \ world-cheeses\ stilton-recipe
+Submit the file stilton-recipe to the default project in the course
+world-cheeses.
+.TP
+.BI turnin\ \-c \ world-cheeses \ \-p \ stilton\ stilton-recipe
+Submit the file stilton-recipe to the project stilton in the course
+world-cheeses.
+
 .SH FILES
 .I /etc/turnin-ng.cf
 .I ~/.turnin-ng/submissions
 
+.SH SEE ALSO
+
+The full documentation for
+.B turnin
+is maintained as a Texinfo manual.  If the
+.B info
+and
+.B turnin
+programs are properly installed at your site, the command
+.IP
+.B info turnin-ng
+.PP
+should give you access to the complete manual.
+
 .SH AUTHOR
 Turnin-NG and this manpage were written by Ryan Kavanagh <ryanakca@kubuntu.org>
-in July 2009. It is a replacement for the 'project' and 'turnin' commands
+in the summer of 2009. It is a replacement for the 'project' and 'turnin' commands
 written in 1990 for the SPARC architecture by an unknown author.
 
 Both Turnin-NG and this manpage are distributed under the terms of the GNU
