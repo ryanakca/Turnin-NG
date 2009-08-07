@@ -1,3 +1,5 @@
+## 01_no_usr-local.diff by Ryan Kavanagh <ryanakca@kubuntu.org>
+## Description: Don't install under /usr/local
 Index: Turnin-NG/setup.py
 ===================================================================
 --- Turnin-NG.orig/setup.py	2009-08-04 12:54:49.427707124 -0400
