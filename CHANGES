@@ -1,4 +1,4 @@
-1.0~rc2 2009-08-24
+1.0~rc2 UNRELEASED
  Global:
   * Rename turninng.sys to turninng.fileperms to avoid name clashes with
     Python's sys.
@@ -15,6 +15,10 @@
   * When disabling a course, check if it's default. If it is, unset the default
     course.
   * Print the course directory when asking if we want to delete it.
+
+ Documentation:
+  * Commented out '@allowcodebreaks false' since it breaks on older systems and
+    the output remains the same.
 
 1.0~rc1 2009-08-06
  Global:
