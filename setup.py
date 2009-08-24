@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import tempfile
 
-def check_executable_in_path(executable):
+def check_executable_in_path(executable, message):
     """ Checks that executable is installed in the system's PATH and returns
     it's location.
     
@@ -21,6 +21,7 @@ def check_executable_in_path(executable):
         for directory in ['/usr/bin', '/usr/local/bin']:
             if os.path.exists(os.path.join(directory, executable)):
                 return os.path.join(directory, executable)
+    print message
     return False
 
 class build_infopage(Command):
@@ -37,7 +38,8 @@ class build_infopage(Command):
 
     def run(self):
         """ Call makeinfo on the Texinfo document. """
-        makeinfo = check_executable_in_path('makeinfo')
+        makeinfo = check_executable_in_path('makeinfo',
+            "Please install the makeinfo executable to generate the info document")
         if makeinfo:
             cargs = [makeinfo, '-o', 'doc/turnin-ng.info', 'doc/turnin-ng.texi']
             retcode = subprocess.call(cargs)
@@ -60,7 +62,8 @@ class build_pdf(Command):
 
     def run(self):
         """ Call texi2pdf on the Texinfo document. """
-        texi2pdf = check_executable_in_path('texi2pdf')
+        texi2pdf = check_executable_in_path('texi2pdf',
+            "Please install texi2pdf to generate the PDF documentation")
         if texi2pdf:
             tempdir = tempfile.mkdtemp()
             shutil.copy(os.path.join('doc', 'turnin-ng.texi'), tempdir)
