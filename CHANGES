@@ -12,6 +12,8 @@
   * Archiving a course sets it 0600 and is owned by the course's user and group.
   * Added a workaround for python2.4 since its tar.tarfile doesn't have an
     extractall()
+  * When disabling a course, check if it's default. If it is, unset the default
+    course.
 
 1.0~rc1 2009-08-06
  Global:

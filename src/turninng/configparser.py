@@ -226,6 +226,9 @@ class ProjectProject(ProjectCourse):
             self.project['directory'] = directory
         if tarball:
             self.project['tarball'] = tarball
+        if not enabled:
+            if self.course['default'] == self.name:
+                self.course['default'] = ''
         self.config.write()
 
 class TurninGlobal(object):
