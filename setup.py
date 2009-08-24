@@ -1,14 +1,28 @@
 #!/usr/bin/python
 
 from distutils.command.build import build
+from distutils.command.install import install
 from distutils.core import Command, setup
+import distutils.sysconfig
 import os
 import os.path
+import re
 import shutil
 import subprocess
+import sys
 import tempfile
 
-data_files = [('/usr/local/share/man/man1/', ['doc/turnin.1', 'doc/project.1'])]
+# Get the install prefix if one is specified from the command line
+for i, arg in enumerate(sys.argv):
+    prefix_regex = re.compile('(?P<prefix>--prefix)?[\=\s]?(?P<path>[\w:\\][\\\w\s/]*)')
+    if prefix_regex.match(arg):
+        if prefix_regex.match(arg).group('prefix') and not prefix_regex.match(arg).group('path'):
+            # We got --prefix with a space instead of an equal. The next arg will have our path.
+            prefix = os.path.expandvars(prefix_regex.match(sys.argv[i+1]).group('path'))
+        elif prefix_regex.match(arg).group('path'):
+            prefix = os.path.expandvars(prefix_regex.match(arg).group('path'))
+
+data_files = [(os.path.join(prefix,'share/man/man1/'), ['doc/turnin.1', 'doc/project.1'])]
 
 def check_executable_in_path(executable, message):
     """ Checks that executable is installed in the system's PATH and returns
@@ -47,7 +61,7 @@ class build_infopage(Command):
             retcode = subprocess.call(cargs)
             if retcode < 0:
                 raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
-            data_files.append(('/usr/local/share/info/',
+            data_files.append((os.path.join(prefix, 'share/info/'),
                 ['doc/turnin-ng.info']))
 
 build.sub_commands.append(('build_infopage', None))
@@ -87,7 +101,7 @@ class build_pdf(Command):
                 # build directory. Without it, it searches for it in the
                 # non-existent tempdir.
                 os.chdir(os.path.join(doc, os.pardir))
-                data_files.append(('/usr/local/share/doc/',
+                data_files.append((os.path.join(prefix, 'share/doc/'),
                     ['doc/turnin-ng.pdf']))
                 
 
