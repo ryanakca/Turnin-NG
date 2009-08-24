@@ -107,9 +107,23 @@ class build_pdf(Command):
 
 build.sub_commands.append(('build_pdf', None))
 
+class install_legacy(install):
+
+    description = 'Install the legacy symlink of project to tcpsadmin'
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        pass
 
 setup(name='turnin-ng',
-      version='1.0~beta2',
+      version='1.0~rc1',
       description='Turn in your assignments with turnin',
       author='Ryan Kavanagh',
       author_email='ryanakca@kubuntu.org',
