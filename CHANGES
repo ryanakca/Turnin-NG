@@ -1,3 +1,18 @@
+1.0~rc2 2009-08-24
+ Global:
+  * Rename turninng.sys to turninng.fileperms to avoid name clashes with
+    Python's sys.
+
+ turnin:
+  * Elaborate the -v option in --help to avoid confusion
+
+ project:
+  * Project without any options calls --help
+  * --list for projects works.
+  * Archiving a course sets it 0600 and is owned by the course's user and group.
+  * Added a workaround for python2.4 since its tar.tarfile doesn't have an
+    extractall()
+
 1.0~beta2 2009-08-04
  Global:
   * Get rid of 'No `START-INFO-DIR-ENTRY' and no `This file documents' when
