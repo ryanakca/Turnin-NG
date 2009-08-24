@@ -130,6 +130,8 @@ def archive_course(config_file, course, ret_path=False):
             tar.add(config_obj.course['directory'], course + '-' +
                     str(datetime.datetime.now().year))
             tar.close()
+            os.chmod(archive_path, 0600)
+            chown(archive_path, config_obj.course['user'], config_obj.course['group'])
             shutil.rmtree(config_obj.course['directory'], ignore_errors=True)
             del config_obj.config[course]
             # We need to check that Global has the key 'default', otherwise we
