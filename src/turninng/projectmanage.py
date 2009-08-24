@@ -24,7 +24,7 @@ import subprocess
 import tarfile
 
 from turninng.configparser import ProjectCourse, ProjectProject
-from turninng.sys import chown
+from turninng.fileperms import chown
 
 def create_project(config_file, course, project):
     """

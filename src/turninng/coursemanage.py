@@ -22,7 +22,7 @@ import shutil
 import tarfile
 
 from turninng.configparser import ProjectGlobal, ProjectAdminCourse
-from turninng.sys import chown
+from turninng.fileperms import chown
 
 def create_course(config_file, course):
     """
