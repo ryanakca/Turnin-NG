@@ -112,6 +112,16 @@ if __name__ == '__main__':
         sys.exit("Please specify your course using the '-c course' or " +
             "'--course=COURSE' options.")
 
+    # List projects
+    if options.list:
+        try:
+            projects = list_projects(config, default_course)
+            for i in projects:
+                print i
+            sys.exit()
+        except ValueError, e:
+            sys.exit(e)
+
     # Let's set the project_name variable
     if len(args) > 1:
         raise ValueError("Error, please pass one project name at a time.")
@@ -143,15 +153,6 @@ if __name__ == '__main__':
         elif options.extract:
             extract_project(config, default_course, project_name)
             sys.exit("Successfully extracted the project %s" % project_name)
-    except ValueError, e:
-        sys.exit(e)
-    # List projects
-    try:
-        if options.list:
-            projects = list_projects(config, default_course)
-            for i in projects:
-                print i
-            sys.exit()
     except ValueError, e:
         sys.exit(e)
 
