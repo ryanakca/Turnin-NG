@@ -94,6 +94,7 @@ setup(name='turnin-ng',
       package_dir={'turninng':'src/turninng'},
       data_files=[('/usr/local/share/man/man1/', ['doc/turnin.1', 
           'doc/project.1']), 
-          ('/usr/local/share/info/', ['doc/turnin-ng.info'])],
+          ('/usr/local/share/info/', ['doc/turnin-ng.info']),
+          ('/usr/local/share/doc/turnin-ng/', ['doc/turnin-ng.pdf'])],
       cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf}
 )
