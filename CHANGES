@@ -14,6 +14,7 @@
     extractall()
   * When disabling a course, check if it's default. If it is, unset the default
     course.
+  * Print the course directory when asking if we want to delete it.
 
 1.0~rc1 2009-08-06
  Global:
