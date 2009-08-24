@@ -77,6 +77,10 @@ class build_pdf(Command):
             else:
                 shutil.copy('turnin-ng.pdf', doc)
                 shutil.rmtree(tempdir, ignore_errors=True)
+                # This is required so that the install command can find the
+                # build directory. Without it, it searches for it in the
+                # non-existent tempdir.
+                os.chdir(os.path.join(doc, os.pardir))
                 
 
 build.sub_commands.append(('build_pdf', None))
