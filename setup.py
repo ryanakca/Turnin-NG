@@ -76,7 +76,7 @@ class build_pdf(Command):
             os.chdir(tempdir)
             cargs = [texi2pdf, 'turnin-ng.texi']
             # We need to call texi2pdf twice.
-            for i in range(2):
+            for i in range(1):
                 retcode = subprocess.call(cargs)
                 if retcode < 0:
                     raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
