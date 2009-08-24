@@ -8,6 +8,8 @@ import shutil
 import subprocess
 import tempfile
 
+data_files = [('/usr/local/share/man/man1/', ['doc/turnin.1', 'doc/project.1'])]
+
 def check_executable_in_path(executable, message):
     """ Checks that executable is installed in the system's PATH and returns
     it's location.
@@ -45,6 +47,8 @@ class build_infopage(Command):
             retcode = subprocess.call(cargs)
             if retcode < 0:
                 raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
+            data_files.append(('/usr/local/share/info/',
+                ['doc/turnin-ng.info']))
 
 build.sub_commands.append(('build_infopage', None))
 
@@ -71,9 +75,11 @@ class build_pdf(Command):
             doc = os.path.join(os.getcwd(), 'doc')
             os.chdir(tempdir)
             cargs = [texi2pdf, 'turnin-ng.texi']
-            retcode = subprocess.call(cargs)
-            if retcode < 0:
-                raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
+            # We need to call texi2pdf twice.
+            for i in range(2):
+                retcode = subprocess.call(cargs)
+                if retcode < 0:
+                    raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
             else:
                 shutil.copy('turnin-ng.pdf', doc)
                 shutil.rmtree(tempdir, ignore_errors=True)
@@ -81,6 +87,8 @@ class build_pdf(Command):
                 # build directory. Without it, it searches for it in the
                 # non-existent tempdir.
                 os.chdir(os.path.join(doc, os.pardir))
+                data_files.append(('/usr/local/share/doc/',
+                    ['doc/turnin-ng.pdf']))
                 
 
 build.sub_commands.append(('build_pdf', None))
@@ -96,9 +104,6 @@ setup(name='turnin-ng',
       scripts=['src/bin/project', 'src/bin/turnin'],
       packages=['turninng'],
       package_dir={'turninng':'src/turninng'},
-      data_files=[('/usr/local/share/man/man1/', ['doc/turnin.1', 
-          'doc/project.1']), 
-          ('/usr/local/share/info/', ['doc/turnin-ng.info']),
-          ('/usr/local/share/doc/turnin-ng/', ['doc/turnin-ng.pdf'])],
+      data_files=data_files,
       cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf}
 )
