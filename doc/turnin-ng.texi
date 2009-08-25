@@ -46,6 +46,10 @@ This manual is for @code{Turnin-NG} (version @value{VERSION}, @value{UPDATED}).
 @end ifinfo
 @end ifnottex
 
+@ifhtml
+@insertcopying
+@end ifhtml
+
 @menu
 * Introduction to Turnin-NG::
 * turnin::

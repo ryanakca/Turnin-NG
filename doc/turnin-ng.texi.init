@@ -1,2 +1,1 @@
-$region_formats_kept{'copying'} = 1;
-$region_formats_kept{'titlepage'} = 1;
+$region_formats_kept{'insertcopying'} = 1;
