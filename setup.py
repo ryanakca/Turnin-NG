@@ -40,6 +40,34 @@ def check_executable_in_path(executable, message):
     print message
     return False
 
+class build_htmldocs(Command):
+
+    description = 'Generate the HTML documentation.'
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        """ Call texi2html on the Texinfo document. """
+        texi2html = check_executable_in_path('texi2html',
+            "Please install the texi2html executable to generate the HTML " +
+            "documentation")
+        if texi2html:
+            cargs = [texi2html, '--init-file=doc/turnin-ng.texi.init', 'doc/turnin-ng.texi']
+            retcode = subprocess.call(cargs)
+            if retcode < 0:
+                raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
+            os.rename('turnin-ng.html', 'doc/turnin-ng.html')
+            data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
+                ['doc/turnin-ng.html']))
+
+build.sub_commands.append(('build_htmldocs', None))
+
 class build_infopage(Command):
 
     description = 'Generate the info document.'
@@ -101,7 +129,7 @@ class build_pdf(Command):
                 # build directory. Without it, it searches for it in the
                 # non-existent tempdir.
                 os.chdir(os.path.join(doc, os.pardir))
-                data_files.append((os.path.join(prefix, 'share/doc/'),
+                data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
                     ['doc/turnin-ng.pdf']))
                 
 
@@ -138,5 +166,5 @@ setup(name='turnin-ng',
       package_dir={'turninng':'src/turninng'},
       data_files=data_files,
       cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf,
-          'install_legacy': install_legacy}
+          'build_htmldocs': build_htmldocs, 'install_legacy': install_legacy}
 )
