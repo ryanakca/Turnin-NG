@@ -1,3 +1,43 @@
+1.0~rc2 UNRELEASED
+ Global:
+  * Rename turninng.sys to turninng.fileperms to avoid name clashes with
+    Python's sys.
+
+ turnin:
+  * Elaborate the -v option in --help to avoid confusion
+
+ project:
+  * Project without any options calls --help
+  * --list for projects works.
+  * Archiving a course sets it 0600 and is owned by the course's user and group.
+  * Added a workaround for python2.4 since its tar.tarfile doesn't have an
+    extractall()
+  * When disabling a course, check if it's default. If it is, unset the default
+    course.
+  * Print the course directory when asking if we want to delete it.
+
+ Documentation:
+  * Commented out '@allowcodebreaks false' since it breaks on older systems and
+    the output remains the same.
+
+1.0~rc1 2009-08-06
+ Global:
+  * Dropped missed references to check_group
+  * Updated the docstrings
+
+ project:
+  * Substitute Error for Warning when stripping random suffixes.
+  * [BUG FIX]: Check for a tarball, not a directory when we set the tarball key
+    in the config
+  * Check that ther's a course before creating a project in situations like
+    'project -c foo apple', which creates the project apple in the course foo.
+  * Simplify how we get the config file and the course from the user
+
+ Documentation:
+  * Update the INSTALL file to reference to the documentation for more
+    information on configuring.
+  * Add examples to the manpages
+
 1.0~beta2 2009-08-04
  Global:
   * Get rid of 'No `START-INFO-DIR-ENTRY' and no `This file documents' when

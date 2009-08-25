@@ -80,7 +80,6 @@ class ProjectAdminCourse(ProjectGlobal):
         """
         super(ProjectAdminCourse, self).__init__(config_file)
         if not self.config.has_key(course):
-            self.config.reload() # We don't want to clobber something
             self.config[course] = {}
             self.config[course]['projlist'] = ''
             self.config.write()
@@ -99,7 +98,6 @@ class ProjectAdminCourse(ProjectGlobal):
         @rtype: None
 
         """
-        #self.config.reload() # We don't want to clobber something
         if user:
             self.course['user'] = user
         if directory:
@@ -131,7 +129,6 @@ class ProjectCourse(ProjectGlobal):
         """
         super(ProjectCourse, self).__init__(config_file)
         if not self.config.has_key(course):
-            self.config.reload() # We don't want to clobber something
             self.config[course] = {}
             self.config[course]['default'] = ''
             self.config.write()
@@ -166,7 +163,6 @@ class ProjectCourse(ProjectGlobal):
         @rtype: None
 
         """
-        #self.config.reload() # We don't want to clobber something
         if user:
             self.course['user'] = user
         if directory:
@@ -221,7 +217,6 @@ class ProjectProject(ProjectCourse):
         @rtype: None
 
         """
-        #self.config.reload() # We don't want to clobber something
         self.project['enabled'] = enabled
         if description:
             self.project['description'] = description
@@ -231,6 +226,9 @@ class ProjectProject(ProjectCourse):
             self.project['directory'] = directory
         if tarball:
             self.project['tarball'] = tarball
+        if not enabled:
+            if self.course['default'] == self.name:
+                self.course['default'] = ''
         self.config.write()
 
 class TurninGlobal(object):
