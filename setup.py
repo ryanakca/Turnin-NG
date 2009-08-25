@@ -107,9 +107,9 @@ class build_pdf(Command):
 
 build.sub_commands.append(('build_pdf', None))
 
-class install_legacy(install):
+class install_legacy(Command):
 
-    description = 'Install the legacy symlink of project to tcpsadmin'
+    description = 'Install the legacy symlink of project to turnincfg'
 
     user_options = []
 
@@ -120,7 +120,11 @@ class install_legacy(install):
         pass
 
     def run(self):
-        pass
+        os.symlink(os.path.join(prefix, 'bin/turnincfg'), os.path.join(prefix,
+            'bin/project'))
+
+
+install.sub_commands.append(('install_legacy', None))
 
 setup(name='turnin-ng',
       version='1.0~rc1',
@@ -129,9 +133,10 @@ setup(name='turnin-ng',
       author_email='ryanakca@kubuntu.org',
       license='GNU General Public License version 2, or (at your option) ' +\
               'any later version',
-      scripts=['src/bin/project', 'src/bin/turnin'],
+      scripts=['src/bin/turnincfg', 'src/bin/turnin'],
       packages=['turninng'],
       package_dir={'turninng':'src/turninng'},
       data_files=data_files,
-      cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf}
+      cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf,
+          'install_legacy': install_legacy}
 )
