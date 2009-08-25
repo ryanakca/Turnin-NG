@@ -24,6 +24,8 @@
  Documentation:
   * Commented out '@allowcodebreaks false' since it breaks on older systems and
     the output remains the same.
+  * Now build PDF/HTML/INFO pages and install them
+  * Updated for the name change
 
 1.0~rc1 2009-08-06
  Global:
