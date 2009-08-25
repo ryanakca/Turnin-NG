@@ -19,6 +19,7 @@
 from optparse import OptionParser, OptionGroup
 import os
 import os.path
+import re
 import sys
 
 import turninng
@@ -72,6 +73,15 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     config = options.config
+
+    # We're moving away from the Uber-generic "project" command
+    if re.match('.*project', sys.argv[0]):
+        print (
+"""    *****************************************************************
+    * Warning: The 'project' command is now deprecated, this legacy *
+    * link to the new executable, tcpsadmin, may disappear in any   *
+    * future release.                                               *
+    *****************************************************************""")
 
     if options.legal:
         sys.exit(turninng.__license__)
