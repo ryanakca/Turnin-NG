@@ -89,7 +89,7 @@ if __name__ == '__main__':
     # Administrative functions :
     if options.create_course:
         try:
-            create_course(config, options.create_course) 
+            create_course(config, options.create_course)
             sys.exit("Successfully created the course %s" % options.create_course)
         except ValueError, e:
             sys.exit(e)
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         print "Please specify the project or set a default project."
         sys.exit(parser.print_help())
 
-    # Create, delete or (un)compress the project if needed before creating an 
+    # Create, delete or (un)compress the project if needed before creating an
     # object
     if options.init:
         create_project(config, default_course, project_name)
