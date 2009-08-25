@@ -53,7 +53,7 @@ This manual is for @code{Turnin-NG} (version @value{VERSION}, @value{UPDATED}).
 @menu
 * Introduction to Turnin-NG::
 * turnin::
-* project::
+* turnincfg::
 * Distributing Turnin-NG::
 @end menu
 
@@ -62,12 +62,12 @@ This manual is for @code{Turnin-NG} (version @value{VERSION}, @value{UPDATED}).
 @chapter Introduction to Turnin-NG
 
 Turnin-NG is an assignment submission suite written in Python and composed of
-@command{turnin} and @command{project}. Students can use the @command{turnin}
+@command{turnin} and @command{turnincfg}. Students can use the @command{turnin}
 command to submit an assignment to a course. Professors and @acronym{TAs,
-teaching assistants} can use @command{project} permits TAs to manage submitted
+teaching assistants} can use @command{turnincfg} permits TAs to manage submitted
 assignments, making them easier to grade.
 
-@node turnin, project, Introduction to Turnin-NG, Top
+@node turnin, turnincfg, Introduction to Turnin-NG, Top
 @chapter turnin
 
 @command{turnin} compresses your assignements using the @command{tar} and
@@ -231,38 +231,38 @@ Successfully submitted your assignment for grading.
 If the project is still enabled and we want to resubmit our assignment, we may
 do so by rerunning the @command{turnin} command.
 
-@node project, Distributing Turnin-NG, turnin, Top
-@chapter project
+@node turnincfg, Distributing Turnin-NG, turnin, Top
+@chapter turnincfg
 
-Turnin-NG's @command{project} command retains most of the functionality of the
+Turnin-NG's @command{turnincfg} command retains most of the functionality of the
 original @command{project} command and seeks to make assignment management as
 easy as possible. To make file management and storage as easy and efficient as
 possible, each submission is compressed using the @command{tar} and
 @command{gzip} formats.
 
 @menu
-* Invoking project::
-* Common situations for project::
+* Invoking turnincfg::
+* Common situations for turnincfg::
 @end menu
 
-@node Invoking project, Common situations for project, project, project
-@section Invoking project
+@node Invoking turnincfg, Common situations for turnincfg, turnincfg, turnincfg
+@section Invoking turnincfg
 
-The author of Turnin-NG strived to make @command{project} as easy to use, all
+The author of Turnin-NG strived to make @command{turnincfg} as easy to use, all
 while retaining the used functionality of the original @command{project}
 command.
 
 The command line format for turnin is as follows.
 
 @code{
-@command{project} [ -hdelripxvw ] [--version] [ -C @var{config} ] [ -c
+@command{turnincfg} [ -hdelripxvw ] [--version] [ -C @var{config} ] [ -c
 @var{course} ] [ --create-course @var{course} ] [ --delete-course @var{course} ]
 [ --archive-course @var{course} ] [ @var{project name} ]
 }
 
 @table @code
 @item @option{--version}
-Print @command{project}'s version.
+Print @command{turnincfg}'s version.
 
 @item @option{-h}, @option{--help}
 Print a help message.
@@ -312,7 +312,7 @@ Delete a course.
 Archive a course using the @command{tar} and @command{gzip} formats
 @end table
 
-@node Common situations for project,  , Invoking project, project
+@node Common situations for turnincfg,  , Invoking turnincfg, turnincfg
 @section Examples
 
 You're the professor for the course cisc2323 and want to create the project
@@ -323,39 +323,39 @@ submits assignments if the student doesn't pass the @option{--project
 
 @smallexample
 @code{
-ryanakca@@zeus:~$ project -i haskell_sort
+ryanakca@@zeus:~$ turnincfg -i haskell_sort
 [Optional] Project description: Implement a bubble sort and the radix sort using Haskell
 Successfully created the project haskell_sort in the course cisc2323
-ryanakca@@zeus:~$ project -e haskell_sort
+ryanakca@@zeus:~$ turnincfg -e haskell_sort
 Successfully enabled and set default the project haskell_sort
 }
 @end smallexample
 
 In the previous example, we created the project `haskell_sort' by running the
-command @command{project -i haskell_sort}.  Finally, we enabled it and set it
-default by running @command{project -e haskell_sort}.
+command @command{turnincfg -i haskell_sort}.  Finally, we enabled it and set it
+default by running @command{turnincfg -e haskell_sort}.
 
-We want to close submissions for the project `haskell_sort' and compress it at
+We want to close submissions for the turnincfg `haskell_sort' and compress it at
 24:00 UTC, September 15 2009. We can do this using the @command{at} command.
 
 @smallexample
 @code{
 ryanakca@@zeus:~$ at 2400 UTC Sep 15 2009
 warning: commands will be executed using /bin/sh
-at> project -c cisc2323
-at> project -D haskell_sort
-at> project -p haskell_sort
+at> turnincfg -c cisc2323
+at> turnincfg -D haskell_sort
+at> turnincfg -p haskell_sort
 job 92 at Tue Sep 15 19:00:00 2009
 }
 @end smallexample
 
 For more details on @command{at}'s time format, please see it's @command{man}
-page. In this case we passed the @command{project -D haskell_sort} command
-instead of the @command{project -d haskell_sort} command since we do not want
+page. In this case we passed the @command{turnincfg -D haskell_sort} command
+instead of the @command{turnincfg -d haskell_sort} command since we do not want
 the long suffixed filenames in the archive, we want them in the
 @file{username.tar.gz} format.
 
-@node Distributing Turnin-NG, , project, Top
+@node Distributing Turnin-NG, , turnincfg, Top
 @chapter Distributing Turnin-NG
 
 Turnin-NG is Copyright @copyright{} 2009 Ryan Kavanagh

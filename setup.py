@@ -22,7 +22,8 @@ for i, arg in enumerate(sys.argv):
         elif prefix_regex.match(arg).group('path'):
             prefix = os.path.expandvars(prefix_regex.match(arg).group('path'))
 
-data_files = [(os.path.join(prefix,'share/man/man1/'), ['doc/turnin.1', 'doc/project.1'])]
+data_files = [(os.path.join(prefix,'share/man/man1/'),
+                    ['doc/turnin.1', 'doc/turnincfg.1'])]
 
 def check_executable_in_path(executable, message):
     """ Checks that executable is installed in the system's PATH and returns
@@ -135,6 +136,24 @@ class build_pdf(Command):
 
 build.sub_commands.append(('build_pdf', None))
 
+class build_legacy(Command):
+
+    description = 'Include the legacy files from renaming project to turnincfg'
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        data_files.append((os.path.join(prefix, 'share/man/man1'),
+                ['doc/project.1']))
+
+build.sub_commands.append(('build_legacy', None))
+
 class install_legacy(Command):
 
     description = 'Install the legacy symlink of project to turnincfg'
@@ -166,5 +185,6 @@ setup(name='turnin-ng',
       package_dir={'turninng':'src/turninng'},
       data_files=data_files,
       cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf,
-          'build_htmldocs': build_htmldocs, 'install_legacy': install_legacy}
+          'build_htmldocs': build_htmldocs, 'build_legacy': build_legacy,
+          'install_legacy': install_legacy}
 )

@@ -1,0 +1,126 @@
+.TH TURNINCFG 1 "AUGUST 2009" Turnin-NG "Queen's University"
+.SH NAME
+turnincfg \- manage assignments submitted with turnin
+.SH SYNOPSYS
+.B turnincfg [
+.I OPTIONS
+.B ] [
+.I project-name
+.B ]
+.SH DESCRIPTION
+Manages assigments submitted with the
+.B turnin(1)
+program. Allows the creation of
+courses and projects and the management of said courses and projects. This
+command used to be known as
+.B project
+in the early days of Turnin-NG and in the original turnin/project suite.
+
+
+Ommitting
+.B [
+.I project-name
+.B ]
+will cause
+.B turnincfg
+to use the default project.
+
+.SH OPTIONS
+.IP \-\-version
+Print project's version.
+.IP "\-h, \-\-help"
+Print these options.
+.IP "\-d, \-\-disable"
+Disable the current project.
+.IP "\-D, \-\-perm-disable"
+Permanently disable submissions for the current project.
+.IP "\-e, \-\-enable"
+Enable submissions for the current project and make it the default project.
+.IP "\-l"
+Enable submissions for the current project but does not make it the default
+project.
+.IP "\-r, \-\-remove"
+Remove the current project and all associated files.
+.IP "\-i, \-\-init"
+Initialize a project. Requires you to pass
+.I project-name
+.IP "\-p, \-\-compress"
+Compress this project using the
+.B tar(1)
+and
+.B gzip(1)
+formats.
+.IP "\-x, \-\-extract"
+Extract this project. This option will be called automatically if you enable a
+compressed project.
+.IP "\-v, \-\-verify"
+Verify the cryptographic signatures on submitted assignments using
+.B gpg(1)
+May require you to fetch the student's public key.
+.IP "\-\-list"
+Print a list of projects, along with wether or not they are enabled and shows
+which project is the default project.
+.IP "\-\-config=CONFIG"
+Path to an alternate configuration file.
+.IP "\-c COURSE, \-\-course=COURSE"
+Switch between the courses you are currently administering.
+.IP "\-w, \-\-legal"
+Print warranty and license information.
+
+.B "ADMINISTRATIVE OPTIONS"
+.IP "\-\-create-course=COURSE"
+Creates the course COURSE.
+.IP "\-\-delete-course=COURSE"
+Deletes the course COURSE.
+.IP "\-\-archive-course=COURSE"
+Archives the course using the
+.B tar(1)
+and
+.B gzip(1)
+formats.
+
+.SH EXAMPLES
+.TP \w'project\ 'u
+.BI turnincfg\ \-\-create-course \ world-cheeses
+Create the course world-cheeses.
+.TP
+.BI turnincfg\ \-c \ world-cheeses \ \-i \ stilton
+Create the project stilton in the course world-cheeses.
+.TP
+.BI turnincfg\ \-c \ world-cheeses \ \-e \ stilton
+Enable and make default the project stilton
+.TP
+.BI turnincfg\ \-c \ world-cheeses \ \-D \ stilton
+Permanently disable submissions for the project stilton.
+.TP
+.BI turnincfg\ \-c \ world-cheeses \ \-p \ stilton
+Compress the project stilton.
+.TP
+.BI turnincfg\ \-\-archive-course \ world-cheeses
+Compress the course world-cheeses and remove it from the global configuration
+file.
+
+.SH FILES
+.I /etc/turnin-ng.cf
+
+.SH SEE ALSO
+.B turnin(1)
+
+The full documentation for
+.B turnincfg
+is maintained as a Texinfo manual.  If the
+.B info
+and
+.B turnincfg
+programs are properly installed at your site, the command
+.IP
+.B info turnin-ng
+.PP
+should give you access to the complete manual.
+.SH AUTHOR
+Turnin-NG and this manpage were written by Ryan Kavanagh <ryanakca@kubuntu.org>
+in the summer of 2009. It is a replacement for the 'project' and 'turnin' commands
+written in 1990 for the SPARC architecture by an unknown author.
+
+Both Turnin-NG and this manpage are distributed under the terms of the GNU
+General Public License version 2, or (at your option) any later version.

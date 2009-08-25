@@ -79,7 +79,7 @@ if __name__ == '__main__':
         print (
 """    *****************************************************************
     * Warning: The 'project' command is now deprecated, this legacy *
-    * link to the new executable, tcpsadmin, may disappear in any   *
+    * link to the new executable, turnincfg, may disappear in any   *
     * future release.                                               *
     *****************************************************************""")
 
