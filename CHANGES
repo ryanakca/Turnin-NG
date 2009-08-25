@@ -1,12 +1,17 @@
 1.0~rc2 UNRELEASED
  Global:
+  * The project command has been renamed to "turnincfg". We still install a link
+    from $prefix/bin/project -> $prefix/bin/tcpsadmin , but we print a warning
+    message when project is called and the link may disappear in any future
+    release.  This was done following this discussion:
+    http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg677272.html
   * Rename turninng.sys to turninng.fileperms to avoid name clashes with
     Python's sys.
 
  turnin:
   * Elaborate the -v option in --help to avoid confusion
 
- project:
+ project/tcpsadmin:
   * Project without any options calls --help
   * --list for projects works.
   * Archiving a course sets it 0600 and is owned by the course's user and group.
