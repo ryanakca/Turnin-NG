@@ -78,7 +78,7 @@ if __name__ == '__main__':
     if re.match('.*project', sys.argv[0]):
         print (
 """    *****************************************************************
-    * Warning: The 'project' command is now deprecated, this legacy *
+    * WARNING: The 'project' command is now deprecated, this legacy *
     * link to the new executable, turnincfg, may disappear in any   *
     * future release.                                               *
     *****************************************************************""")
