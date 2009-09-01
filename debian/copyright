@@ -1,0 +1,42 @@
+This package was debianized by:
+
+    Ryan Kavanagh <ryanakca@kubuntu.org> on Tue, 21 Jul 2009 14:19:44 -0400
+
+It was downloaded from:
+
+    http://github.com/ryanakca/Turnin-NG/downloads
+
+Upstream Author:
+
+    Ryan Kavanagh <ryanakca@kubuntu.org>
+
+Copyright:
+
+    Copyright (C) 2009 Ryan Kavanagh
+
+License:
+
+    This package is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This package is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this package; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian systems, the complete text of the GNU General Public License version
+two or later can be found in the files `/usr/share/common-licenses/GPL-2' and
+`/usr/share/common-licenses/GPL-3'.
+
+The Debian packaging is:
+
+    Copyright (C) 2009, Ryan Kavanagh <ryanakca@kubuntu.org>
+
+and is licensed under the GPL, either version 2 of the License, or (at your
+option) any later version, see above.
