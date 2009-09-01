@@ -5,9 +5,9 @@
 @comment Commented out allowcodebreaks because it breaks on older versions of
 @comment texi2pdf and there aren't any differences in output with or without it.
 @comment @allowcodebreaks false
-@set VERSION 1.0~rc2 (UNRELEASED)
-@set UPDATED 25 August 2009
-@set UPDATED-MONTH August 2009
+@set VERSION 1.0
+@set UPDATED September 1 2009
+@set UPDATED-MONTH September 2009
 @comment %**end of header
 @copying
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
