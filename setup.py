@@ -127,15 +127,17 @@ class build_pdf(Command):
                     raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
                     break
             if success:
-                shutil.copy('turnin-ng.pdf', doc)
-                shutil.rmtree(tempdir, ignore_errors=True)
-                # This is required so that the install command can find the
-                # build directory. Without it, it searches for it in the
-                # non-existent tempdir.
-                os.chdir(os.path.join(doc, os.pardir))
-                data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
-                    ['doc/turnin-ng.pdf']))
-                
+                try:
+                    shutil.copy('turnin-ng.pdf', doc)
+                    shutil.rmtree(tempdir, ignore_errors=True)
+                    # This is required so that the install command can find the
+                    # build directory. Without it, it searches for it in the
+                    # non-existent tempdir.
+                    os.chdir(os.path.join(doc, os.pardir))
+                    data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
+                        ['doc/turnin-ng.pdf']))
+                except:
+                    print 'An error has occured, skipping PDF documentation.'
 
 build.sub_commands.append(('build_pdf', None))
 
