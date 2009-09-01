@@ -26,7 +26,7 @@ from turninng.submitter import submit_files, list_projects
 
 if __name__ == '__main__':
     usage = '%prog [options] [files]'
-    parser = OptionParser(version='1.0~beta2', usage=usage)
+    parser = OptionParser(version=turninng.__version__, usage=usage)
     parser.add_option('-c', '--course', help='Set the course to submit the ' +
             'assignment to.')
     parser.add_option('-l', '--list', help='Lists projects for the course. ' +

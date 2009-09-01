@@ -1,4 +1,4 @@
-1.0~rc2 UNRELEASED
+1.0
  Global:
   * The project command has been renamed to "turnincfg". We still install a link
     from $prefix/bin/project -> $prefix/bin/tcpsadmin , but we print a warning
