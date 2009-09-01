@@ -26,7 +26,7 @@ import subprocess
 import tarfile
 import tempfile
 
-from turninng.sys import chown
+from turninng.fileperms import chown
 from turninng.configparser import TurninCourse, TurninList
 
 def submit_files(course_name, project, files, list='', gpg_key=''):

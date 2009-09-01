@@ -22,7 +22,7 @@ import shutil
 import tarfile
 
 from turninng.configparser import ProjectGlobal, ProjectAdminCourse
-from turninng.sys import chown
+from turninng.fileperms import chown
 
 def create_course(config_file, course):
     """
@@ -85,7 +85,9 @@ def delete_course(config_file, course):
     if config_obj.config.has_key(course):
         course_obj = ProjectAdminCourse(config_file, course)
         if raw_input("If you really want to delete this course and all " +
-                "associated files, enter 'yes' in capital letters: ") == 'YES':
+                "files in the course directory  %s , " % (
+                course_obj.course['directory'] ) + "enter 'yes' in capital" +
+                " letters: ") == 'YES':
             shutil.rmtree(course_obj.course['directory'], ignore_errors=True)
             del course_obj.config[course]
             # We need to check that Global has the key 'default', otherwise we
@@ -130,6 +132,8 @@ def archive_course(config_file, course, ret_path=False):
             tar.add(config_obj.course['directory'], course + '-' +
                     str(datetime.datetime.now().year))
             tar.close()
+            os.chmod(archive_path, 0600)
+            chown(archive_path, config_obj.course['user'], config_obj.course['group'])
             shutil.rmtree(config_obj.course['directory'], ignore_errors=True)
             del config_obj.config[course]
             # We need to check that Global has the key 'default', otherwise we

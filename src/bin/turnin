@@ -39,7 +39,7 @@ if __name__ == '__main__':
     parser.add_option('-k', '--keyid', help='Cryptographically sign this ' +
             'assignment using this key.')
     parser.add_option('-v', '--verbose', action='store_true', help='Print ' +
-            'a list of submitted files.')
+            'a list of submitted files after submitting.')
     parser.add_option('-w', '--legal', action='store_true',
             help='Print warranty and license information.')
     parser.set_defaults(config=os.path.join('/etc', 'turnin-ng.cf'))

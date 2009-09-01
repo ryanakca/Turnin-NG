@@ -21,10 +21,11 @@ import pwd
 import re
 import shutil
 import subprocess
+import sys
 import tarfile
 
 from turninng.configparser import ProjectCourse, ProjectProject
-from turninng.sys import chown
+from turninng.fileperms import chown
 
 def create_project(config_file, course, project):
     """
@@ -145,7 +146,12 @@ def extract_project(config_file, course, project):
         print project_obj.project['tarball']
         tar = tarfile.open(project_obj.project['tarball'], 'r:gz')
         # Extract it to the course directory instead of to '.'
-        tar.extractall(path=project_obj.course['directory'])
+        if sys.version_info[1] >= 5:
+            # extractall was added in Python 2.5
+            tar.extractall(path=project_obj.course['directory'])
+        else:
+            for member in tar.getmembers():
+                tar.extract(member, path=project_obj.course['directory'])
         tar.close()
         os.remove(project_obj.project['tarball'])
         project_obj.project['tarball'] = ''
