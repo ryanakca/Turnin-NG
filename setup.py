@@ -117,13 +117,17 @@ class build_pdf(Command):
             shutil.copy(os.path.join('doc', 'gpl-2.0.texi'), tempdir)
             doc = os.path.join(os.getcwd(), 'doc')
             os.chdir(tempdir)
+            success = True
             cargs = [texi2pdf, 'turnin-ng.texi']
             # We need to call texi2pdf twice.
             for i in range(1):
                 retcode = subprocess.call(cargs)
                 if retcode < 0:
+                    success = False
                     raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
-                else:
+                    break
+            if success:
+                try:
                     shutil.copy('turnin-ng.pdf', doc)
                     shutil.rmtree(tempdir, ignore_errors=True)
                     # This is required so that the install command can find the
@@ -132,7 +136,8 @@ class build_pdf(Command):
                     os.chdir(os.path.join(doc, os.pardir))
                     data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
                         ['doc/turnin-ng.pdf']))
-                
+                except:
+                    print 'An error has occured, skipping PDF documentation.'
 
 build.sub_commands.append(('build_pdf', None))
 
