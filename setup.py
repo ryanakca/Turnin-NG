@@ -174,7 +174,7 @@ class install_legacy(Command):
 install.sub_commands.append(('install_legacy', None))
 
 setup(name='turnin-ng',
-      version='1.0~rc1',
+      version='1.0',
       description='Turn in your assignments with turnin',
       author='Ryan Kavanagh',
       author_email='ryanakca@kubuntu.org',
