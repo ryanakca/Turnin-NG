@@ -12,14 +12,18 @@ import subprocess
 import sys
 import tempfile
 
+# Default prefix
+prefix = '/usr/local'
 # Get the install prefix if one is specified from the command line
 for i, arg in enumerate(sys.argv):
-    prefix_regex = re.compile('(?P<prefix>--prefix)?[\=\s]?(?P<path>[\w:\\][\\\w\s/]*)')
+    prefix_regex = re.compile('(?P<prefix>--prefix)?[\=\s]?(?P<path>/[\w\s/]*)')
     if prefix_regex.match(arg):
         if prefix_regex.match(arg).group('prefix') and not prefix_regex.match(arg).group('path'):
             # We got --prefix with a space instead of an equal. The next arg will have our path.
             prefix = os.path.expandvars(prefix_regex.match(sys.argv[i+1]).group('path'))
         elif prefix_regex.match(arg).group('path'):
+            prefix = prefix_regex.match(arg).group('path')
+        elif (sys.argv[i-1] == '--prefix') and prefix_regex.match(arg).group('path'):
             prefix = os.path.expandvars(prefix_regex.match(arg).group('path'))
 
 data_files = [(os.path.join(prefix,'share/man/man1/'),
@@ -172,6 +176,7 @@ class install_legacy(Command):
         pass
 
     def run(self):
+        print os.path.join(prefix, 'bin/turnincfg')
         os.symlink(os.path.join(prefix, 'bin/turnincfg'), os.path.join(prefix,
             'bin/project'))
 
