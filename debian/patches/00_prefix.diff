@@ -1,0 +1,13 @@
+Index: Turnin-NG/setup.py
+===================================================================
+--- Turnin-NG.orig/setup.py	2009-09-01 21:59:27.420828286 -0400
++++ Turnin-NG/setup.py	2009-09-01 21:59:35.772830394 -0400
+@@ -13,7 +13,7 @@
+ import tempfile
+ 
+ # Default prefix
+-prefix = '/usr/local'
++prefix = 'debian/turnin-ng/usr'
+ # Get the install prefix if one is specified from the command line
+ for i, arg in enumerate(sys.argv):
+     prefix_regex = re.compile('(?P<prefix>--prefix)?[\=\s]?(?P<path>/[\w\s/]*)')
