@@ -8,8 +8,5 @@ include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 
 DEB_COMPRESS_EXCLUDE := .py
 
-install/turnin-ng::
-	dh_link usr/bin/project usr/bin/turnincfg
-
 binary-post-install/turnin-ng::
 	dh_pysupport
