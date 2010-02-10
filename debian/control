@@ -5,7 +5,7 @@ Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
 Build-Depends: debhelper (>= 7),
  python (>= 2.5),
  quilt
-Build-Depends-Indep: python-support (>= 0.5.3),
+Build-Depends-Indep: python-support (>= 1.0.6),
  texinfo,
  texlive,
  texi2html
