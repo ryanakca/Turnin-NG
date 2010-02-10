@@ -2,8 +2,14 @@ Source: turnin-ng
 Section: utils
 Priority: optional
 Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
-Build-Depends: cdbs, debhelper (>= 7), python (>= 2.5), quilt
-Build-Depends-Indep: python-support (>= 0.5.3), texinfo, texlive, texi2html
+Build-Depends: cdbs,
+ debhelper (>= 7),
+ python (>= 2.5),
+ quilt
+Build-Depends-Indep: python-support (>= 0.5.3),
+ texinfo,
+ texlive,
+ texi2html
 Standards-Version: 3.8.4
 Homepage: http://github.com/ryanakca/Turnin-NG
 Vcs-git: git://github.com/ryanakca/Turnin-NG.git
