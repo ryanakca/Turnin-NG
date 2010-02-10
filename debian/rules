@@ -1,12 +1,4 @@
 #!/usr/bin/make -f
 
-DEB_PYTHON_SYSTEM=pysupport
-
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/python-distutils.mk
-include /usr/share/cdbs/1/rules/patchsys-quilt.mk
-
-DEB_COMPRESS_EXCLUDE := .py
-
-binary-post-install/turnin-ng::
-	dh_pysupport
+%:
+	dh --with quilt $@
