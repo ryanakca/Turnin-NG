@@ -1,7 +1,8 @@
 Source: turnin-ng
 Section: utils
 Priority: optional
-Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
 Build-Depends: debhelper (>= 7),
  python (>= 2.5),
  quilt
