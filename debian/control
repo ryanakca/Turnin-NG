@@ -6,7 +6,7 @@ XSBC-Original-Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
 Build-Depends: debhelper (>= 7),
  python (>= 2.5),
  quilt
-Build-Depends-Indep: python-support (>= 1.0.6),
+Build-Depends-Indep: python-support (>= 1.0.4),
  texinfo,
  texlive,
  texi2html
