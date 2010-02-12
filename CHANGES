@@ -1,4 +1,11 @@
-1.0
+1.0.1
+ Global:
+  * Fix typos in turnin and turnincfg option descriptions
+
+ Documentation:
+  * Fix typos in the Texinfo documentation and in manpages
+
+1.0 2009-09-01
  Global:
   * The project command has been renamed to "turnincfg". We still install a link
     from $prefix/bin/project -> $prefix/bin/tcpsadmin , but we print a warning
