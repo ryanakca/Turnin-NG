@@ -1,5 +1,5 @@
-turnin-ng (1.0.1-1) unstable; urgency=low
+turnin-ng (1.0.1-0ubuntu1) lucid; urgency=low
 
-  * Initial release (Closes: #540385)
+  * Initial release
 
- -- Ryan Kavanagh <ryanakca@kubuntu.org>  Fri, 12 Feb 2010 15:59:39 -0500
+ -- Ryan Kavanagh <ryanakca@kubuntu.org>  Fri, 12 Feb 2010 17:16:36 -0500
