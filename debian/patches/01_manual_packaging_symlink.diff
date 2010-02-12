@@ -1,0 +1,29 @@
+# 01_manual_packaging_link.diff by Ryan Kavanagh <ryanakca@kubuntu.org>
+# Description: We'll manually take care of the legacy project->turnincfg link so
+#              that out build doesn't fail.
+Index: Turnin-NG/setup.py
+===================================================================
+--- Turnin-NG.orig/setup.py	2010-02-12 07:25:10.180107401 -0500
++++ Turnin-NG/setup.py	2010-02-12 07:26:52.832105086 -0500
+@@ -180,8 +180,9 @@
+         os.symlink(os.path.join(prefix, 'bin/turnincfg'), os.path.join(prefix,
+             'bin/project'))
+ 
+-
+-install.sub_commands.append(('install_legacy', None))
++# We've manually taken care of this in the packaging (debian/turnin-ng.links),
++# otherwise the build fails.
++# install.sub_commands.append(('install_legacy', None))
+ 
+ setup(name='turnin-ng',
+       version='1.0',
+@@ -195,6 +196,7 @@
+       package_dir={'turninng':'src/turninng'},
+       data_files=data_files,
+       cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf,
+-          'build_htmldocs': build_htmldocs, 'build_legacy': build_legacy,
+-          'install_legacy': install_legacy}
++          'build_htmldocs': build_htmldocs, 'build_legacy': build_legacy#,
++          #'install_legacy': install_legacy} # Commented out for packaging link
++          }
+ )
