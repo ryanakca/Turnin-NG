@@ -16,7 +16,9 @@ Vcs-Browser: http://github.com/ryanakca/Turnin-NG/tree/master
 
 Package: turnin-ng
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-configobj
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
+ python-configobj,
+ install-info
 Description: Assignment submitter and manager
  Turnin-NG is an assignment submission suite written in Python and composed of
  turnin and project. Students can use the turnin command to submit an
