@@ -1,6 +1,6 @@
 #!/usr/bin/python2.5
 # Turnin-NG, an assignment submitter and manager. --- Turnin script
-# Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_option('-c', '--course', help='Set the course to submit the ' +
             'assignment to.')
     parser.add_option('-l', '--list', help='Lists projects for the course. ' +
-            'also displays wether or not the project is open.',
+            'also displays whether or not the project is open.',
             action='store_true')
     parser.add_option('-p', '--project', help='Set the project to submit the '+
             'assigmnent to.')
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             else:
                 raise ValueError("It appears that this course does not have a "+
                         "default project. You will have to specify one " +
-                        "yourself using the '-p' or '--project' option")
+                        "yourself using the '-p' or '--project' option.")
     except ValueError, e:
         sys.exit(e)
 
