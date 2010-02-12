@@ -70,7 +70,7 @@ assignments, making them easier to grade.
 @node turnin, turnincfg, Introduction to Turnin-NG, Top
 @chapter turnin
 
-@command{turnin} compresses your assignements using the @command{tar} and
+@command{turnin} compresses your assignments using the @command{tar} and
 @command{gzip} formats before submitting them to be graded. If you feel so
 inclined, @command{turnin} can cryptographically sign your assignments using
 @command{GnuPG} to prevent someone from submitting an assignment in your name.
@@ -104,7 +104,7 @@ Print a list of submitted files once they have been submitted.
 Print a help message.
 
 @item @option{-l}, @option{--list}
-Print a list of projects, along with wether or not they are enabled and if the
+Print a list of projects, along with whether or not they are enabled and if the
 project is the default project.
 
 @item @option{--version}
@@ -352,7 +352,7 @@ job 92 at Tue Sep 15 19:00:00 2009
 For more details on @command{at}'s time format, please see it's @command{man}
 page. In this case we passed the @command{turnincfg -D haskell_sort} command
 instead of the @command{turnincfg -d haskell_sort} command since we do not want
-the long suffixed filenames in the archive, we want them in the
+the long suffixed file names in the archive, we want them in the
 @file{username.tar.gz} format.
 
 @node Distributing Turnin-NG, , turnincfg, Top
