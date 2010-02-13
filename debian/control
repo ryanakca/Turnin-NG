@@ -11,11 +11,13 @@ Build-Depends-Indep: python-support (>= 1.0.6),
  texi2html
 Standards-Version: 3.8.4
 Homepage: http://github.com/ryanakca/Turnin-NG
+XS-Python-Version: >= 2.5
 Vcs-git: git://github.com/ryanakca/Turnin-NG.git
 Vcs-Browser: http://github.com/ryanakca/Turnin-NG/tree/master
 
 Package: turnin-ng
 Architecture: all
+XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
  python-configobj,
  install-info
