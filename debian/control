@@ -2,6 +2,7 @@ Source: turnin-ng
 Section: utils
 Priority: optional
 Maintainer: Ryan Kavanagh <ryanakca@kubuntu.org>
+Uploaders: Python Applications Packaging Team <python-apps-team@lists.alioth.debian.org>
 Build-Depends: debhelper (>= 7),
  python (>= 2.5),
  quilt
@@ -12,8 +13,8 @@ Build-Depends-Indep: python-support (>= 1.0.6),
 Standards-Version: 3.8.4
 Homepage: http://github.com/ryanakca/Turnin-NG
 XS-Python-Version: >= 2.5
-Vcs-git: git://github.com/ryanakca/Turnin-NG.git
-Vcs-Browser: http://github.com/ryanakca/Turnin-NG/tree/master
+Vcs-Svn: svn://svn.debian.org/svn/python-apps/packages/turnin-ng/
+Vcs-Browser: http://svn.debian.org/viewsvn/python-apps/packages/turnin-ng/trunk/
 
 Package: turnin-ng
 Architecture: all
