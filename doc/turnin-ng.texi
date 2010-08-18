@@ -5,9 +5,9 @@
 @comment Commented out allowcodebreaks because it breaks on older versions of
 @comment texi2pdf and there aren't any differences in output with or without it.
 @comment @allowcodebreaks false
-@set VERSION 1.0.1
-@set UPDATED February 12 2010
-@set UPDATED-MONTH February 2010
+@set VERSION 1.1 (unreleased)
+@set UPDATED August 18 2010
+@set UPDATED-MONTH August 2010
 @comment %**end of header
 @copying
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
@@ -23,7 +23,7 @@ notice and this notice are preserved.
 
 @dircategory Turnin-NG Assignment Submission Suite
 @direntry
-* Turnin-NG:: Turnin-NG
+* Turnin-NG: (turnin-ng).              The Turnin-NG Assignment Submission Suite
 @end direntry
 
 @titlepage
