@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- Project manager
-# Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009, 2010  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +45,10 @@ def create_project(config_file, course, project):
     group = project_obj.course['group']
     directory = project_obj.project['directory']
     os.makedirs(directory)
-    os.chmod(directory, 0733)
+    if project_obj.course['group_managed']:
+        os.chmod(directory, 0773)
+    else:
+        os.chmod(directory, 0733)
     chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
     project_obj.write(True, description)
@@ -113,7 +116,10 @@ def compress_project(config_file, course, project):
         tar.add(project_obj.project['directory'], project_obj.name)
         tar.close() # This writes the tarball
         project_obj.project['tarball'] = archive_name
-        os.chmod(archive_name, 0600)
+        if project_obj.course['group_managed']:
+            os.chmod(archive_name, 0660)
+        else:
+            os.chmod(archive_name, 0600)
         project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:

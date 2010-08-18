@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- Course manager
-# Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,15 +52,16 @@ def create_course(config_file, course):
             else:
                 break
         directory = raw_input("Full path to the course directory: ")
-        # Don't die if we get an invalid group
-        while True:
+        group_managed = '?'
+        # Don't go "in 'UuGg'" because we don't want 'uGg' to match
+        while group_managed not in ('U', 'u', 'G', 'g'):
+            group_managed = raw_input("Managed by a User or Group [U/G]: ")
+        if group_managed in ('G', 'g'):
+            group_managed = True
+            group = raw_input("Managing group: ")
+        else:
+            group_managed = False
             group = raw_input("Student group: ")
-            try:
-                grp.getgrnam(group)
-            except KeyError, e:
-                print "Group does not exist. Please try again."
-            else:
-                break
         try:
             try:
                 os.makedirs(directory) # We could supply the mode here, but it might get
@@ -72,18 +73,23 @@ def create_course(config_file, course):
                     print 'Continuing'
                 else:
                     sys.exit(e)
-            os.chmod(directory, 0755)
             chown(directory, user, group)
-            os.chmod(config_file, 0644)
             chown(config_file, user, group)
+            if group_managed:
+                os.chmod(directory, 0775)
+            else:
+                os.chmod(directory, 0755)
         except OSError, e:
             print e
-        course.write(user, directory, group)
+        course.write(user, directory, group, group_managed)
         # We want to set the default course for the per course config.
         global_course_conf = ProjectGlobal(course.course['projlist'])
         global_course_conf.set_default(course.course.name)
         chown(course.course['projlist'], user, group)
-        os.chmod(course.course['projlist'], 0644)
+        if group_managed:
+            os.chmod(course.course['projlist'], 0664)
+        else:
+            os.chmod(course.course['projlist'], 0644)
     else:
         raise ValueError ('The course %s already exists, aborting' % course)
 
@@ -151,7 +157,10 @@ def archive_course(config_file, course, ret_path=False):
             tar.add(config_obj.course['directory'], course + '-' +
                     str(datetime.datetime.now().year))
             tar.close()
-            os.chmod(archive_path, 0600)
+            if config_obj.course['group_managed']:
+                os.chmod(archive_path, 0660)
+            else:
+                os.chmod(archive_path, 0600)
             chown(archive_path, config_obj.course['user'], config_obj.course['group'])
             shutil.rmtree(config_obj.course['directory'], ignore_errors=True)
             del config_obj.config[course]
@@ -166,5 +175,3 @@ def archive_course(config_file, course, ret_path=False):
         else:
             raise ValueError("Aborting and keeping course %s unarchived" %
                     course)
-    else:
-        raise ValueError("%s is not an existing course" % course)

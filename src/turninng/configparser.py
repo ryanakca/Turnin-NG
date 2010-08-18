@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- config parser
-# Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009, 2010  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,10 @@ import os.path
 import uuid
 
 from configobj import ConfigObj
+
+# The Project prefix represents classes that were used by 'project', now
+# 'turnincfg'.
+# The Turnin prefix represents classes that are used by 'turnin'.
 
 class ProjectGlobal(object):
     """ This class class represents the global configurations for the
@@ -109,7 +113,8 @@ class ProjectAdminCourse(ProjectGlobal):
         self.course = self.config[course]
         """ @ivar: A shortcut to access the course configurations. """
 
-    def write(self, user='', directory='', group=''):
+
+    def write(self, user='', directory='', group='', group_managed=False):
         """ Modifies the config file.
 
         @type user: string
@@ -118,6 +123,8 @@ class ProjectAdminCourse(ProjectGlobal):
         @param directory: path to the course submission directory.
         @type group: string
         @param group: group that owns the course directory.
+        @type group_managed: Bool
+        @param group_managed: Course managed by a group instead of a user?
         @rtype: None
 
         """
@@ -127,6 +134,8 @@ class ProjectAdminCourse(ProjectGlobal):
             self.course['directory'] = directory
         if group:
             self.course['group'] = group
+        if group_managed:
+            self.course['group_managed'] = group_managed
         self.course['projlist'] = os.path.join(self.course['directory'],
                                   'turnin-ng.cf')
         self.config.write()
