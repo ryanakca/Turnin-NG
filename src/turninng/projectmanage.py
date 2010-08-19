@@ -25,7 +25,7 @@ import sys
 import tarfile
 
 from turninng.configparser import ProjectCourse, ProjectProject
-from turninng.fileperms import chown
+from turninng.fileperms import chown, chgrp
 
 def create_project(config_file, course, project):
     """
@@ -47,9 +47,10 @@ def create_project(config_file, course, project):
     os.makedirs(directory)
     if project_obj.course['group_managed']:
         os.chmod(directory, 0773)
+        chgrp(directory, group)
     else:
         os.chmod(directory, 0733)
-    chown(directory, user, group)
+        chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
     project_obj.write(True, description)
 
