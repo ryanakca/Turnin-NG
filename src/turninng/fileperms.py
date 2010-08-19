@@ -19,7 +19,9 @@ import pwd
 import grp
 import os
 
-def chown(path, user, group):
+from stat import ST_UID, ST_GID
+
+def chown(path, user='', group=''):
     """
     Change the owner and the group of 'path'
 
@@ -33,4 +35,26 @@ def chown(path, user, group):
     @return: Function to change the owner and group of 'path'
 
     """
-    return os.chown(path, pwd.getpwnam(user)[2], grp.getgrnam(group)[2])
+    if user:
+        UID = pwd.getpwnam(user)[2]
+    else:
+        UID = os.stat(path)[ST_UID]
+    if group:
+        GID = grp.getgrnam(group)[2]
+    else:
+        GID = os.stat(path)[ST_GID]
+    return os.chown(path, UID, GID)
+
+def chgrp(path, group):
+    """
+    Change the group of 'path'
+
+    @type path: string
+    @param path: file / directory for which to change the group
+    @type group: string
+    @param group: group name
+    @rtype: function
+    @return: Function to change the group of path
+
+    """
+    return chown(path, group=group)
