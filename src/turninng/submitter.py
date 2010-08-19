@@ -53,6 +53,9 @@ def submit_files(course_name, project, files, list='', gpg_key=''):
         # We don't want something like /home/ryan/.turning-ng/submissions../
         if not os.path.isdir(os.path.normpath(os.path.join(list, os.pardir))):
             os.makedirs(os.path.normpath(os.path.join(list, os.pardir)))
+        # We don't want other people to be able to read out submitted file
+        # suffixes and messing with our files!
+        os.chmod(list, 0600)
     list_file = TurninList(list)
     random_suffix = ''
     if list_file.config.has_key(project.course.name):
