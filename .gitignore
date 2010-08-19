@@ -1,0 +1,6 @@
+build/
+.*.swp
+.*.swo
+doc/turnin-ng.pdf
+doc/turnin-ng.info
+tags
