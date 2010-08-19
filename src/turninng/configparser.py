@@ -21,8 +21,8 @@ import uuid
 from configobj import ConfigObj
 
 class ProjectGlobal(object):
-    """ This class class represents the global configurations for the project
-        command.
+    """ This class class represents the global configurations for the
+        turnincfg command.
 
     """
 
@@ -64,7 +64,10 @@ class ProjectGlobal(object):
             raise ValueError("Please add the course %s first." % course)
 
 class ProjectAdminCourse(ProjectGlobal):
-    """ This class represents a course object for project. """
+    """ This class represents a course object for turnincfg in the global
+        configuration file.
+
+    """
 
     def __init__(self, config_file, course):
         """
@@ -113,7 +116,10 @@ class ProjectAdminCourse(ProjectGlobal):
                        group = self.course['group'])
 
 class ProjectCourse(ProjectGlobal):
-    """ This class represents a course object for project. """
+    """ This class represents a course object for in the course configuration
+        file (projlist) for turnincfg.
+
+    """
 
     def __init__(self, config_file, course):
         """
@@ -172,7 +178,7 @@ class ProjectCourse(ProjectGlobal):
         self.config.write()
 
 class ProjectProject(ProjectCourse):
-    """ This class represents a project object for project. """
+    """ This class represents a project object for turnincfg. """
 
     def __init__(self, config_file, course, project):
         """
