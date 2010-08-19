@@ -188,7 +188,7 @@ ryanakca@@zeus:~$ turnin -c cisc2323 -l
 
 You see that you want the @option{haskell_sort} project. Since it is not the
 default project, we will have to pass the @option{-p @var{project}} option, in
-this case, @option{-p haskell_sort}, to turnin when we invoke it.
+this case, @option{-p @var{haskell_sort}}, to turnin when we invoke it.
 
 We now proceed to submit our assignments.
 @smallexample
@@ -252,7 +252,7 @@ The author of Turnin-NG strived to make @command{turnincfg} as easy to use, all
 while retaining the used functionality of the original @command{project}
 command.
 
-The command line format for turnin is as follows.
+The command line format for turnincfg is as follows.
 
 @code{
 @command{turnincfg} [ -hdelripxvw ] [--version] [ -C @var{config} ] [ -c
@@ -306,13 +306,92 @@ Print warranty and license information.
 Create a course.
 
 @item @option{--delete-course}
-Delete a course.
+Delete a course and all associated files.
 
 @item @option{--archive-course}
-Archive a course using the @command{tar} and @command{gzip} formats
+Archive a course using the @command{tar} and @command{gzip} formats to create a
+@file{.tar.gz} file.
 @end table
 
 @node Common situations for turnincfg,  , Invoking turnincfg, turnincfg
+@section Administration
+
+A course (or many!) needs to be created by an administrator before users can use
+the @command{turnincfg} and @command{turnin} commands.
+
+There are two styles of course management: user managed and group managed. With
+user managed courses, all project management actions are done with a single
+account. With group management, project management actions are done by accounts
+in a UNIX group. The original @command{project} and @command{turnin} commands
+only supported user managed courses.
+
+Due to the limited granularity of UNIX permissions, group managed courses permit
+submissions from all accounts.
+
+The following example shows the creation of a user managed course.
+
+@smallexample
+@code{
+root@@zeus:~$ turnincfg --create-course cisc2323
+Managing username [usually your UNIX login]: ryanakca
+Full path to the course directory: /srv/submit/cisc2323
+Managed by a User or Group [U/G]: U
+Student group: students
+Successfully created the course cisc-2323.
+}
+@end smallexample
+
+This creates a directory with the permissions and contents:
+@smallexample
+@code{
+ryanakca@@zeus:~$ ls -lash /srv/submit/cisc2323
+total 4,0K
+   0 drwxr-xr-x  2 ryanakca students  60 19 Aug 13:01 ./
+   0 drwxrwxrwt 17 root     root     400 19 Aug 13:12 ../
+4,0K -rw-r--r--  1 ryanakca students 134 19 Aug 13:01 turnin-ng.cf
+}
+@end smallexample
+
+Submission subdirectories for enabled projects will have the permissions
+@code{0770} and an ownership of @code{MANAGING_USERNAME:STUDENT_GROUP}. Once
+disabled, they will have the permissions @code{0700}.
+
+The following example shows the creation of a group managed course. In this
+case, we'll set the managing username to the professor's account and the
+managing group to the group containing the course's professor and TAs.
+
+@smallexample
+@code{
+root@@zeus:~$ turnincfg --create-course cisc2323
+Managing username [usually your UNIX login]: ryanakca
+Full path to the course directory: /srv/submit/cisc2323
+Managed by a User or Group [U/G]: G
+Managing group: cisc-2323
+Successfully created the course cisc-2323.
+}
+@end smallexample
+
+This creates a directory with the permissions and contents:
+@smallexample
+@code{
+total 4,0K
+   0 drwxrwxr-x  2 ryanakca cisc-2323  60 19 Aug 13:25 ./
+   0 drwxrwxrwt 18 root     root      420 19 Aug 13:25 ../
+4,0K -rw-rw-r--  1 ryanakca cisc-2323 121 19 Aug 13:25 turnin-ng.cf
+}
+@end smallexample
+
+Submission subdirectories for enabled projects will have the permissions
+@code{0777} and an ownership of @code{MANAGING_USERNAME:MANAGING_GROUP}. Once
+disabled, they will have the permissions @code{0770}.
+
+Once a course has finished, you may remove it from the global configuration file
+and delete all files in its directory by running the command @command{turnincfg
+--delete-course @var{COURSENAME}}. If you would rather keep its files
+and still remove it from the global configuration file, you can run
+@command{turnincfg --archive-course @var{COURSENAME}}. This will create
+a @file{.tar.gz} file containing the course directory.
+
 @section Examples
 
 You're the professor for the course cisc2323 and want to create the project
@@ -331,11 +410,11 @@ Successfully enabled and set default the project haskell_sort
 }
 @end smallexample
 
-In the previous example, we created the project `haskell_sort' by running the
-command @command{turnincfg -i haskell_sort}.  Finally, we enabled it and set it
-default by running @command{turnincfg -e haskell_sort}.
+In the previous example, we created the project @file{haskell_sort} by running
+the command @command{turnincfg -i haskell_sort}.  Finally, we enabled it and set
+it default by running @command{turnincfg -e haskell_sort}.
 
-We want to close submissions for the turnincfg `haskell_sort' and compress it at
+We want to close submissions for the project `haskell_sort' and compress it at
 24:00 UTC, September 15 2009. We can do this using the @command{at} command.
 
 @smallexample
@@ -358,7 +437,7 @@ the long suffixed file names in the archive, we want them in the
 @node Distributing Turnin-NG, , turnincfg, Top
 @chapter Distributing Turnin-NG
 
-Turnin-NG is Copyright @copyright{} 2009 Ryan Kavanagh
+Turnin-NG is Copyright @copyright{} 2009--2010 Ryan Kavanagh
 (@email{ryanakca@@kubuntu.org}). It is licensed under the terms of the GNU
 General Public License version 2, or (at your option) any later version.
 
