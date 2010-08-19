@@ -53,15 +53,23 @@ def create_course(config_file, course):
                 break
         directory = raw_input("Full path to the course directory: ")
         group_managed = '?'
-        # Don't go "in 'UuGg'" because we don't want 'uGg' to match
+        # Don't check if "in 'UuGg'" because we don't want 'uGg' to match
         while group_managed not in ('U', 'u', 'G', 'g'):
             group_managed = raw_input("Managed by a User or Group [U/G]: ")
-        if group_managed in ('G', 'g'):
-            group_managed = True
-            group = raw_input("Managing group: ")
-        else:
-            group_managed = False
-            group = raw_input("Student group: ")
+        # Don't die if we get an invalid group
+        while True:
+            if group_managed in ('G', 'g'):
+                group_managed = True
+                group = raw_input("Managing group: ")
+            else:
+                group_managed = False
+                group = raw_input("Student group: ")
+            try:
+                grp.getgrnam(group)
+            except KeyError, e:
+                print "Group does not exist. Please try again."
+            else:
+                break
         try:
             try:
                 os.makedirs(directory) # We could supply the mode here, but it might get
