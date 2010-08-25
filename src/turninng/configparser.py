@@ -103,7 +103,7 @@ class ProjectAdminCourse(ProjectGlobal):
         """
         super(ProjectAdminCourse, self).__init__(config_file)
         self.config_defaults = {'projlist': '', 'user': '', 'directory': '',
-                                'group': ''}
+                                'group': '', 'group_managed': False}
         if not self.config.has_key(course):
             self.config[course] = self.config_defaults
             self.config.write()
@@ -142,7 +142,8 @@ class ProjectAdminCourse(ProjectGlobal):
         projlist = ProjectCourse(self.course['projlist'], self.course.name)
         projlist.write(user = self.course['user'],
                        directory = self.course['directory'],
-                       group = self.course['group'])
+                       group = self.course['group'],
+                       group_managed = self.course['group_managed'])
 
 class ProjectCourse(ProjectGlobal):
     """ This class represents a course object for in the course configuration
