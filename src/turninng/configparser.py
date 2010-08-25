@@ -134,7 +134,7 @@ class ProjectAdminCourse(ProjectGlobal):
             self.course['directory'] = directory
         if group:
             self.course['group'] = group
-        if group_managed:
+        if group_managed != self.course['group_managed']:
             self.course['group_managed'] = group_managed
         self.course['projlist'] = os.path.join(self.course['directory'],
                                   'turnin-ng.cf')
@@ -209,7 +209,7 @@ class ProjectCourse(ProjectGlobal):
             self.course['directory'] = directory
         if group:
             self.course['group'] = group
-        if group_managed:
+        if group_managed != self.course['group_managed']:
             self.course['group_managed'] = group_managed
         self.config.write()
 
