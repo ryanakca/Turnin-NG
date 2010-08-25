@@ -85,6 +85,9 @@ class ProjectAdminCourse(ProjectGlobal):
         if not self.config.has_key(course):
             self.config[course] = {}
             self.config[course]['projlist'] = ''
+            self.config[course]['user'] = ''
+            self.config[course]['directory'] = ''
+            self.config[course]['group'] = ''
             self.config.write()
         self.course = self.config[course]
         """ @ivar: A shortcut to access the course configurations. """
