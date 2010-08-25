@@ -165,7 +165,7 @@ class ProjectCourse(ProjectGlobal):
         """
         super(ProjectCourse, self).__init__(config_file)
         self.config_defaults = {'default': '', 'user': '', 'directory': '',
-                                'group': ''}
+                                'group': '', 'group_managed': False}
         if not self.config.has_key(course):
             self.config[course] = self.config_defaults
             self.config.write()
@@ -191,7 +191,7 @@ class ProjectCourse(ProjectGlobal):
         else:
             raise ValueError("Please add the project %s first." % project)
 
-    def write(self, user='', directory='', group=''):
+    def write(self, user='', directory='', group='', group_managed=False):
         """ Modifies the config file.
 
         @type user: string
@@ -209,6 +209,8 @@ class ProjectCourse(ProjectGlobal):
             self.course['directory'] = directory
         if group:
             self.course['group'] = group
+        if group_managed:
+            self.course['group_managed'] = group_managed
         self.config.write()
 
 class ProjectProject(ProjectCourse):
