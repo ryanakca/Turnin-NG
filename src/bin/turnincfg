@@ -25,6 +25,7 @@ import sys
 import turninng
 from turninng.configparser import ProjectGlobal, ProjectCourse, ProjectProject
 from turninng.coursemanage import create_course, delete_course, archive_course
+from turninng.fileperms import chmod
 from turninng.projectmanage import create_project, delete_project, verify_sig
 from turninng.projectmanage import compress_project, extract_project
 from turninng.projectmanage import strip_random_suffix
@@ -182,10 +183,10 @@ if __name__ == '__main__':
             print "Extracted the project %s." % project_name
         if project.course['group_managed']:
             # Set the directory writable by everybody
-            os.chmod(project.project['directory'], 0773)
+            chmod(project.project['directory'], 0773)
         else:
             # Set the directory writable by the student group.
-            os.chmod(project.project['directory'], 0730)
+            chmod(project.project['directory'], 0730)
         project.write(True, default=True)
         sys.exit("Successfully enabled and set default the project %s." % project_name)
     elif options.enabled == False: # Disable it. I know, using '== False' is
@@ -201,9 +202,9 @@ if __name__ == '__main__':
             sys.exit(ValueError('Course %s does not have the project %s.' %
                 (default_course, project_name)))
         if project.course['group_managed']:
-            os.chmod(project.project['directory'], 0770)
+            chmod(project.project['directory'], 0770)
         else:
-            os.chmod(project.project['directory'], 0700)
+            chmod(project.project['directory'], 0700)
         project.write(False)
         sys.exit("Successfully disabled the project %s." % project_name)
     elif options.enabled_nodefault:
@@ -235,9 +236,9 @@ if __name__ == '__main__':
             sys.exit(ValueError('Course %s does not have the project %s.' %
                 (default_course, project_name)))
         if project.course['group_managed']:
-            os.chmod(project.project['directory'], 0770)
+           chmod(project.project['directory'], 0770)
         else:
-            os.chmod(project.project['directory'], 0700)
+            chmod(project.project['directory'], 0700)
         project.write(False)
         try:
             strip_random_suffix(project)

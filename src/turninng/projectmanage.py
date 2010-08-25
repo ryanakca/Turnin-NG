@@ -25,7 +25,7 @@ import sys
 import tarfile
 
 from turninng.configparser import ProjectCourse, ProjectProject
-from turninng.fileperms import chown, chgrp
+from turninng.fileperms import chmod, chown, chgrp
 
 def create_project(config_file, course, project):
     """
@@ -46,10 +46,10 @@ def create_project(config_file, course, project):
     directory = project_obj.project['directory']
     os.makedirs(directory)
     if project_obj.course['group_managed']:
-        os.chmod(directory, 0773)
+        chmod(directory, 0773)
         chgrp(directory, group)
     else:
-        os.chmod(directory, 0733)
+        chmod(directory, 0733)
         chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
     project_obj.write(True, description)
@@ -118,9 +118,9 @@ def compress_project(config_file, course, project):
         tar.close() # This writes the tarball
         project_obj.project['tarball'] = archive_name
         if project_obj.course['group_managed']:
-            os.chmod(archive_name, 0660)
+            chmod(archive_name, 0660)
         else:
-            os.chmod(archive_name, 0600)
+            chmod(archive_name, 0600)
         project_obj.config.write()
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:
