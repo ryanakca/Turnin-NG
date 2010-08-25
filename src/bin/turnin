@@ -86,6 +86,8 @@ if __name__ == '__main__':
     except ValueError, e:
         sys.exit(e)
 
+    if not project.project['enabled']:
+        sys.exit(ValueError("Error, project %s is not enabled." % project.name))
 
     # We have checked that the user has provided a course, a project and
     # assignments. We can now proceed to submit them.
