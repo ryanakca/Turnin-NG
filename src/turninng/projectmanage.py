@@ -262,6 +262,11 @@ def strip_random_suffix(project_obj):
         format = re.match(user +
                 '-\w{16}(?P<format>(\.tar\.gz|\.tar\.gz\.sig))$',
                 submission[0]).group('format')
-        os.rename(
-            os.path.join(project_obj.project['directory'], submission[0]),
-            os.path.join(project_obj.project['directory'], user + format))
+        if user + format in rejects:
+            print ValueError("Warning: Stripping the file %s" % submission[0] +
+                    " would cause the file %s to be" % (user + format) +
+                    " overwritten. Skipping.")
+        else:
+            os.rename(
+                os.path.join(project_obj.project['directory'], submission[0]),
+                os.path.join(project_obj.project['directory'], user + format))
