@@ -15,9 +15,15 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import errno
 import pwd
 import grp
 import os
+import shutil
+import tempfile
+
+from shutil import Error
+from stat import ST_UID, ST_GID
 
 def chown(path, user='', group=''):
     """
@@ -57,3 +63,66 @@ def chgrp(path, group):
 
     """
     return chown(path, group=group)
+
+def chmod_hack(path):
+    """
+    We need to be the owner of 'path' to be able to change the permissions. This
+    convoluted hack is necessary if we want to change the permissions of a
+    directory we have g+rwx, but not u+rwx.
+
+    Loosely based on the sourcecode for shutil.copytree
+
+    @type path: string
+    @param path: file / directory on which to change permissions
+    @return: None
+
+    """
+    # Get the name of the group that owns path
+    path_group = grp.getgrgid(os.stat(path)[ST_GID])[0]
+    temp_dir = tempfile.mkdtemp()
+    files = os.listdir(path)
+    errors = []
+    for file in files:
+        src = os.path.join(path, file)
+        dst = os.path.join(temp_dir, file)
+        try:
+            if os.path.islink(src):
+                linkto = os.readlink(src)
+                os.symlink(linkto, dst)
+            elif os.path.isdir(src):
+                shutil.copytree(src, dst, symlinks=True)
+            else:
+                shutil.copy2(src, dst)
+        except (IOError, os.error), why:
+            errors.append((src, dst, str(why)))
+        except Error, err:
+            errors.extend(err.args[0])
+    try:
+        shutil.copystat(path, temp_dir)
+        shutil.rmtree(path)
+        os.rename(temp_dir, path)
+        chgrp(path, path_group)
+    except OSError, why:
+        errors.extend((path, temp_dir, str(why)))
+    if errors:
+        raise Error(errors)
+
+def chmod(path, permissions):
+    """
+    Change the permissions of 'path'
+
+    @type path: string
+    @param path: file / directory on which to change permissions
+    @type permissions: int
+    @param permissions: 4 digit octal permissions for path
+    @return: None
+    @raise ValueError: permissions aren't valid octal permissions
+
+    """
+    if not 0 <= permissions <= 7777:
+        raise ValueError("%s are invalid octal permissions", oct(permissions))
+    # Do we own the file or are we root?
+    if os.stat(path)[ST_UID] != os.geteuid() and os.geteuid() != 0:
+        # Ewwww!
+        chmod_hack(path)
+    os.chmod(path, permissions)
