@@ -87,6 +87,8 @@ def create_course(config_file, course):
                 os.chmod(directory, 0775)
             else:
                 os.chmod(directory, 0755)
+                print "Please make sure the account %s" % user +\
+                      " is a member of the group %s." % group
         except OSError, e:
             print e
         course.write(user, directory, group, group_managed)
