@@ -27,6 +27,9 @@ import tarfile
 from turninng.configparser import ProjectCourse, ProjectProject
 from turninng.fileperms import chmod, chown, chgrp
 
+# Username of the current user
+whoami = pwd.getpwuid(os.getuid())[0]
+
 def create_project(config_file, course, project):
     """
     Create the project 'project'.
@@ -53,6 +56,7 @@ def create_project(config_file, course, project):
         chown(directory, user, group)
     description = raw_input("[Optional] Project description: ")
     project_obj.write(True, description)
+    project_obj.add_manager(whoami)
 
 def delete_project(config_file, course, project):
     """
@@ -122,6 +126,7 @@ def compress_project(config_file, course, project):
         else:
             chmod(archive_name, 0600)
         project_obj.config.write()
+        project_obj.add_manager(whoami)
         shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
     else:
         raise ValueError("%s is not an existing project in the course %s" %
@@ -163,6 +168,7 @@ def extract_project(config_file, course, project):
         os.remove(project_obj.project['tarball'])
         project_obj.project['tarball'] = ''
         project_obj.config.write()
+        project_obj.add_manager(whoami)
     else:
         raise ValueError("%s is not an existing project in the course %s" %
                 (project, course))
