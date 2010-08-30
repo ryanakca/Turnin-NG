@@ -177,13 +177,15 @@ def verify_sig(project_obj):
         raise ValueError("No assignments have been submitted yet.")
     signatures = []
     submissions.sort()
-    for i, submission in enumerate(submissions):
-        if submission.endswith('.sig'):
-            signatures.append(submissions.pop(i)) # Signature file
-            submissions.pop(i-1)                  # Archive
+    for file in submissions:
+        if file.endswith('.tar.gz'):
+            if file + '.sig' in submissions:
+                signatures.append(file + '.sig')
+                submissions.remove(file)
+                submissions.remove(file + '.sig')
     for sig in signatures:
         print "Verifying %s" % sig[:-4]
-        retcode = subprocess.call(['gpg', '--verify',
+        retcode = subprocess.call(['gpgv',
             os.path.join(project_obj.project['directory'], sig)])
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
