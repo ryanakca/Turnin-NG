@@ -232,7 +232,7 @@ class ProjectProject(ProjectCourse):
         """
         super(ProjectProject, self).__init__(config_file, course)
         self.config_defaults = {'enabled': False, 'description': '',
-                'uuid': str(uuid.uuid4())}
+                'uuid': str(uuid.uuid4()), 'managing_accounts': []}
         if not self.course.has_key(project):
             self.config[course][project] = self.config_defaults
             self.config.write()
@@ -273,6 +273,19 @@ class ProjectProject(ProjectCourse):
         if not enabled:
             if self.course['default'] == self.name:
                 self.course['default'] = ''
+        self.config.write()
+
+    def add_manager(self, manager):
+        """
+        Adds a UNIX username that has managed the projects.
+
+        @type manager: string
+        @param manager: username that has managed accounts
+        @rtype: None
+
+        """
+        if manager not in self.project['managing_accounts']:
+            self.project['managing_accounts'].append(manager)
         self.config.write()
 
 class TurninGlobal(object):
