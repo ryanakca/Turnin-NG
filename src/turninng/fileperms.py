@@ -38,11 +38,12 @@ def chown(path, user='', group=''):
     if user:
         UID = pwd.getpwnam(user)[2]
     else:
-        UID = os.stat(path)[ST_UID]
+        # Set to -1 to leave unchanged.
+        UID = -1
     if group:
         GID = grp.getgrnam(group)[2]
     else:
-        GID = os.stat(path)[ST_GID]
+        GID = -1
     return os.chown(path, UID, GID)
 
 def chgrp(path, group):
