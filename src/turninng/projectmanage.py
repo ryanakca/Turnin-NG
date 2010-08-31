@@ -222,6 +222,7 @@ def strip_random_suffix(project_obj):
     @raise ValueError: No assignments have been submitted.
 
     """
+    project_obj.add_manager(whoami)
     files = os.listdir(project_obj.project['directory'])
     if not files:
         raise ValueError("No assignments have been submitted yet. Not " +
@@ -273,7 +274,8 @@ def strip_random_suffix(project_obj):
         submissions_user_tarfiles = set(submissions[user]['tarfiles'])
         for tar in submissions_user_tarfiles:
             owner = get_owner(project_obj, tar)
-            if not owner == user:
+            if not owner == user and \
+                   owner not in project_obj.project['managing_accounts']:
                 # Let's get rid of assignments other people submitted for the
                 # user
                 print Warning('Warning: Student %s submitted an ' % owner +
@@ -289,7 +291,8 @@ def strip_random_suffix(project_obj):
         submissions_user_sigfiles = set(submissions[user]['sigfiles'])
         for sig in submissions_user_sigfiles:
             owner = get_owner(project_obj, sig)
-            if not owner == user:
+            if not owner == user and \
+                   owner not in project_obj.project['managing_accounts']:
                 # Let's get rid of signatures other people submitted for the
                 # user. This should probably never get called unless we have
                 # really really stupidsilly people who are
