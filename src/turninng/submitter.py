@@ -92,6 +92,11 @@ def submit_files(course_name, project, files, list='', gpg_key=''):
         retcode = subprocess.call(cargs)
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
+            print "An error occured when calling GPG, not submitting signature"
+            # It's important that we set gpg_key to False. Otherwise,
+            # shutil.copy below will fail because it can't find the .sig file
+            # and Turnin-NG will crash.
+            gpg_key = False
     shutil.copy(temparchive.name,
             os.path.join(project.project['directory'], filename))
     os.chmod(os.path.join(project.project['directory'], filename), 0666)
