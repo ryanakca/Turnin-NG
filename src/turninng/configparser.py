@@ -287,6 +287,7 @@ class ProjectProject(ProjectCourse):
         if manager not in self.project['managing_accounts']:
             self.project['managing_accounts'].append(manager)
         self.config.write()
+        self.config.reload()
 
 class TurninGlobal(object):
     """
