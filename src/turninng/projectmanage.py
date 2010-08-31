@@ -171,13 +171,15 @@ def verify_sig(project_obj):
     @raise subprocess.CalledProcessError: gpg encounters an issue when verifying
 
     """
-    # We need to sort so that we get ['archive.tar.gz', 'archive.tar.gz.sig']
     submissions = os.listdir(project_obj.project['directory'])
     if not submissions:
         raise ValueError("No assignments have been submitted yet.")
     signatures = []
-    submissions.sort()
-    for file in submissions:
+    # We need to work with a copy of submissions since we should never mutate a
+    # list in place. Don't go submissions_copy = submissions , submissions_copy
+    # would point to the same list submissions is pointing to.
+    submissions_copy = list(submissions)
+    for file in submissions_copy:
         if file.endswith('.tar.gz'):
             if file + '.sig' in submissions:
                 signatures.append(file + '.sig')
