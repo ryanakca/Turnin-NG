@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- Submission utilities
-# Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -105,6 +105,13 @@ def submit_files(course_name, project, files, list='', gpg_key=''):
         shutil.copy(temparchive.name + '.sig',
                 os.path.join(project.project['directory'], filename + '.sig'))
         os.remove(temparchive.name + '.sig')
+    else:
+        submitted_sig = os.path.join(project.project['directory'],
+                                     filename + '.sig')
+        if os.path.exists(submitted_sig):
+            # We've already submitted our project and we had signed it. Since
+            # we're resubmitting, our old signature won't match. Delete it.
+            os.remove(submitted_sig)
     temparchive.close()
     shutil.rmtree(tempdir, ignore_errors=True)
     for j, file in enumerate(submitted_files):
