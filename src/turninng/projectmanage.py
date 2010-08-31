@@ -251,11 +251,11 @@ def strip_random_suffix(project_obj):
                     print Warning('Warning: Student %s submitted ' % user +
                     'more than one assignment, skipping the files: %s' %
                     ' '.join(submissions.pop(user)))
-            # We don't want to print the above error if we are out of
-            # submissions, but we don't want to match a nonexistent submission
-            # later on
-            if not submissions[user]:
-                submissions.pop(user)
+            # If a user doesn't have any valid assignments associated with him,
+            # take him out of the to-stip queue
+            if submissions.has_key(user):
+                if not submissions[user]:
+                    submissions.pop(user)
         owner = pwd.getpwuid(os.stat(os.path.join(project_obj.project['directory'],
                             subs[0])).st_uid).pw_name
 
