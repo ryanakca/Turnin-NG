@@ -16,8 +16,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import datetime
+import grp
 import os
 import os.path
+import pwd
 import shutil
 import tarfile
 
@@ -39,9 +41,25 @@ def create_course(config_file, course):
     config_obj = ProjectGlobal(config_file)
     if not config_obj.config.has_key(course):
         course = ProjectAdminCourse(config_file, course)
-        user = raw_input("Username [usually your UNIX login]: ")
+        # Don't die if we get an invalid user
+        while True:
+            user = raw_input("Managing username [usually your UNIX login]: ")
+            try:
+                pwd.getpwnam(user)
+            except KeyError, e:
+                print "User does not exist. Please try again."
+            else:
+                break
         directory = raw_input("Full path to the course directory: ")
-        group = raw_input("Group: ")
+        # Don't die if we get an invalid group
+        while True:
+            group = raw_input("Student group: ")
+            try:
+                grp.getgrnam(group)
+            except KeyError, e:
+                print "Group does not exist. Please try again."
+            else:
+                break
         try:
             try:
                 os.makedirs(directory) # We could supply the mode here, but it might get
