@@ -42,10 +42,20 @@ class ProjectGlobal(object):
         self.config.indent_type = '    '
         self.config.unrepr = True
         self.config.reload()
+        self.config_defaults = {'default': ''}
         if not self.config.has_key('Global'):
-            self.config['Global'] = {}
-            self.config['Global']['default'] = ''
+            self.config['Global'] = self.config_defaults
             self.config.write()
+        else:
+            self.config_ref = self.config['Global']
+            self.upgrade_config()
+
+    def upgrade_config(self):
+        """ Update the configuration file from a previous release. """
+        for key, default in self.config_defaults.items():
+            if not self.config_ref.has_key(key):
+                self.config_ref[key] = default
+        self.config.write()
 
     def set_default(self, course):
         """
@@ -82,13 +92,14 @@ class ProjectAdminCourse(ProjectGlobal):
 
         """
         super(ProjectAdminCourse, self).__init__(config_file)
+        self.config_defaults = {'projlist': '', 'user': '', 'directory': '',
+                                'group': ''}
         if not self.config.has_key(course):
-            self.config[course] = {}
-            self.config[course]['projlist'] = ''
-            self.config[course]['user'] = ''
-            self.config[course]['directory'] = ''
-            self.config[course]['group'] = ''
+            self.config[course] = self.config_defaults
             self.config.write()
+        else:
+            self.config_ref = self.config[course]
+            self.upgrade_config()
         self.course = self.config[course]
         """ @ivar: A shortcut to access the course configurations. """
 
@@ -137,13 +148,14 @@ class ProjectCourse(ProjectGlobal):
 
         """
         super(ProjectCourse, self).__init__(config_file)
+        self.config_defaults = {'default': '', 'user': '', 'directory': '',
+                                'group': ''}
         if not self.config.has_key(course):
-            self.config[course] = {}
-            self.config[course]['default'] = ''
-            self.config[course]['user'] = ''
-            self.config[course]['directory'] = ''
-            self.config[course]['group'] = ''
+            self.config[course] = self.config_defaults
             self.config.write()
+        else:
+            self.config_ref = self.config[course]
+            self.upgrade_config()
         self.course = self.config[course]
         """ @ivar: A shortcut to access the course configurations. """
 
@@ -201,12 +213,14 @@ class ProjectProject(ProjectCourse):
 
         """
         super(ProjectProject, self).__init__(config_file, course)
+        self.config_defaults = {'enabled': False, 'description': '',
+                'uuid': str(uuid.uuid4())}
         if not self.course.has_key(project):
-            self.config[course][project] = {}
-            self.config[course][project]['enabled'] = False
-            self.config[course][project]['description'] = ''
-            self.config[course][project]['uuid'] = str(uuid.uuid4())
+            self.config[course][project] = self.config_defaults
             self.config.write()
+        else:
+            self.config_ref = self.config[course][project]
+            self.upgrade_config()
         self.project = self.course[project]
         """ @ivar: shortcut to the project configurations """
         self.project['directory'] = os.path.join(self.course['directory'],
