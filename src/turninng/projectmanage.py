@@ -239,7 +239,16 @@ def strip_random_suffix(project_obj):
             # It might still be that the user submitted more than one
             # assignment, but at least we know that the student submitted them.
             if len(submissions[user]) > 1:
-                print Warning('Warning: Student %s submitted ' % user +
+                # Make sure we have 'foo.tar.gz' before 'foo.tar.gz.sig' for the
+                # check immediately below
+                submissions[user].sort()
+                if (len(submissions[user]) == 2) and \
+                   (submissions[user][1] == submissions[user][0] + '.sig'):
+                    # We've got ['foo.tar.gz', 'foo.tar.gz.sig'], this is to be
+                    # expected.
+                    pass
+                else:
+                    print Warning('Warning: Student %s submitted ' % user +
                     'more than one assignment, skipping the files: %s' %
                     ' '.join(submissions.pop(user)))
             # We don't want to print the above error if we are out of
