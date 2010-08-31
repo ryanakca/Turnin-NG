@@ -94,12 +94,26 @@ def submit_files(project, files, tlist='', gpg_key=''):
             # shutil.copy below will fail because it can't find the .sig file
             # and Turnin-NG will crash.
             gpg_key = False
-    shutil.copy(temparchive.name,
+    shutil.copyfile(temparchive.name,
             os.path.join(project.project['directory'], filename))
-    os.chmod(os.path.join(project.project['directory'], filename), 0666)
+    try:
+        os.chmod(os.path.join(project.project['directory'], filename), 0666)
+    except OSError, e:
+        if e.errno == 1:
+            # We've got an error on our hands:
+            # OSError: [Errno 1] Operation not permitted
+            #
+            # Probable cause:
+            #
+            # We've previously submitted. A managing user has since
+            # disabled/enabled the project and is now the owner of our archive.
+            # Since we aren't the owner, we don't have permisisons to run chmod.
+            # In any case, unless we have a malicious TA, since we've already
+            # submitted, the permissions on our file should already be correct.
+            pass
     # We want the signature's timestamp to be more recent than the archive's.
     if gpg_key:
-        shutil.copy(temparchive.name + '.sig',
+        shutil.copyfile(temparchive.name + '.sig',
                 os.path.join(project.project['directory'], filename + '.sig'))
         os.remove(temparchive.name + '.sig')
         # GPG signatures are 644 by default
