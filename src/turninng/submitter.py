@@ -102,6 +102,9 @@ def submit_files(project, files, tlist='', gpg_key=''):
         shutil.copy(temparchive.name + '.sig',
                 os.path.join(project.project['directory'], filename + '.sig'))
         os.remove(temparchive.name + '.sig')
+        # GPG signatures are 644 by default
+        os.chmod(os.path.join(project.project['directory'], filename + '.sig'),
+                 0666)
     else:
         submitted_sig = os.path.join(project.project['directory'],
                                      filename + '.sig')
