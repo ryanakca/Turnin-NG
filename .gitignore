@@ -3,4 +3,5 @@ build/
 .*.swo
 doc/turnin-ng.pdf
 doc/turnin-ng.info
+doc/turnin-ng.html
 tags
