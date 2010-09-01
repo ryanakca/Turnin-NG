@@ -216,71 +216,109 @@ def strip_random_suffix(project_obj):
     # They need to be sorted since there is no guarantee that os.listdir will
     # read files in alphabetical order.
     submissions = {}
-    rejects = []
+    rejects = set()
+    filename_format = re.compile(
+            '^(?P<username>\w+)-\w{16}(?P<format>\.tar\.gz(|.sig))$')
     for submission in files:
-        if re.match('^(?P<username>\w+)-\w{16}\.tar\.gz(|.sig)$', submission):
-            username = re.match('^(?P<username>\w+)-\w{16}\.tar\.gz(|.sig)$',
-                submission).group('username')
+        if filename_format.match(submission):
+            username = filename_format.match(submission).group('username')
+            format = filename_format.match(submission).group('format')
             if not submissions.has_key(username):
-                submissions[username] = []
-            submissions[username].append(submission)
+                submissions[username] = {'tarfiles': set(), 'sigfiles': set()}
+            if format.endswith('.tar.gz'):
+                submissions[username]['tarfiles'].add(submission)
+            else:
+                submissions[username]['sigfiles'].add(submission)
         else:
-            rejects.append(submission)
+            rejects.add(submission)
 
-    for user, subs in submissions.items():
-        if len(subs) != 1:
-            # Let's get rid of assignments other people submitted for the user
-            for submission in subs:
-                owner = pwd.getpwuid(os.stat(os.path.join(
-                    project_obj.project['directory'],
-                    submission)).st_uid).pw_name
-                if owner != user:
-                    print Warning('Warning: Student %s submitted an ' % owner +
-                        'assignment for the student %s. Skipping file %s.' %
-                        (user, submission))
-                    submissions[user].remove(submission)
-            # It might still be that the user submitted more than one
-            # assignment, but at least we know that the student submitted them.
-            if len(submissions[user]) > 1:
-                # Make sure we have 'foo.tar.gz' before 'foo.tar.gz.sig' for the
-                # check immediately below
-                submissions[user].sort()
-                if (len(submissions[user]) == 2) and \
-                   (submissions[user][1] == submissions[user][0] + '.sig'):
-                    # We've got ['foo.tar.gz', 'foo.tar.gz.sig'], this is to be
-                    # expected.
-                    pass
-                else:
-                    print Warning('Warning: Student %s submitted ' % user +
-                    'more than one assignment, skipping the files: %s' %
-                    ' '.join(submissions.pop(user)))
-            # If a user doesn't have any valid assignments associated with him,
-            # take him out of the to-stip queue
-            if submissions.has_key(user):
-                if not submissions[user]:
-                    submissions.pop(user)
-        owner = pwd.getpwuid(os.stat(os.path.join(project_obj.project['directory'],
-                            subs[0])).st_uid).pw_name
-
-        if owner != user:
-            print Warning('Warning: Student %s submitted an ' % owner +
-                    'assignment for the student %s. Skipping file %s.' % (user,
-                        submissions.pop(user)[0]))
     if rejects:
         print ValueError("Warning: The following file(s) do not have the " +
             "the format username-XXXXXXXXXXXXXXXX.tar.gz or " +
             "username-XXXXXXXXXXXXXXX.tar.gz.sig, skipping: %s" %
             '\n'.join(rejects))
 
-    for user, submission in submissions.items():
-        format = re.match(user +
-                '-\w{16}(?P<format>(\.tar\.gz|\.tar\.gz\.sig))$',
-                submission[0]).group('format')
-        if user + format in rejects:
-            print ValueError("Warning: Stripping the file %s" % submission[0] +
-                    " would cause the file %s to be" % (user + format) +
-                    " overwritten. Skipping.")
+    def get_owner(project, submission):
+        """
+        Which user owns the submission
+
+        @type project: ProjectProject
+        @param project: current project
+        @type submission: str
+        @param submission: file in the submission directory
+        @rtype: string
+        @return: the owner of the submission
+
+        """
+        owner = pwd.getpwuid(os.stat(os.path.join(
+            project.project['directory'], submission)).st_uid).pw_name
+        return owner
+
+    for user in submissions.keys():
+        # Make copies of the sets to iterate through since we'll be modifying
+        # them and can't mutate sets while iterating through them
+        submissions_user_tarfiles = set(submissions[user]['tarfiles'])
+        for tar in submissions_user_tarfiles:
+            owner = get_owner(project_obj, tar)
+            if not owner == user:
+                # Let's get rid of assignments other people submitted for the
+                # user
+                print Warning('Warning: Student %s submitted an ' % owner +
+                    'assignment for the student %s. Skipping file %s.' %
+                    (user, tar))
+                submissions[user]['tarfiles'].discard(tar)
+                if tar + '.sig' in submissions[user]['sigfiles']:
+                    print Warning('Also skipping associated signature file' +
+                        ' %s.' % (tar + '.sig'))
+                    submissions[user]['sigfiles'].discard(tar + '.sig')
+        # Make the sigfiles copy here since we may have modified sigfiles in the
+        # tar checking loop
+        submissions_user_sigfiles = set(submissions[user]['sigfiles'])
+        for sig in submissions_user_sigfiles:
+            owner = get_owner(project_obj, sig)
+            if not owner == user:
+                # Let's get rid of signatures other people submitted for the
+                # user. This should probably never get called unless we have
+                # really really stupidsilly people who are
+                # desperately trying to get caught.
+                print Warning('Warning: Student %s submitted a ' % owner +
+                    'signature for the student %s. Skipping file %s.' %
+                    (user, sig))
+                submissions[user]['sigfiles'].discard(sig)
+            elif sig[:-4] not in submissions[user]['tarfiles']:
+                # Remove hanging signature files so that
+                # len(submissions[user]['sigfiles']) <=
+                # len(submissions[user]['tarfiles)
+                print Warning('Warning: Signature file %s' % sig +
+                    ' has no associated archive. Skipping file %s.' % sig)
+                submissions[user]['sigfiles'].discard(sig)
+
+        if len(submissions[user]['tarfiles']) > 1:
+                print Warning('Warning: Student %s submitted ' % user +
+                    'more than one assignment, skipping the files: %s' %
+                    ' '.join(submissions[user].pop('tarfiles') |
+                             submissions[user].pop('sigfiles')))
+                submissions.pop(user)
+        elif len(submissions[user]['tarfiles']) == 0:
+            # If a user doesn't have any valid assignments associated with him,
+            # take him out of the to-stip queue
+            submissions.pop(user)
+
+    for user in submissions.keys():
+        submitted_files = submissions[user]['tarfiles'] | \
+                          submissions[user]['sigfiles']
+        # Any overwrites?
+        overwrites = set([user + '.tar.gz', user + '.tar.gz.sig']) & rejects
+        if overwrites:
+            print ValueError("Warning: Stripping the user %s's" % user +
+                " file(s) (%s) would either cause the files %s" % (
+                ', '.join(submitted_files), ', '.join(overwrites)) +
+                " to be overwritten or would break signatures. Skipping" +
+                " the files: %s" % ' '.join(submitted_files))
         else:
-            os.rename(
-                os.path.join(project_obj.project['directory'], submission[0]),
-                os.path.join(project_obj.project['directory'], user + format))
+            for submission in submitted_files:
+                format = filename_format.match(submission).group('format')
+                os.rename(
+                    os.path.join(project_obj.project['directory'], submission),
+                    os.path.join(project_obj.project['directory'],
+                                 user + format))
