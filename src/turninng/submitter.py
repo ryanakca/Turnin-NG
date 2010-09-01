@@ -27,7 +27,7 @@ import tempfile
 
 from turninng.configparser import TurninCourse, TurninList
 
-def submit_files(project, files, list='', gpg_key=''):
+def submit_files(project, files, tlist='', gpg_key=''):
     """
     Submits the files to the project.
 
@@ -35,8 +35,8 @@ def submit_files(project, files, list='', gpg_key=''):
     @param project: Project to which we should submit the files
     @type files: list
     @param files: Python list of files.
-    @type list: TurninList
-    @param list: list of submitted files
+    @type tlist: TurninList
+    @param tlist: list of submitted files
     @type gpg_key: string
     @param gpg_key: GnuPG public-key ID
     @rtype: list
@@ -44,16 +44,16 @@ def submit_files(project, files, list='', gpg_key=''):
     @raise subprocess.CalledProcessError: GnuPG fails to sign
 
     """
-    if not list:
-        list = os.path.join(os.path.expanduser('~'), '.turnin-ng',
+    if not tlist:
+        tlist = os.path.join(os.path.expanduser('~'), '.turnin-ng',
                 'submissions')
         # We don't want something like /home/ryan/.turning-ng/submissions../
-        if not os.path.isdir(os.path.normpath(os.path.join(list, os.pardir))):
-            os.makedirs(os.path.normpath(os.path.join(list, os.pardir)))
+        if not os.path.isdir(os.path.normpath(os.path.join(tlist, os.pardir))):
+            os.makedirs(os.path.normpath(os.path.join(tlist, os.pardir)))
         # We don't want other people to be able to read out submitted file
         # suffixes and messing with our files!
-        os.chmod(list, 0600)
-    list_file = TurninList(list)
+        os.chmod(tlist, 0600)
+    list_file = TurninList(tlist)
     random_suffix = ''
     if list_file.config.has_key(project.course.name):
         if list_file.config[project.course.name].has_key(
