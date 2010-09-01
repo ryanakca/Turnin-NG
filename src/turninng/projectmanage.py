@@ -187,8 +187,9 @@ def verify_sig(project_obj):
                 submissions.remove(file + '.sig')
     for sig in signatures:
         print "Verifying %s" % sig[:-4]
-        retcode = subprocess.call(['gpg', '--verify',
-            os.path.join(project_obj.project['directory'], sig)])
+        cargs = ['gpg', '--verify',
+                 os.path.join(project_obj.project['directory'], sig)]
+        retcode = subprocess.call(cargs)
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
     ret = ['Unsigned submissions: ']
