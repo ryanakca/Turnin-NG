@@ -55,7 +55,13 @@ class ProjectGlobal(object):
         for key, default in self.config_defaults.items():
             if not self.config_ref.has_key(key):
                 self.config_ref[key] = default
-        self.config.write()
+        try:
+            self.config.write()
+        except IOError, err:
+            if err.errno == 13:
+                # We don't have write permissions, we're probably running as a
+                # student, ignore.
+                pass
 
     def set_default(self, course):
         """
