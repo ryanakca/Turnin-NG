@@ -21,6 +21,7 @@ import os
 import os.path
 import pwd
 import shutil
+import sys
 import tarfile
 
 from turninng.configparser import ProjectGlobal, ProjectAdminCourse
