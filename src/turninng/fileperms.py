@@ -19,8 +19,6 @@ import pwd
 import grp
 import os
 
-from stat import ST_UID, ST_GID
-
 def chown(path, user='', group=''):
     """
     Change the owner and the group of 'path'
