@@ -91,8 +91,7 @@ if __name__ == '__main__':
 
     # We have checked that the user has provided a course, a project and
     # assignments. We can now proceed to submit them.
-    files = submit_files(options.course, project, args,
-            gpg_key=options.keyid)
+    files = submit_files(project, args, gpg_key=options.keyid)
     if options.verbose:
         print "Submitted files:"
         for file in files:

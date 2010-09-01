@@ -27,12 +27,10 @@ import tempfile
 
 from turninng.configparser import TurninCourse, TurninList
 
-def submit_files(course_name, project, files, list='', gpg_key=''):
+def submit_files(project, files, list='', gpg_key=''):
     """
     Submits the files to the project.
 
-    @type course_name: string
-    @param course_name: course name
     @type project: TurninProject
     @param project: Project to which we should submit the files
     @type files: list
