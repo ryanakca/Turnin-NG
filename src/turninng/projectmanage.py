@@ -78,6 +78,8 @@ def delete_project(config_file, course, project):
         if raw_input("If you really want to delete this project and all " +
                 "associated files, enter 'yes' in capital letters: ") == 'YES':
             shutil.rmtree(project_obj.project['directory'], ignore_errors=True)
+            if project_obj.project['tarball']:
+                os.remove(project_obj.project['tarball'])
             if project_obj.course['default'] == project:
                 project_obj.course['default'] = ''
             del project_obj.course[project]
