@@ -123,6 +123,7 @@ def compress_project(config_file, course, project):
         project_obj.project['tarball'] = archive_name
         if project_obj.course['group_managed']:
             chmod(archive_name, 0660)
+            chgrp(archive_name, project_obj.course['group'])
         else:
             chmod(archive_name, 0600)
         project_obj.config.write()
@@ -164,6 +165,7 @@ def extract_project(config_file, course, project):
         else:
             for member in tar.getmembers():
                 tar.extract(member, path=project_obj.course['directory'])
+        chgrp(project_obj.project['directory'], project_obj.course['group'])
         tar.close()
         os.remove(project_obj.project['tarball'])
         project_obj.project['tarball'] = ''
