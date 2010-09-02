@@ -186,6 +186,32 @@ class install_legacy(Command):
 
 install.sub_commands.append(('install_legacy', None))
 
+class install_infopage(Command):
+
+    description = 'Install the info page'
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        install_info = check_executable_in_path('install-info',
+            "Please install the install-info executable to install the info " +
+            "documentation")
+        if install_info:
+            cargs = ['install-info', os.path.join(prefix,
+                'share/info/turnin-ng.info'), os.path.join(prefix,
+                'share/info/dir')]
+            retcode = subprocess.call(cargs)
+            if retcode < 0:
+                raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
+
+install.sub_commands.append(('install_infopage', None))
+
 setup(name='turnin-ng',
       version='1.0',
       description='Turn in your assignments with turnin',
@@ -199,5 +225,6 @@ setup(name='turnin-ng',
       data_files=data_files,
       cmdclass={'build_infopage': build_infopage, 'build_pdf':build_pdf,
           'build_htmldocs': build_htmldocs, 'build_legacy': build_legacy,
+          'install_infopage': install_infopage,
           'install_legacy': install_legacy}
 )
