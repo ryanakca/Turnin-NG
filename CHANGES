@@ -1,3 +1,37 @@
+1.1 2010-09-01
+ Global:
+  * Ignore build files in Git (generated documentation, build/*, etc.)
+  * Always initialize all of the course's options in the config files
+  * Upgrade configuration files from old releases / installations. Preserves
+    previous settings, just adds the options to the config files.
+  * Accept that the legacy symlink may already exist from a previous install
+
+ turnincfg:
+  * Add support for group managed courses
+  * Don't die if we receive an invalid username or group when creating courses
+  * Don't strip a submission if it causes an overwrite
+  * Added forgotten import (sys.exit() needs sys to be imported)
+  * Don't crash when raising CalledProcessError when gpg --verify fails
+  * Warn on dangling signatures
+  * Warn on signatures submitted by other students
+  * Set the group on the compressed tarball and extracted project directory
+  * Also delete tarball on delete_project if project is compressed
+
+ turnin:
+  * Don't needlessly import chown
+  * Fixed vulnerability. Set student's $HOME/.turnin-ng/list to 0600 so that, on
+    off chance their home directory is world readable, other students can't find
+    out what their submitted file suffixes are (and thus be able to play with
+    them).
+  * Print a pretty error message when we try to submit to a closed project
+  * Don't crash when GPG fails to sign and we try to copy a non-existent .sig file
+  * Remove stale signatures on unsigned resubmits
+
+ Documentation:
+  * Fix broken infodir entry
+  * Properly install info manual with install-info
+  * Expand the administrative section of the info manual
+
 1.0.1 2010-02-12
  Global:
   * Fix typos in turnin and turnincfg option descriptions

@@ -5,9 +5,9 @@
 @comment Commented out allowcodebreaks because it breaks on older versions of
 @comment texi2pdf and there aren't any differences in output with or without it.
 @comment @allowcodebreaks false
-@set VERSION 1.1 (unreleased)
-@set UPDATED August 18 2010
-@set UPDATED-MONTH August 2010
+@set VERSION 1.1
+@set UPDATED September 01 2010
+@set UPDATED-MONTH September 2010
 @comment %**end of header
 @copying
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
@@ -337,6 +337,7 @@ Managing username [usually your UNIX login]: ryanakca
 Full path to the course directory: /srv/submit/cisc2323
 Managed by a User or Group [U/G]: U
 Student group: students
+Please make sure the account ryanakca is a member of the group students.
 Successfully created the course cisc-2323.
 }
 @end smallexample
