@@ -177,8 +177,11 @@ class install_legacy(Command):
 
     def run(self):
         print os.path.join(prefix, 'bin/turnincfg')
-        os.symlink(os.path.join(prefix, 'bin/turnincfg'), os.path.join(prefix,
-            'bin/project'))
+        try:
+            os.symlink(os.path.join(prefix, 'bin/turnincfg'),
+                       os.path.join(prefix, 'bin/project'))
+        except:
+            pass
 
 
 install.sub_commands.append(('install_legacy', None))
