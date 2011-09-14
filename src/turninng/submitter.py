@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- Submission utilities
-# Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2011  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import errno
 import os
 import os.path
 import pwd
@@ -99,7 +100,7 @@ def submit_files(project, files, tlist='', gpg_key=''):
     try:
         os.chmod(os.path.join(project.project['directory'], filename), 0666)
     except OSError, e:
-        if e.errno == 1:
+        if e.errno == e.EPERM:
             # We've got an error on our hands:
             # OSError: [Errno 1] Operation not permitted
             #

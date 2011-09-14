@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import datetime
+import errno
 import grp
 import os
 import os.path
@@ -76,7 +77,7 @@ def create_course(config_file, course):
                                        #ignored on some systems. We'll do it here instead
             except OSError, e:
                 # We don't want to abort of the directory already exists
-                if e.errno == 17:
+                if e.errno == errno.EEXIST:
                     print e
                     print 'Continuing'
                 else:

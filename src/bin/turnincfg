@@ -1,6 +1,6 @@
 #!/usr/bin/python2.5
 # Turnin-NG, an assignment submitter and manager. --- Project script
-# Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2011  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import errno
 from optparse import OptionParser, OptionGroup
 import os
 import os.path
@@ -108,7 +109,7 @@ if __name__ == '__main__':
         except ValueError, e:
             sys.exit(e)
         except OSError, e:
-            if e.errno == 2:
+            if e.errno == errno.ENOENT:
                 print "Has someone already moved the submission directory?"
                 sys.exit(e)
 

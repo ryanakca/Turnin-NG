@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- config parser
-# Copyright (C) 2009, 2010  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2011  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import errno
 import os.path
 import uuid
 
@@ -62,7 +63,7 @@ class ProjectGlobal(object):
         try:
             self.config.write()
         except IOError, err:
-            if err.errno == 13:
+            if err.errno == errno.EACCES:
                 # We don't have write permissions, we're probably running as a
                 # student, ignore.
                 pass

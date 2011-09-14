@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- Custom system utilities
-# Copyright (C) 2009  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009, 2011  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import errno
 import pwd
 import grp
 import os
