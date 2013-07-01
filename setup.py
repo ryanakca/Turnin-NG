@@ -58,16 +58,16 @@ class build_htmldocs(Command):
         pass
 
     def run(self):
-        """ Call texi2html on the Texinfo document. """
-        texi2html = check_executable_in_path('texi2html',
-            "Please install the texi2html executable to generate the HTML " +
+        """ Call makeinfo on the Texinfo document. """
+        makeinfo=check_executable_in_path('makeinfo',
+            "Please install the makeinfo executable to generate the HTML " +
             "documentation")
-        if texi2html:
-            cargs = [texi2html, '--init-file=doc/turnin-ng.texi.init', 'doc/turnin-ng.texi']
+        if makeinfo:
+            cargs = [makeinfo, '--html', '--no-split', '-odoc/turnin-ng.html',\
+                    '--init-file=doc/turnin-ng.texi.init', 'doc/turnin-ng.texi']
             retcode = subprocess.call(cargs)
             if retcode < 0:
                 raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
-            os.rename('turnin-ng.html', 'doc/turnin-ng.html')
             data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
                 ['doc/turnin-ng.html']))
 
@@ -112,17 +112,17 @@ class build_pdf(Command):
         pass
 
     def run(self):
-        """ Call texi2pdf on the Texinfo document. """
-        texi2pdf = check_executable_in_path('texi2pdf',
-            "Please install texi2pdf to generate the PDF documentation")
-        if texi2pdf:
+        """ Call makeinfo on the Texinfo document. """
+        makeinfo = check_executable_in_path('makeinfo',
+            "Please install makeinfo to generate the PDF documentation")
+        if makeinfo:
             tempdir = tempfile.mkdtemp()
             shutil.copy(os.path.join('doc', 'turnin-ng.texi'), tempdir)
             shutil.copy(os.path.join('doc', 'gpl-2.0.texi'), tempdir)
             doc = os.path.join(os.getcwd(), 'doc')
             os.chdir(tempdir)
             success = True
-            cargs = [texi2pdf, 'turnin-ng.texi']
+            cargs = [makeinfo, '--pdf', 'turnin-ng.texi']
             # We need to call texi2pdf twice.
             for i in range(1):
                 retcode = subprocess.call(cargs)
