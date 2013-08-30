@@ -6,13 +6,13 @@
 @comment texi2pdf and there aren't any differences in output with or without it.
 @comment @allowcodebreaks false
 @set VERSION 1.1
-@set UPDATED September 01 2010
-@set UPDATED-MONTH September 2010
+@set UPDATED June 27 2013
+@set UPDATED-MONTH June 27 2013
 @comment %**end of header
 @copying
 This manual is for Turnin-NG (version @value{VERSION}, @value{UPDATED}).
 
-Copyright @copyright{} 2009--2010 Ryan Kavanagh (@email{ryanakca@@kubuntu.org}).
+Copyright @copyright{} 2009--2013 Ryan Kavanagh (@email{rak@@debian.org}).
 
 @quotation
 Copying and distribution of this file, with or without modification,
@@ -30,7 +30,7 @@ notice and this notice are preserved.
 @title Turnin-NG
 @subtitle Assignment Submission Suite
 @subtitle Version @value{VERSION}, @value{UPDATED-MONTH}
-@author Ryan Kavanagh (@email{ryanakca@@kubuntu.org})
+@author Ryan Kavanagh (@email{rak@@debian.org})
 @page
 @vskip 0pt plus 1filll
 @insertcopying
@@ -439,7 +439,7 @@ the long suffixed file names in the archive, we want them in the
 @chapter Distributing Turnin-NG
 
 Turnin-NG is Copyright @copyright{} 2009--2010 Ryan Kavanagh
-(@email{ryanakca@@kubuntu.org}). It is licensed under the terms of the GNU
+(@email{rak@@debian.org}). It is licensed under the terms of the GNU
 General Public License version 2, or (at your option) any later version.
 
 @menu

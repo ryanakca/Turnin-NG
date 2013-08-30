@@ -216,7 +216,7 @@ setup(name='turnin-ng',
       version='1.1',
       description='Turn in your assignments with turnin',
       author='Ryan Kavanagh',
-      author_email='ryanakca@kubuntu.org',
+      author_email='rak@debian.org',
       license='GNU General Public License version 2, or (at your option) ' +\
               'any later version',
       scripts=['src/bin/turnincfg', 'src/bin/turnin'],

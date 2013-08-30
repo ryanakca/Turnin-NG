@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager.
-# Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2013  Ryan Kavanagh <rak@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 __version__ = "1.1"
 __license__ = """Turnin-NG, an assignment submitter and manager.
-Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
+Copyright (C) 2009-2013  Ryan Kavanagh <rak@debian.org>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,5 +32,5 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
-__copyright__ = "Copyright (C) 2009-2010 Ryan Kavanagh <ryanakca@kubuntu.org>"
-__author__ = "Ryan Kavanagh <ryanakca@kubuntu.org> http://ryanak.ca/"
+__copyright__ = "Copyright (C) 2009-2013 Ryan Kavanagh <rak@debian.org>"
+__author__ = "Ryan Kavanagh <rak@debian.org> http://ryanak.ca/"
