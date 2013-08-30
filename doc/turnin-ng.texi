@@ -50,12 +50,14 @@ This manual is for @code{Turnin-NG} (version @value{VERSION}, @value{UPDATED}).
 @insertcopying
 @end ifhtml
 
+@ifnottex
 @menu
 * Introduction to Turnin-NG::
 * turnin::
 * turnincfg::
 * Distributing Turnin-NG::
 @end menu
+@end ifnottex
 
 @node Introduction to Turnin-NG, turnin, Top, Top
 @comment node-name, next, previous, up
