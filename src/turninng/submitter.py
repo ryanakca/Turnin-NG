@@ -43,6 +43,7 @@ def submit_files(project, files, tlist='', gpg_key=''):
     @rtype: list
     @return: Python list of submitted files
     @raise subprocess.CalledProcessError: GnuPG fails to sign
+    @raise EnvironmentError: tlist exists and is not a file
 
     """
     if not tlist:
@@ -51,6 +52,14 @@ def submit_files(project, files, tlist='', gpg_key=''):
         # We don't want something like /home/ryan/.turning-ng/submissions../
         if not os.path.isdir(os.path.normpath(os.path.join(tlist, os.pardir))):
             os.makedirs(os.path.normpath(os.path.join(tlist, os.pardir)))
+        # Create the TurninList if it doesn't exist:
+        if not os.path.isfile(tlist):
+            if os.path.exists(tlist):
+                raise EnvironmentError(
+                    "Path for list of submissions %s exists " % tlist +
+                    "but is not a file.")
+            else:
+                open(tlist, 'w').close()
         # We don't want other people to be able to read out submitted file
         # suffixes and messing with our files!
         os.chmod(tlist, 0600)
