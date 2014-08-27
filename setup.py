@@ -213,7 +213,7 @@ class install_infopage(Command):
 install.sub_commands.append(('install_infopage', None))
 
 setup(name='turnin-ng',
-      version='1.2',
+      version='1.3',
       description='Turn in your assignments with turnin',
       author='Ryan Kavanagh',
       author_email='rak@debian.org',
