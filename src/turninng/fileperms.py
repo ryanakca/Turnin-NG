@@ -92,16 +92,16 @@ def chmod_hack(path):
                 shutil.copytree(src, dst, symlinks=True)
             else:
                 shutil.copy2(src, dst)
-        except (IOError, os.error), why:
+        except (IOError, os.error) as why:
             errors.append((src, dst, str(why)))
-        except Error, err:
+        except Error as err:
             errors.extend(err.args[0])
     try:
         shutil.copystat(path, temp_dir)
         shutil.rmtree(path)
         os.rename(temp_dir, path)
         chgrp(path, path_group)
-    except OSError, why:
+    except OSError as why:
         errors.extend((path, temp_dir, str(why)))
     if errors:
         raise Error(errors)

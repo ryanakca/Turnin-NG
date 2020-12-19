@@ -62,12 +62,11 @@ def submit_files(project, files, tlist='', gpg_key=''):
                 open(tlist, 'w').close()
         # We don't want other people to be able to read out submitted file
         # suffixes and messing with our files!
-        os.chmod(tlist, 0600)
+        os.chmod(tlist, 0o600)
     list_file = TurninList(tlist)
     random_suffix = ''
-    if list_file.config.has_key(project.course.name):
-        if list_file.config[project.course.name].has_key(
-                project.project['uuid']):
+    if project.course.name in list_file.config:
+        if project.project['uuid'] in list_file.config[project.course.name]:
             random_suffix = list_file.config[project.course.name][
                     project.project['uuid']]
     if not random_suffix:
@@ -99,7 +98,7 @@ def submit_files(project, files, tlist='', gpg_key=''):
         retcode = subprocess.call(cargs)
         if retcode < 0:
             raise subprocess.CalledProcessError(retcode, ' '.join(cargs))
-            print "An error occured when calling GPG, not submitting signature"
+            print("An error occured when calling GPG, not submitting signature")
             # It's important that we set gpg_key to False. Otherwise,
             # shutil.copy below will fail because it can't find the .sig file
             # and Turnin-NG will crash.
@@ -107,8 +106,8 @@ def submit_files(project, files, tlist='', gpg_key=''):
     shutil.copyfile(temparchive.name,
             os.path.join(project.project['directory'], filename))
     try:
-        os.chmod(os.path.join(project.project['directory'], filename), 0666)
-    except OSError, e:
+        os.chmod(os.path.join(project.project['directory'], filename), 0o666)
+    except OSError as e:
         if e.errno == e.EPERM:
             # We've got an error on our hands:
             # OSError: [Errno 1] Operation not permitted
@@ -128,7 +127,7 @@ def submit_files(project, files, tlist='', gpg_key=''):
         os.remove(temparchive.name + '.sig')
         # GPG signatures are 644 by default
         os.chmod(os.path.join(project.project['directory'], filename + '.sig'),
-                 0666)
+                 0o666)
     else:
         submitted_sig = os.path.join(project.project['directory'],
                                      filename + '.sig')
@@ -158,7 +157,7 @@ def list_projects(config, course):
     projects = [['Enabled', 'Project', 'Description']]
     course_obj = TurninCourse(config, course)
     default = ''
-    if course_obj.course.has_key('default'):
+    if 'default' in course_obj.course:
         default = course_obj.course['default']
     for i in course_obj.course.__dict__['sections']:
         if default == i:
@@ -166,7 +165,7 @@ def list_projects(config, course):
         else:
             projects.append([course_obj.course[i]['enabled'], i,
                 course_obj.course[i]['description']])
-    maxlen = [0,0,0]
+    maxlen = [0, 0, 0]
     for p, project in enumerate(projects):
         for i, item in enumerate(project):
             # We need to convert item to string since item might be a bool.

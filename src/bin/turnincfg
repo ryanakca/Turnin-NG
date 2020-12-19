@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5
+#!/usr/bin/python3
 # Turnin-NG, an assignment submitter and manager. --- Project script
 # Copyright (C) 2009-2011  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
@@ -93,30 +93,30 @@ if __name__ == '__main__':
         try:
             create_course(config, options.create_course)
             sys.exit("Successfully created the course %s." % options.create_course)
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
     if options.delete_course:
         try:
             delete_course(config, options.delete_course)
             sys.exit("Successfully deleted the course %s." % options.delete_course)
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
     if options.archive_course:
         try:
             path = archive_course(config, options.archive_course, ret_path=True)
             sys.exit("Successfully archived the course %s to %s." %
                     (options.archive_course, path))
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
-                print "Has someone already moved the submission directory?"
+                print("Has someone already moved the submission directory?")
                 sys.exit(e)
 
 
     # End user functions :
     if options.course:
-        if ProjectGlobal(config).config.has_key(options.course):
+        if options.course in ProjectGlobal(config).config:
             # From now on we want to use the projlist as the config file
             config = ProjectCourse(config, options.course).course['projlist']
             default_course = options.course
@@ -132,9 +132,9 @@ if __name__ == '__main__':
         try:
             projects = list_projects(config, default_course)
             for i in projects:
-                print i
+                print(i)
             sys.exit()
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
 
     # Let's set the project_name variable
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     elif ProjectCourse(config, default_course).course['default']:
         project_name = ProjectCourse(config, default_course).course['default']
     else:
-        print "Please specify the project or set a default project."
+        print("Please specify the project or set a default project.")
         sys.exit(parser.print_help())
 
     # Create, delete or (un)compress the project if needed before creating an
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         try:
             delete_project(config, default_course, project_name)
             sys.exit("Successfully deleted the project %s." % project_name)
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
     # Compress or decompress
     try:
@@ -168,26 +168,26 @@ if __name__ == '__main__':
         elif options.extract:
             extract_project(config, default_course, project_name)
             sys.exit("Successfully extracted the project %s." % project_name)
-    except ValueError, e:
+    except ValueError as e:
         sys.exit(e)
 
 
     # Enable submissions for a project
     if options.enabled:
-        if ProjectCourse(config, default_course).course.has_key(project_name):
+        if project_name in ProjectCourse(config, default_course).course:
             project = ProjectProject(config, default_course, project_name)
         else:
             sys.exit(ValueError('Course %s does not have the project %s.' %
                 (default_course, project_name)))
-        if project.project.has_key('tarball') and project.project['tarball']:
+        if 'tarball' in project.project and project.project['tarball']:
             extract_project(config, default_course, project_name)
-            print "Extracted the project %s." % project_name
+            print("Extracted the project %s." % project_name)
         if project.course['group_managed']:
             # Set the directory writable by everybody
-            chmod(project.project['directory'], 0773)
+            chmod(project.project['directory'], 0o773)
         else:
             # Set the directory writable by the student group.
-            chmod(project.project['directory'], 0730)
+            chmod(project.project['directory'], 0o730)
         project.write(True, default=True)
         sys.exit("Successfully enabled and set default the project %s." % project_name)
     elif options.enabled == False: # Disable it. I know, using '== False' is
@@ -197,30 +197,30 @@ if __name__ == '__main__':
         # rather be explicit than implicit ;)
         #       This chmod line is to prevent students from manually uploading
         # assignments to a project once it's disabled.
-        if ProjectCourse(config, default_course).course.has_key(project_name):
+        if project_name in ProjectCourse(config, default_course).course:
             project = ProjectProject(config, default_course, project_name)
         else:
             sys.exit(ValueError('Course %s does not have the project %s.' %
                 (default_course, project_name)))
         if project.course['group_managed']:
-            chmod(project.project['directory'], 0770)
+            chmod(project.project['directory'], 0o770)
         else:
-            chmod(project.project['directory'], 0700)
+            chmod(project.project['directory'], 0o700)
         project.write(False)
         sys.exit("Successfully disabled the project %s." % project_name)
     elif options.enabled_nodefault:
-        if ProjectCourse(config, default_course).course.has_key(project_name):
+        if project_name in ProjectCourse(config, default_course).course:
             project = ProjectProject(config, default_course, project_name)
         else:
             sys.exit(ValueError('Course %s does not have the project %s.' %
                 (default_course, project_name)))
-        if project.project.has_key('tarball') and project.project['tarball']:
+        if 'tarball' in project.project and project.project['tarball']:
             extract_project(config, default_course, project_name)
-            print "Extracted the project %s." % project_name
+            print("Extracted the project %s." % project_name)
         project.write(True)
         sys.exit("Successfully enabled the project %s." % project_name)
     elif options.verify:
-        if ProjectCourse(config, default_course).course.has_key(project_name):
+        if project_name in ProjectCourse(config, default_course).course:
             project = ProjectProject(config, default_course, project_name)
         else:
             sys.exit(ValueError('Course %s does not have the project %s.' %
@@ -228,22 +228,22 @@ if __name__ == '__main__':
         try:
             unsigned = verify_sig(project)
             sys.exit("\n".join(unsigned))
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
     elif options.pdisable:
-        if ProjectCourse(config, default_course).course.has_key(project_name):
+        if project_name in ProjectCourse(config, default_course).course:
             project = ProjectProject(config, default_course, project_name)
         else:
             sys.exit(ValueError('Course %s does not have the project %s.' %
                 (default_course, project_name)))
         if project.course['group_managed']:
-           chmod(project.project['directory'], 0770)
+           chmod(project.project['directory'], 0o770)
         else:
-            chmod(project.project['directory'], 0700)
+            chmod(project.project['directory'], 0o700)
         project.write(False)
         try:
             strip_random_suffix(project)
-        except ValueError, e:
+        except ValueError as e:
             sys.exit(e)
         sys.exit("Successfully disabled the project %s and " % project_name +
             "stripped random suffixes.")

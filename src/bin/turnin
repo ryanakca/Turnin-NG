@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5
+#!/usr/bin/python3
 # Turnin-NG, an assignment submitter and manager. --- Turnin script
 # Copyright (C) 2009-2010  Ryan Kavanagh <ryanakca@kubuntu.org>
 #
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     # If we're listing projects, it's obvious we won't be submitting to one.
     if not options.list and not args:
-        print ValueError("Error, please submit at least one document.")
+        print(ValueError("Error, please submit at least one document."))
         parser.print_help()
         sys.exit(ValueError(''))
     if not options.course:
@@ -65,9 +65,9 @@ if __name__ == '__main__':
         if options.list:
             projects = list_projects(course.config.filename, options.course)
             for i in projects:
-                print i
+                print(i)
             sys.exit()
-    except ValueError, e:
+    except ValueError as e:
         sys.exit(e)
 
     try:
@@ -76,14 +76,14 @@ if __name__ == '__main__':
         if options.project:
             project = TurninProject(course.config.filename, options.course, options.project)
         else:
-            if course.course.has_key('default') and course.course['default']:
+            if 'default' in course.course and course.course['default']:
                 project = TurninProject(course.config.filename, options.course,
                                     course.course['default'])
             else:
                 raise ValueError("It appears that this course does not have a "+
                         "default project. You will have to specify one " +
                         "yourself using the '-p' or '--project' option.")
-    except ValueError, e:
+    except ValueError as e:
         sys.exit(e)
 
     if not project.project['enabled']:
@@ -93,9 +93,9 @@ if __name__ == '__main__':
     # assignments. We can now proceed to submit them.
     files = submit_files(project, args, gpg_key=options.keyid)
     if options.verbose:
-        print "Submitted files:"
+        print("Submitted files:")
         for file in files:
-            print file
+            print(file)
         sys.exit()
     else:
         sys.exit("Successfully submitted your assignment for grading.")

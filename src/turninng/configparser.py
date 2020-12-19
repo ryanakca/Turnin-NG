@@ -48,7 +48,7 @@ class ProjectGlobal(object):
         self.config.unrepr = True
         self.config.reload()
         self.config_defaults = {'default': ''}
-        if not self.config.has_key('Global'):
+        if 'Global' not in self.config:
             self.config['Global'] = self.config_defaults
             self.config.write()
         else:
@@ -57,12 +57,12 @@ class ProjectGlobal(object):
 
     def upgrade_config(self):
         """ Update the configuration file from a previous release. """
-        for key, default in self.config_defaults.items():
-            if not self.config_ref.has_key(key):
+        for key, default in list(self.config_defaults.items()):
+            if key not in self.config_ref:
                 self.config_ref[key] = default
         try:
             self.config.write()
-        except IOError, err:
+        except IOError as err:
             if err.errno == errno.EACCES:
                 # We don't have write permissions, we're probably running as a
                 # student, ignore.
@@ -78,7 +78,7 @@ class ProjectGlobal(object):
         @raise ValueError: We try to set a non-existent course as default.
 
         """
-        if self.config.has_key(course):
+        if course in self.config:
             self.config['Global']['default'] = course
             self.config.write()
         else:
@@ -105,7 +105,7 @@ class ProjectAdminCourse(ProjectGlobal):
         super(ProjectAdminCourse, self).__init__(config_file)
         self.config_defaults = {'projlist': '', 'user': '', 'directory': '',
                                 'group': '', 'group_managed': False}
-        if not self.config.has_key(course):
+        if course not in self.config:
             self.config[course] = self.config_defaults
             self.config.write()
         else:
@@ -167,7 +167,7 @@ class ProjectCourse(ProjectGlobal):
         super(ProjectCourse, self).__init__(config_file)
         self.config_defaults = {'default': '', 'user': '', 'directory': '',
                                 'group': '', 'group_managed': False}
-        if not self.config.has_key(course):
+        if course not in self.config:
             self.config[course] = self.config_defaults
             self.config.write()
         else:
@@ -186,7 +186,7 @@ class ProjectCourse(ProjectGlobal):
         @raise ValueError: We try to set a non-existent project as default.
 
         """
-        if self.course.has_key(project):
+        if project in self.course:
             self.course['default'] = project
             self.config.write()
         else:
@@ -234,7 +234,7 @@ class ProjectProject(ProjectCourse):
         super(ProjectProject, self).__init__(config_file, course)
         self.config_defaults = {'enabled': False, 'description': '',
                 'uuid': str(uuid.uuid4()), 'managing_accounts': []}
-        if not self.course.has_key(project):
+        if project not in self.course:
             self.config[course][project] = self.config_defaults
             self.config.write()
         else:
@@ -314,7 +314,7 @@ class TurninGlobal(object):
         self.config.indent_type = '    '
         self.config.unrepr = True
         self.config.reload()
-        if not self.config.has_key('Global'):
+        if 'Global' not in self.config:
             raise ValueError("Invalid config file")
 
 class TurninCourse(TurninGlobal):
@@ -334,7 +334,7 @@ class TurninCourse(TurninGlobal):
 
         """
         super(TurninCourse, self).__init__(config_file)
-        if not self.config.has_key(course):
+        if course not in self.config:
             raise ValueError("Course %s does not exists!" % course)
         self.course = self.config[course]
         """ @ivar: shortcut to the course configurations. """
@@ -359,7 +359,7 @@ class TurninProject(TurninCourse):
 
         """
         super(TurninProject, self).__init__(config_file, course)
-        if not self.course.has_key(project):
+        if project not in self.course:
             raise ValueError("Project %s does not exist in course %s!" %
                     (project, course))
         self.project = self.course[project]
@@ -391,7 +391,7 @@ class TurninList:
         """
         course = project.course.name
         uuid = project.project['uuid']
-        if not self.config.has_key(course):
+        if course not in self.config:
             self.config[course] = {}
         self.config[course][uuid] = suffix
         self.config.write()

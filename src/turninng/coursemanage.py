@@ -41,66 +41,66 @@ def create_course(config_file, course):
 
     """
     config_obj = ProjectGlobal(config_file)
-    if not config_obj.config.has_key(course):
+    if course not in config_obj.config:
         course = ProjectAdminCourse(config_file, course)
         # Don't die if we get an invalid user
         while True:
-            user = raw_input("Managing username [usually your UNIX login]: ")
+            user = input("Managing username [usually your UNIX login]: ")
             try:
                 pwd.getpwnam(user)
-            except KeyError, e:
-                print "User does not exist. Please try again."
+            except KeyError as e:
+                print("User does not exist. Please try again.")
             else:
                 break
-        directory = raw_input("Full path to the course directory: ")
+        directory = input("Full path to the course directory: ")
         group_managed = '?'
         # Don't check if "in 'UuGg'" because we don't want 'uGg' to match
         while group_managed not in ('U', 'u', 'G', 'g'):
-            group_managed = raw_input("Managed by a User or Group [U/G]: ")
+            group_managed = input("Managed by a User or Group [U/G]: ")
         # Don't die if we get an invalid group
         while True:
             if group_managed in ('G', 'g'):
                 group_managed = True
-                group = raw_input("Managing group: ")
+                group = input("Managing group: ")
             else:
                 group_managed = False
-                group = raw_input("Student group: ")
+                group = input("Student group: ")
             try:
                 grp.getgrnam(group)
-            except KeyError, e:
-                print "Group does not exist. Please try again."
+            except KeyError as e:
+                print("Group does not exist. Please try again.")
             else:
                 break
         try:
             try:
                 os.makedirs(directory) # We could supply the mode here, but it might get
                                        #ignored on some systems. We'll do it here instead
-            except OSError, e:
+            except OSError as e:
                 # We don't want to abort of the directory already exists
                 if e.errno == errno.EEXIST:
-                    print e
-                    print 'Continuing'
+                    print(e)
+                    print('Continuing')
                 else:
                     sys.exit(e)
             chown(directory, user, group)
             chown(config_file, user, group)
             if group_managed:
-                os.chmod(directory, 0775)
+                os.chmod(directory, 0o775)
             else:
-                os.chmod(directory, 0755)
-                print "Please make sure the account %s" % user +\
-                      " is a member of the group %s." % group
-        except OSError, e:
-            print e
+                os.chmod(directory, 0o755)
+                print("Please make sure the account %s" % user +\
+                      " is a member of the group %s." % group)
+        except OSError as e:
+            print(e)
         course.write(user, directory, group, group_managed)
         # We want to set the default course for the per course config.
         global_course_conf = ProjectGlobal(course.course['projlist'])
         global_course_conf.set_default(course.course.name)
         chown(course.course['projlist'], user, group)
         if group_managed:
-            os.chmod(course.course['projlist'], 0664)
+            os.chmod(course.course['projlist'], 0o664)
         else:
-            os.chmod(course.course['projlist'], 0644)
+            os.chmod(course.course['projlist'], 0o644)
     else:
         raise ValueError ('The course %s already exists, aborting' % course)
 
@@ -118,9 +118,9 @@ def delete_course(config_file, course):
 
     """
     config_obj = ProjectGlobal(config_file)
-    if config_obj.config.has_key(course):
+    if course in config_obj.config:
         course_obj = ProjectAdminCourse(config_file, course)
-        if raw_input("If you really want to delete this course and all " +
+        if input("If you really want to delete this course and all " +
                 "files in the course directory  %s , " % (
                 course_obj.course['directory'] ) + "enter 'yes' in capital" +
                 " letters: ") == 'YES':
@@ -128,7 +128,7 @@ def delete_course(config_file, course):
             del course_obj.config[course]
             # We need to check that Global has the key 'default', otherwise we
             # get a KeyError if it doesn't.
-            if ((course_obj.config['Global'].has_key('default')) and
+            if (('default' in course_obj.config['Global']) and
                     (course_obj.config['Global']['default'] == course)):
                 course_obj.config['Global']['default'] = ''
             course_obj.config.write()
@@ -154,9 +154,9 @@ def archive_course(config_file, course, ret_path=False):
 
     """
     config_obj = ProjectGlobal(config_file)
-    if config_obj.config.has_key(course):
+    if course in config_obj.config:
         config_obj = ProjectAdminCourse(config_file, course)
-        if raw_input("If you really want to archive this course and erase it "+
+        if input("If you really want to archive this course and erase it "+
                 "from the configuration file, enter 'yes' in capital " +
                 "letters: ") == 'YES':
             archive_path = os.path.normpath(os.path.join(
@@ -169,15 +169,15 @@ def archive_course(config_file, course, ret_path=False):
                     str(datetime.datetime.now().year))
             tar.close()
             if config_obj.course['group_managed']:
-                os.chmod(archive_path, 0660)
+                os.chmod(archive_path, 0o660)
             else:
-                os.chmod(archive_path, 0600)
+                os.chmod(archive_path, 0o600)
             chown(archive_path, config_obj.course['user'], config_obj.course['group'])
             shutil.rmtree(config_obj.course['directory'], ignore_errors=True)
             del config_obj.config[course]
             # We need to check that Global has the key 'default', otherwise we
             # get a KeyError if it doesn't.
-            if ((config_obj.config['Global'].has_key('default')) and
+            if (('default' in config_obj.config['Global']) and
                     (config_obj.config['Global']['default'] == course)):
                 config_obj.config['Global']['default'] = ''
             config_obj.config.write()

@@ -26,7 +26,7 @@ for i, arg in enumerate(sys.argv):
         elif (sys.argv[i-1] == '--prefix') and prefix_regex.match(arg).group('path'):
             prefix = os.path.expandvars(prefix_regex.match(arg).group('path'))
 
-data_files = [(os.path.join(prefix,'share/man/man1/'),
+data_files = [(os.path.join(prefix, 'share/man/man1/'),
                     ['doc/turnin.1', 'doc/turnincfg.1'])]
 
 def check_executable_in_path(executable, message):
@@ -34,7 +34,7 @@ def check_executable_in_path(executable, message):
     it's location.
     
     """
-    if os.environ.has_key('PATH'):
+    if 'PATH' in os.environ:
         for directory in os.environ['PATH'].split(':'):
             if os.path.exists(os.path.join(directory, executable)):
                 return os.path.join(directory, executable)
@@ -42,7 +42,7 @@ def check_executable_in_path(executable, message):
         for directory in ['/usr/bin', '/usr/local/bin']:
             if os.path.exists(os.path.join(directory, executable)):
                 return os.path.join(directory, executable)
-    print message
+    print(message)
     return False
 
 class build_htmldocs(Command):
@@ -141,7 +141,7 @@ class build_pdf(Command):
                     data_files.append((os.path.join(prefix, 'share/doc/turnin-ng/'),
                         ['doc/turnin-ng.pdf']))
                 except:
-                    print 'An error has occured, skipping PDF documentation.'
+                    print('An error has occured, skipping PDF documentation.')
 
 build.sub_commands.append(('build_pdf', None))
 
@@ -176,7 +176,7 @@ class install_legacy(Command):
         pass
 
     def run(self):
-        print os.path.join(prefix, 'bin/turnincfg')
+        print(os.path.join(prefix, 'bin/turnincfg'))
         try:
             os.symlink(os.path.join(prefix, 'bin/turnincfg'),
                        os.path.join(prefix, 'bin/project'))
