@@ -1,5 +1,5 @@
 # Turnin-NG, an assignment submitter and manager. --- config parser
-# Copyright (C) 2009-2011  Ryan Kavanagh <ryanakca@kubuntu.org>
+# Copyright (C) 2009-2020  Ryan Kavanagh <rak@rak.ac>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
