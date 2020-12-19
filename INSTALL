@@ -1,13 +1,11 @@
 [DEPENDENCIES]
+ * You will need Python 3. If you are stuck on Python 2, use Turnin-NG 1.3
  * You need to have the configobj module installed. See
    http://www.voidspace.org.uk/python/configobj.html to get it or install
-   the python-configobj package on Debian based systems.
- * You also need to have the UUID module, provided in python 2.5+. If you are
-   running python <= 2.4, you can get it from http://pypi.python.org/pypi/uuid/
-   Your mileage may vary.
+   the python3-configobj package on Debian based systems.
 
 [INSTALLING]
-Once you have all the dependencies, , in the source's root directory, run:
+Once you have all the dependencies, in the source's root directory run:
 % sudo python setup.py install
 This will install turnin-ng to your system's default location, /usr under UNIX.
 If you wanted to install it under /usr/local, pass the --prefix option:
