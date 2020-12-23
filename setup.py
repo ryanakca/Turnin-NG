@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from distutils.command.build import build
 from distutils.command.install import install
