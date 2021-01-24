@@ -25,7 +25,7 @@ from configobj import ConfigObj
 # 'turnincfg'.
 # The Turnin prefix represents classes that are used by 'turnin'.
 
-class ProjectGlobal(object):
+class ProjectGlobal:
     """ This class class represents the global configurations for the
         turnincfg command.
 
@@ -102,7 +102,7 @@ class ProjectAdminCourse(ProjectGlobal):
         @rtype: None
 
         """
-        super(ProjectAdminCourse, self).__init__(config_file)
+        super().__init__(config_file)
         self.config_defaults = {'projlist': '', 'user': '', 'directory': '',
                                 'group': '', 'group_managed': False}
         if course not in self.config:
@@ -164,7 +164,7 @@ class ProjectCourse(ProjectGlobal):
         @rtype: None
 
         """
-        super(ProjectCourse, self).__init__(config_file)
+        super().__init__(config_file)
         self.config_defaults = {'default': '', 'user': '', 'directory': '',
                                 'group': '', 'group_managed': False}
         if course not in self.config:
@@ -231,7 +231,7 @@ class ProjectProject(ProjectCourse):
         @rtype: None
 
         """
-        super(ProjectProject, self).__init__(config_file, course)
+        super().__init__(config_file, course)
         self.config_defaults = {'enabled': False, 'description': '',
                 'uuid': str(uuid.uuid4()), 'managing_accounts': []}
         if project not in self.course:
@@ -246,7 +246,7 @@ class ProjectProject(ProjectCourse):
                                 project)
         self.name = project
 
-    def write(self, enabled, description='', directory='', tarball='', 
+    def write(self, enabled, description='', directory='', tarball='',
             default=False):
         """
         Modifies the config file.
@@ -266,7 +266,7 @@ class ProjectProject(ProjectCourse):
         if description:
             self.project['description'] = description
         if default:
-            super(ProjectProject, self).set_default(self.name)
+            super().set_default(self.name)
         if directory:
             self.project['directory'] = directory
         if tarball:
@@ -333,7 +333,7 @@ class TurninCourse(TurninGlobal):
         @raise ValueError: The course isn't defined in the config file.
 
         """
-        super(TurninCourse, self).__init__(config_file)
+        super().__init__(config_file)
         if course not in self.config:
             raise ValueError("Course %s does not exists!" % course)
         self.course = self.config[course]
@@ -358,7 +358,7 @@ class TurninProject(TurninCourse):
         @raise ValueError: The project isn't defined in the config file.
 
         """
-        super(TurninProject, self).__init__(config_file, course)
+        super().__init__(config_file, course)
         if project not in self.course:
             raise ValueError("Project %s does not exist in course %s!" %
                     (project, course))
