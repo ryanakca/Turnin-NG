@@ -70,7 +70,7 @@ def submit_files(project, files, tlist='', gpg_key=''):
             random_suffix = list_file.config[project.course.name][
                     project.project['uuid']]
     if not random_suffix:
-        chars = string.letters + string.digits
+        chars = string.ascii_letters + string.digits
         for i in range(16):
             random_suffix += random.choice(chars)
         list_file.write(project, random_suffix)
